@@ -70,12 +70,13 @@ Check whether `.github/skills/` already exists:
     change-request.md             ← change request body format
     deployment-checklist.md       ← deployment steps and verification checklist
     architecture-guardrails.md    ← architecture guardrails, pattern library, ADR register template
+    reference-index.md            ← index template for feature-scoped source documents
 
   artefacts/
     .gitkeep                      ← placeholder so directory is committed
 ```
 
-**Total: 12 skill files + 18 templates + 3 root files + artefacts directory**
+**Total: 12 skill files + 19 templates + 3 root files + artefacts directory**
 
 ---
 

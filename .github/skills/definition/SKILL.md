@@ -26,7 +26,13 @@ Before asking anything, verify:
 2. Benefit-metric artefact exists at `.github/artefacts/[feature]/benefit-metric.md`
 3. Benefit-metric artefact contains at least one metric with a defined target
 
-If not met:
+Also check for reference materials at `.github/artefacts/[feature]/reference/`.
+If present, scan for technical designs, scoping documents, or programme-level
+constraints that should shape story decomposition and are not yet reflected in
+the discovery or benefit-metric artefacts. Surface any that are relevant before
+choosing a slicing strategy.
+
+If not met (entry condition):
 
 > ❌ **Entry condition not met**
 > [Specific issue — e.g. "Benefit-metric artefact not found. Run /benefit-metric first."]

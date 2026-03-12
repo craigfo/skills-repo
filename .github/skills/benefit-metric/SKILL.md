@@ -26,7 +26,20 @@ Before asking anything, verify:
 2. Status field reads "Approved" — not "Draft"
 3. Discovery contains problem statement, MVP scope, and directional success indicators
 
-If not met:
+Also check for reference materials at `.github/artefacts/[feature]/reference/`.
+If present, scan for:
+- Business case documents (benefits realisation plans, investment proposals)
+- Outcome or OKR documents
+- Stakeholder or sponsor expectations
+
+If found, note it before starting:
+
+> **Reference materials found:** [list files]
+> I'll use these to validate and strengthen the metrics we define.
+> If a target or baseline figure appears in the source documents, I'll surface
+> it rather than asking you to provide it from memory.
+
+If not met (entry condition):
 
 > ❌ **Entry condition not met**
 > [Specific issue — e.g. "Discovery status is still 'Draft'. A human needs to

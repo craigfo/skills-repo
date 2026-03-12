@@ -76,6 +76,7 @@ Skills reference these templates — do not embed format definitions in skill fi
 | Change request | `.github/templates/change-request.md` |
 | Deployment checklist | `.github/templates/deployment-checklist.md` |
 | Architecture guardrails | `.github/templates/architecture-guardrails.md` |
+| Reference index | `.github/templates/reference-index.md` |
 
 When a skill produces a structured artefact, it uses the relevant template.
 When reviewing artefacts, check them against the template — missing fields are findings.
@@ -88,6 +89,11 @@ All pipeline artefacts are saved to `.github/artefacts/[feature-slug]/`:
 
 ```
 .github/artefacts/[feature-slug]/
+  reference/
+    reference-index.md            ← index of all uploaded source documents
+    [scoping-doc.pdf / .pptx / .docx ...]
+    [business-case.pdf / ...]
+    [any other source materials]
   discovery.md
   benefit-metric.md
   decisions.md

@@ -23,10 +23,49 @@ triggers:
 
 No prerequisites. First step in the pipeline.
 
+---
+
+## Step 0 — Check for reference materials
+
+Before asking any questions, check whether a reference folder exists for this
+feature at `.github/artefacts/[feature-slug]/reference/`.
+
+If the folder exists and contains files, list them:
+
+> **Reference materials found:**
+> - [filename] — [brief description from reference-index.md if present]
+>
+> I'll use these to pre-populate sections where they contain relevant context.
+> You can still correct or override anything I extract.
+>
+> Do you want me to read these documents before we start?
+> Reply: yes — or skip, I'll describe the context directly
+
+If the user says yes, read the available documents and summarise what you found
+before proceeding:
+
+> **From the reference materials:**
+> - Problem / opportunity: [extracted summary]
+> - Stakeholders / personas mentioned: [list]
+> - Scope or boundaries mentioned: [summary]
+> - Success indicators or targets mentioned: [summary]
+> - Constraints mentioned: [summary]
+>
+> I'll use this as a starting point. Confirm or correct each section as we go.
+
+If no reference folder exists, proceed directly to the conversational process.
+
+> **Tip for large or multi-team initiatives:** Drop scoping documents, business
+> cases, or other source materials into
+> `.github/artefacts/[feature-slug]/reference/` and create a
+> `reference-index.md` there (template at `.github/templates/reference-index.md`).
+> Discovery, /benefit-metric, and /definition will read them automatically.
+
 If no input has been provided, ask this first:
 
 > **What's the problem or opportunity you want to explore?**
-> A sentence or two is enough to start.
+> A sentence or two is enough to start — or point me to the reference folder
+> if you've already uploaded source documents.
 >
 > Reply: describe it
 
