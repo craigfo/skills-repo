@@ -358,16 +358,30 @@ async function loadState() {
   try {
     const resp = await fetch(STATE_FILE + '?_=' + Date.now());
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    allData = await resp.json();
+    allData = normalizeData(await resp.json());
     render();
   } catch (e) {
     showDropZone();
   }
 }
 
+function normalizeData(data) {
+  // Accept either `slug` or `id` on features, epics, and stories.
+  // Skills may write `id`; the viz uses `slug` internally.
+  (data.features || []).forEach(f => {
+    f.slug = f.slug || f.id;
+    (f.epics || []).forEach(e => {
+      e.slug = e.slug || e.id;
+      (e.stories || []).forEach(s => { s.slug = s.slug || s.id; });
+    });
+  });
+  (data.programmes || []).forEach(p => { p.slug = p.slug || p.id; });
+  return data;
+}
+
 function loadFromText(text) {
   try {
-    allData = JSON.parse(text);
+    allData = normalizeData(JSON.parse(text));
     const dz = document.getElementById('drop-zone');
     if (dz) dz.remove();
     render();
