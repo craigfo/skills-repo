@@ -215,6 +215,28 @@
 
   /* ── Keyboard hint ────────────────────────────────────────────── */
   #kbd-hint { position: fixed; bottom: 12px; right: 16px; font-size: 10px; color: var(--border); }
+
+  /* ── Drop zone (shown when fetch fails) ─────────────────────── */
+  #drop-zone {
+    border: 2px dashed var(--border); border-radius: 10px;
+    padding: 48px 24px; text-align: center; cursor: pointer;
+    transition: border-color .2s, background .2s;
+    margin: 24px auto; max-width: 480px;
+  }
+  #drop-zone:hover, #drop-zone.drag-over {
+    border-color: var(--blue); background: rgba(59,130,246,.06);
+  }
+  #drop-zone h2 { font-size: 16px; margin-bottom: 8px; }
+  #drop-zone p  { font-size: 12px; color: var(--muted); line-height: 1.7; }
+  #drop-zone .drop-icon { font-size: 36px; margin-bottom: 12px; }
+  #file-input { display: none; }
+  #browse-btn {
+    margin-top: 14px; display: inline-block;
+    background: var(--blue); color: #fff; border: none;
+    border-radius: 5px; padding: 6px 18px; font-size: 13px;
+    cursor: pointer; font-family: inherit;
+  }
+  #browse-btn:hover { background: #2563eb; }
 </style>
 </head>
 <body>
@@ -268,6 +290,10 @@
   </div>
 
   <span id="last-updated"></span>
+  <label id="load-file-btn" class="btn" title="Load pipeline-state.json from disk" style="cursor:pointer">
+    📂 Load file
+    <input type="file" id="file-input" accept=".json">
+  </label>
   <button id="reload-btn" title="Reload state file">↺ Reload</button>
 </header>
 
@@ -326,26 +352,66 @@ let drawerStory  = null;
 // DATA LOADING
 // ─────────────────────────────────────────────────────────────────────────────
 async function loadState() {
+  // Try fetch first (works with VS Code Live Server, GitHub Pages, etc.).
+  // On file:// the browser blocks fetch, so we silently fall back to the
+  // drop-zone picker so the user can load the file from disk — no server needed.
   try {
     const resp = await fetch(STATE_FILE + '?_=' + Date.now());
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     allData = await resp.json();
     render();
   } catch (e) {
-    showLoadError(e);
+    showDropZone();
   }
 }
 
-function showLoadError(e) {
+function loadFromText(text) {
+  try {
+    allData = JSON.parse(text);
+    const dz = document.getElementById('drop-zone');
+    if (dz) dz.remove();
+    render();
+  } catch (e) {
+    alert('Could not parse JSON: ' + e.message);
+  }
+}
+
+function readFile(file) {
+  const reader = new FileReader();
+  reader.onload = e => loadFromText(e.target.result);
+  reader.readAsText(file);
+}
+
+function showDropZone() {
   const board = document.getElementById('board');
   board.innerHTML = `
-    <div class="empty-state">
-      <h2>No pipeline state found</h2>
-      <p>Could not load <code>pipeline-state.json</code>.<br>
-      ${e.message}<br><br>
-      Skills will create and update this file as you run them.<br>
-      You can also create it manually — see <code>pipeline-state.schema.json</code> for the format.</p>
+    <div id="drop-zone">
+      <div class="drop-icon">📄</div>
+      <h2>Load pipeline-state.json</h2>
+      <p>
+        Drag and drop <strong>pipeline-state.json</strong> here,<br>
+        or click <em>Load file</em> in the header to browse for it.<br><br>
+        <span style="font-size:11px">
+          The file lives at <code>.github/pipeline-state.json</code> in your repo.
+          Skills populate it automatically as you run them.
+        </span>
+      </p>
+      <button id="browse-btn">Browse…</button>
     </div>`;
+
+  document.getElementById('browse-btn').addEventListener('click', () => {
+    document.getElementById('file-input').click();
+  });
+
+  const dz = document.getElementById('drop-zone');
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+  dz.addEventListener('dragleave', ()  => dz.classList.remove('drag-over'));
+  dz.addEventListener('drop', e => {
+    e.preventDefault(); dz.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file) readFile(file);
+  });
+
   document.getElementById('summary-bar').innerHTML = '';
   document.getElementById('last-updated').textContent = '';
 }
@@ -676,6 +742,9 @@ function initFilters() {
     openFeatures.clear(); openEpics.clear(); openStories.clear(); render();
   });
   document.getElementById('reload-btn').addEventListener('click', loadState);
+  document.getElementById('file-input').addEventListener('change', e => {
+    if (e.target.files[0]) readFile(e.target.files[0]);
+  });
   document.getElementById('drawer-close').addEventListener('click', closeDrawer);
   document.getElementById('drawer-overlay').addEventListener('click', closeDrawer);
 }
