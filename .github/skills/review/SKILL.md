@@ -200,3 +200,16 @@ comparing this run's findings to the previous run.
 - Does not run /test-plan
 - Does not make scope decisions — flags issues, humans decide
 - Does not review code — pre-coding artefact review only
+
+---
+
+## State update
+
+After producing a review report, for each story reviewed update the story entry in `.github/pipeline-state.json`:
+
+- Set `stage: "review"`, `updatedAt: [now]`
+- Set `reviewStatus: "passed"` if no HIGH findings, `"has-findings"` if any remain
+- Set `highFindings: [count]`
+- Set `health: "green"` if passed, `"red"` if HIGH findings remain, `"amber"` if MEDIUM only
+
+**Human review note:** If a human resolves findings and re-approves stories outside a skill session, update `reviewStatus` and `highFindings` manually in `pipeline-state.json`, or run `/workflow` to reconcile.

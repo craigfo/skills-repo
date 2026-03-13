@@ -187,3 +187,15 @@ Use the least capable model that can handle each role to conserve cost:
 **Follows:** /implementation-plan
 **Precedes:** /verify-completion
 **If no subagents available:** use /tdd task-by-task instead
+
+---
+
+## State update
+
+Update `.github/pipeline-state.json` progressively during execution:
+
+- When execution begins: set story `stage: "subagent-execution"`, `health: "green"`, `updatedAt: [now]`
+- After each task completes: update `updatedAt`
+- If a task is stuck or a subagent fails a review: set `health: "amber"`, note the task in `blocker`
+- When all tasks complete and two-stage review passes: set `health: "green"`, clear `blocker`
+- If a critical issue blocks progress: set `health: "red"`, `blocker: "[issue description]"`

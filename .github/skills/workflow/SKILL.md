@@ -300,8 +300,52 @@ When multiple features are active, after the status table:
 - Does not make scope or priority decisions — surfaces them for human judgment
 - Does not skip pipeline steps
 - Does not auto-approve artefacts
-- Does not update artefact files
 - Does not resolve blockers — identifies them precisely so a human or skill can
+
+---
+
+## State file reconciliation
+
+`/workflow` is the designated reconciler of `.github/pipeline-state.json`.
+Run this process on every invocation — it is fast and non-destructive.
+
+### When to reconcile
+
+- Session start (always)
+- When a human says "reconcile", "sync state", or "update the state file"
+- Before displaying the status table
+- After any human confirms they have made changes to artefacts outside a skill session
+
+### Reconciliation process
+
+For each feature in `pipeline-state.json`:
+
+1. **Check for new artefacts not yet reflected in state:**
+   - If `discovery.md` exists but feature `stage` is earlier → advance to `discovery`
+   - If `benefit-metric.md` exists → advance to `benefit-metric`
+   - If story files exist in `stories/` → ensure all are present in `epics[].stories[]`
+   - If `review/` artefacts exist → check `reviewStatus` and `highFindings` — update if artefact shows different state
+   - If `test-plans/` artefact exists → set `testPlan.status: "written"` if not already
+   - If `dor/` artefact exists → set `dorStatus: "signed-off"` if it contains "Proceed: Yes"
+   - If PR is merged (check `dod/` artefact exists) → set `prStatus: "merged"`, `dodStatus: "complete"`
+
+2. **Check for stalled features:**
+   - If `updatedAt` is more than 3 days ago and stage has not advanced → set `health: "amber"`, note "Stalled [n] days"
+   - If `updatedAt` is more than 7 days ago → set `health: "red"`, note "Stalled [n] days — needs attention"
+
+3. **Check for missing state entries:**
+   - If a `discovery.md` artefact exists for a feature slug with no entry in `features[]` → add a new entry and infer state from artefacts present
+
+4. **Do not overwrite human-set fields without evidence:**
+   - Do not change `health: "red"` to `"green"` unless the artefact evidence supports it
+   - Do not remove `blocker` text unless the blocking condition is resolved in artefacts
+
+5. **After reconciliation:**
+   - Update `updated` timestamp to now
+   - Save the file
+   - Note in the status table output: "State reconciled — [n] updates made" or "State up to date"
+
+---
 
 ## Tone
 

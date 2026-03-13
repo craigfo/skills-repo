@@ -122,3 +122,16 @@ When all Critical fixed and Important fixed (or acknowledged):
 **Use after:** each task batch in /tdd, or after /subagent-execution final review
 **Precedes:** /verify-completion
 **Note:** /subagent-execution dispatches spec compliance and code quality as separate reviewer subagents internally — use this skill for manual or non-subagent code review
+
+---
+
+## State update
+
+After producing the review report:
+
+- Set story `stage: "implementation-review"`, `updatedAt: [now]`
+- If critical issues found: set `health: "red"`, `blocker: "[summary of critical issue]"`
+- If important issues found (no criticals): set `health: "amber"`
+- If clean: set `health: "green"`, clear `blocker`
+
+**Human review note:** If a human performs a code review outside a skill session and resolves findings, update `health` and clear `blocker` manually in `pipeline-state.json`, or run `/workflow` to reconcile.

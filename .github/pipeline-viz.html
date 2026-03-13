@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pipeline Visualiser</title>
+<style>
+  /* ── Reset + base ───────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:        #0f172a;
+    --surface:   #1e293b;
+    --surface2:  #273548;
+    --border:    #334155;
+    --text:      #e2e8f0;
+    --muted:     #94a3b8;
+    --green:     #22c55e;
+    --amber:     #f59e0b;
+    --red:       #ef4444;
+    --blue:      #3b82f6;
+    --purple:    #a855f7;
+    --teal:      #14b8a6;
+    --col-w:     220px;
+    --gap:       12px;
+  }
+  body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; font-size: 13px; min-height: 100vh; }
+
+  /* ── Top bar ────────────────────────────────────────────────── */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 8px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  header h1 { font-size: 14px; font-weight: 700; letter-spacing: .03em; white-space: nowrap; }
+  header .sep { color: var(--border); }
+  .filter-group { display: flex; align-items: center; gap: 6px; }
+  .filter-group label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+  select, input[type="text"] {
+    background: var(--bg); border: 1px solid var(--border); color: var(--text);
+    border-radius: 4px; padding: 3px 7px; font-size: 12px; outline: none;
+  }
+  select:focus, input:focus { border-color: var(--blue); }
+  .btn {
+    background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+    border-radius: 4px; padding: 3px 10px; font-size: 12px; cursor: pointer;
+    white-space: nowrap;
+  }
+  .btn:hover { background: var(--border); }
+  .btn.active { background: var(--blue); border-color: var(--blue); }
+  .spacer { flex: 1; }
+  #last-updated { color: var(--muted); font-size: 11px; white-space: nowrap; }
+  #reload-btn { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 4px; padding: 3px 8px; font-size: 11px; cursor: pointer; }
+  #reload-btn:hover { color: var(--text); border-color: var(--text); }
+
+  /* ── Legend ─────────────────────────────────────────────────── */
+  .legend { display: flex; gap: 12px; align-items: center; }
+  .legend-item { display: flex; gap: 4px; align-items: center; font-size: 11px; color: var(--muted); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot.green { background: var(--green); }
+  .dot.amber { background: var(--amber); }
+  .dot.red   { background: var(--red); }
+
+  /* ── Stage columns ───────────────────────────────────────────── */
+  #board {
+    display: flex; gap: var(--gap); padding: var(--gap) 16px;
+    overflow-x: auto; align-items: flex-start; min-height: calc(100vh - 60px);
+  }
+  .col {
+    flex-shrink: 0; width: var(--col-w);
+    background: var(--surface); border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .col-header {
+    padding: 8px 10px; border-bottom: 1px solid var(--border);
+    font-weight: 600; font-size: 11px; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--muted);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .col-count {
+    background: var(--surface2); border-radius: 10px;
+    padding: 1px 6px; font-size: 10px; color: var(--muted);
+  }
+  .col-body { padding: 8px; display: flex; flex-direction: column; gap: 6px; min-height: 60px; }
+
+  /* ── Feature cards ────────────────────────────────────────────── */
+  .feature-card {
+    background: var(--surface2); border-radius: 6px;
+    border: 1px solid var(--border); overflow: hidden;
+    transition: border-color .15s;
+  }
+  .feature-card:hover { border-color: var(--blue); }
+  .feature-card.health-red    { border-left: 3px solid var(--red); }
+  .feature-card.health-amber  { border-left: 3px solid var(--amber); }
+  .feature-card.health-green  { border-left: 3px solid var(--green); }
+
+  .card-header {
+    padding: 8px 10px; cursor: pointer;
+    display: flex; align-items: flex-start; gap: 6px;
+  }
+  .card-toggle { color: var(--muted); font-size: 10px; flex-shrink: 0; margin-top: 2px; transition: transform .15s; }
+  .card-toggle.open { transform: rotate(90deg); }
+  .card-title { font-weight: 600; font-size: 12px; line-height: 1.3; flex: 1; }
+  .card-track {
+    font-size: 10px; border-radius: 3px; padding: 1px 5px; flex-shrink: 0;
+    background: var(--bg); color: var(--muted);
+  }
+  .card-track.short    { color: var(--teal); }
+  .card-track.standard { color: var(--blue); }
+  .card-track.programme-workstream { color: var(--purple); }
+
+  .card-body { border-top: 1px solid var(--border); padding: 8px 10px; display: none; }
+  .card-body.open { display: block; }
+
+  /* meta row */
+  .meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .tag { font-size: 10px; background: var(--bg); border-radius: 3px; padding: 1px 6px; color: var(--muted); }
+  .tag.red   { color: var(--red); }
+  .tag.amber { color: var(--amber); }
+  .tag.green { color: var(--green); }
+
+  /* Blocker notice */
+  .blocker-notice {
+    background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3);
+    border-radius: 4px; padding: 5px 8px; font-size: 11px; color: var(--red);
+    margin-bottom: 8px;
+  }
+
+  /* ── Epic tree ────────────────────────────────────────────────── */
+  .epic-list { display: flex; flex-direction: column; gap: 4px; }
+  .epic-row {
+    background: var(--bg); border-radius: 4px; border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .epic-row-header {
+    padding: 5px 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;
+  }
+  .epic-toggle { color: var(--muted); font-size: 9px; flex-shrink: 0; transition: transform .15s; }
+  .epic-toggle.open { transform: rotate(90deg); }
+  .epic-name { font-size: 11px; font-weight: 600; flex: 1; }
+  .epic-status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .status-not-started { background: var(--border); }
+  .status-in-progress { background: var(--amber); }
+  .status-complete    { background: var(--green); }
+
+  .story-list { padding: 4px 8px 6px 20px; display: none; flex-direction: column; gap: 3px; }
+  .story-list.open { display: flex; }
+  .story-row {
+    background: var(--surface2); border-radius: 4px; border: 1px solid var(--border);
+    padding: 5px 8px; cursor: pointer; transition: border-color .15s;
+  }
+  .story-row:hover { border-color: var(--blue); }
+  .story-row-top { display: flex; align-items: center; gap: 6px; }
+  .story-health { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .story-name { font-size: 11px; flex: 1; }
+  .story-stage-badge {
+    font-size: 9px; background: var(--bg); border-radius: 3px; padding: 1px 5px; color: var(--muted);
+  }
+  .story-details { margin-top: 5px; display: none; }
+  .story-details.open { display: block; }
+  .story-progress { margin-top: 4px; }
+  .progress-label { font-size: 10px; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 2px; }
+  .progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width .3s; }
+  .progress-fill.partial { background: var(--amber); }
+  .story-pills { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
+  .pill {
+    font-size: 9px; border-radius: 3px; padding: 1px 6px;
+    border: 1px solid transparent;
+  }
+  .pill.ok   { background: rgba(34,197,94,.12); color: var(--green); border-color: rgba(34,197,94,.3); }
+  .pill.warn { background: rgba(245,158,11,.12); color: var(--amber); border-color: rgba(245,158,11,.3); }
+  .pill.fail { background: rgba(239,68,68,.12);  color: var(--red);   border-color: rgba(239,68,68,.3); }
+  .pill.none { background: var(--bg); color: var(--muted); border-color: var(--border); }
+
+  /* ── Empty state ─────────────────────────────────────────────── */
+  .empty-state {
+    text-align: center; padding: 40px 16px; color: var(--muted);
+  }
+  .empty-state h2 { font-size: 15px; margin-bottom: 8px; color: var(--text); }
+  .empty-state p  { font-size: 12px; line-height: 1.6; }
+  .empty-state code { background: var(--surface); padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+
+  /* ── Summary bar ─────────────────────────────────────────────── */
+  #summary-bar {
+    display: flex; gap: 16px; padding: 6px 16px;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    font-size: 11px; color: var(--muted); flex-wrap: wrap;
+  }
+  .summary-stat { display: flex; gap: 5px; align-items: center; }
+  .summary-stat .val { color: var(--text); font-weight: 600; }
+
+  /* ── Story drawer (slide-in from right) ─────────────────────── */
+  #drawer-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 200;
+  }
+  #drawer-overlay.open { display: block; }
+  #drawer {
+    position: fixed; right: 0; top: 0; bottom: 0; width: 360px;
+    background: var(--surface); border-left: 1px solid var(--border);
+    z-index: 201; overflow-y: auto; padding: 16px;
+    transform: translateX(100%); transition: transform .2s;
+  }
+  #drawer.open { transform: translateX(0); }
+  #drawer-close { float: right; background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 4px; padding: 2px 8px; cursor: pointer; font-size: 12px; }
+  #drawer-close:hover { color: var(--text); }
+  #drawer h2 { font-size: 14px; font-weight: 700; margin-bottom: 2px; margin-right: 40px; }
+  #drawer .drawer-stage { font-size: 11px; color: var(--muted); margin-bottom: 12px; }
+  .drawer-section { margin-bottom: 14px; }
+  .drawer-section h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: 6px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+  .drawer-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; font-size: 12px; }
+  .drawer-row .label { color: var(--muted); }
+  .drawer-link { color: var(--blue); text-decoration: none; font-size: 11px; }
+  .drawer-link:hover { text-decoration: underline; }
+  .drawer-blocker { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); border-radius: 4px; padding: 6px 8px; font-size: 11px; color: var(--red); }
+
+  /* ── Keyboard hint ────────────────────────────────────────────── */
+  #kbd-hint { position: fixed; bottom: 12px; right: 16px; font-size: 10px; color: var(--border); }
+</style>
+</head>
+<body>
+
+<!-- ───────────── HEADER ───────────── -->
+<header>
+  <h1>🗂 Pipeline</h1>
+  <span class="sep">|</span>
+
+  <div class="filter-group">
+    <label>Health</label>
+    <select id="filter-health">
+      <option value="">All</option>
+      <option value="red">🔴 Blocked</option>
+      <option value="amber">🟡 At risk</option>
+      <option value="green">🟢 Moving</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label>Track</label>
+    <select id="filter-track">
+      <option value="">All</option>
+      <option value="short">Short</option>
+      <option value="standard">Standard</option>
+      <option value="programme-workstream">Programme</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label>Team</label>
+    <select id="filter-team">
+      <option value="">All</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label>Search</label>
+    <input type="text" id="filter-search" placeholder="feature / story name…" style="width:160px">
+  </div>
+
+  <button class="btn" id="expand-all-btn" title="Expand all (e)">Expand all</button>
+  <button class="btn" id="collapse-all-btn" title="Collapse all (c)">Collapse all</button>
+
+  <div class="spacer"></div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="dot green"></div>Moving</div>
+    <div class="legend-item"><div class="dot amber"></div>At risk</div>
+    <div class="legend-item"><div class="dot red"></div>Blocked</div>
+  </div>
+
+  <span id="last-updated"></span>
+  <button id="reload-btn" title="Reload state file">↺ Reload</button>
+</header>
+
+<!-- ───────────── SUMMARY ───────────── -->
+<div id="summary-bar"></div>
+
+<!-- ───────────── BOARD ───────────── -->
+<div id="board"></div>
+
+<!-- ───────────── STORY DRAWER ───────────── -->
+<div id="drawer-overlay"></div>
+<div id="drawer">
+  <button id="drawer-close">✕</button>
+  <div id="drawer-content"></div>
+</div>
+
+<div id="kbd-hint">e = expand all &nbsp;·&nbsp; c = collapse all &nbsp;·&nbsp; Esc = close drawer</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// CONFIG
+// ─────────────────────────────────────────────────────────────────────────────
+const STATE_FILE = 'pipeline-state.json';
+
+const STAGES = [
+  { id: 'discovery',           label: 'Discovery' },
+  { id: 'benefit-metric',      label: 'Benefit Metric' },
+  { id: 'definition',          label: 'Definition' },
+  { id: 'review',              label: 'Review' },
+  { id: 'test-plan',           label: 'Test Plan' },
+  { id: 'definition-of-ready', label: 'Def of Ready' },
+  { id: 'branch-setup',        label: 'Branch Setup' },
+  { id: 'implementation-plan', label: 'Impl Plan' },
+  { id: 'subagent-execution',  label: 'Execution' },
+  { id: 'implementation-review', label: 'Impl Review' },
+  { id: 'verify-completion',   label: 'Verify' },
+  { id: 'branch-complete',     label: 'Branch Done' },
+  { id: 'definition-of-done',  label: 'Def of Done' },
+  { id: 'trace',               label: 'Trace' },
+  { id: 'released',            label: 'Released' },
+  { id: 'spike',               label: 'Spike' },
+  { id: 'stalled',             label: 'Stalled' },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────────────────────
+let allData = null;
+let activeFilters = { health: '', track: '', team: '', search: '' };
+let openFeatures = new Set();   // feature slugs with expanded card body
+let openEpics    = new Set();   // epic slugs with expanded story list
+let openStories  = new Set();   // story slugs with expanded detail
+let drawerStory  = null;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DATA LOADING
+// ─────────────────────────────────────────────────────────────────────────────
+async function loadState() {
+  try {
+    const resp = await fetch(STATE_FILE + '?_=' + Date.now());
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    allData = await resp.json();
+    render();
+  } catch (e) {
+    showLoadError(e);
+  }
+}
+
+function showLoadError(e) {
+  const board = document.getElementById('board');
+  board.innerHTML = `
+    <div class="empty-state">
+      <h2>No pipeline state found</h2>
+      <p>Could not load <code>pipeline-state.json</code>.<br>
+      ${e.message}<br><br>
+      Skills will create and update this file as you run them.<br>
+      You can also create it manually — see <code>pipeline-state.schema.json</code> for the format.</p>
+    </div>`;
+  document.getElementById('summary-bar').innerHTML = '';
+  document.getElementById('last-updated').textContent = '';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FILTERING
+// ─────────────────────────────────────────────────────────────────────────────
+function filteredFeatures() {
+  if (!allData) return [];
+  return allData.features.filter(f => {
+    if (activeFilters.health && f.health !== activeFilters.health) return false;
+    if (activeFilters.track  && f.track  !== activeFilters.track)  return false;
+    if (activeFilters.team   && f.team   !== activeFilters.team)   return false;
+    if (activeFilters.search) {
+      const q = activeFilters.search.toLowerCase();
+      const inFeature = f.name.toLowerCase().includes(q) || f.slug.toLowerCase().includes(q);
+      const inStory   = (f.epics || []).some(e =>
+        (e.stories || []).some(s => s.name.toLowerCase().includes(q) || s.slug.toLowerCase().includes(q)));
+      if (!inFeature && !inStory) return false;
+    }
+    return true;
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SUMMARY BAR
+// ─────────────────────────────────────────────────────────────────────────────
+function renderSummary(features) {
+  const bar = document.getElementById('summary-bar');
+  if (!allData || features.length === 0) { bar.innerHTML = ''; return; }
+  const total   = features.length;
+  const blocked = features.filter(f => f.health === 'red').length;
+  const amber   = features.filter(f => f.health === 'amber').length;
+  const green   = features.filter(f => f.health === 'green').length;
+  const stories = features.flatMap(f => (f.epics || []).flatMap(e => e.stories || []));
+  const relReady = stories.filter(s => s.releaseReady).length;
+  bar.innerHTML = `
+    <div class="summary-stat"><span class="val">${total}</span> features</div>
+    <div class="summary-stat"><span class="val" style="color:var(--red)">${blocked}</span> blocked</div>
+    <div class="summary-stat"><span class="val" style="color:var(--amber)">${amber}</span> at risk</div>
+    <div class="summary-stat"><span class="val" style="color:var(--green)">${green}</span> moving</div>
+    <div class="summary-stat"><span class="val">${stories.length}</span> stories total</div>
+    ${relReady > 0 ? `<div class="summary-stat"><span class="val" style="color:var(--teal)">${relReady}</span> release-ready</div>` : ''}
+  `;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BOARD
+// ─────────────────────────────────────────────────────────────────────────────
+function render() {
+  const features = filteredFeatures();
+  renderSummary(features);
+  renderBoard(features);
+  populateTeamFilter();
+  updateTimestamp();
+}
+
+function renderBoard(features) {
+  const board = document.getElementById('board');
+
+  if (features.length === 0) {
+    board.innerHTML = `
+      <div class="empty-state">
+        <h2>${allData && allData.features.length > 0 ? 'No features match your filters' : 'Pipeline is empty'}</h2>
+        <p>${allData && allData.features.length > 0
+          ? 'Try clearing your filters to see all features.'
+          : 'Run <code>/workflow</code> to begin, or add features to <code>pipeline-state.json</code>.'}</p>
+      </div>`;
+    return;
+  }
+
+  // Group features by stage
+  const byStage = {};
+  STAGES.forEach(s => { byStage[s.id] = []; });
+  features.forEach(f => {
+    const bucket = byStage[f.stage] || byStage['stalled'];
+    bucket.push(f);
+  });
+
+  // Only render stages that have features (or are core stages)
+  const coreStages = ['discovery','benefit-metric','definition','review','test-plan',
+    'definition-of-ready','subagent-execution','verify-completion','branch-complete',
+    'definition-of-done','released'];
+  const stagesToShow = STAGES.filter(s =>
+    coreStages.includes(s.id) || byStage[s.id].length > 0);
+
+  board.innerHTML = stagesToShow.map(s => `
+    <div class="col" data-stage="${s.id}">
+      <div class="col-header">
+        <span>${s.label}</span>
+        <span class="col-count">${byStage[s.id].length}</span>
+      </div>
+      <div class="col-body">
+        ${byStage[s.id].map(f => featureCardHTML(f)).join('') || '<div style="color:var(--border);font-size:11px;padding:4px 0">—</div>'}
+      </div>
+    </div>`).join('');
+
+  bindCardEvents();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FEATURE CARD
+// ─────────────────────────────────────────────────────────────────────────────
+function featureCardHTML(f) {
+  const isOpen = openFeatures.has(f.slug);
+  const epics  = f.epics || [];
+  const allStories = epics.flatMap(e => e.stories || []);
+  const teamTag = f.team ? `<span class="tag">${esc(f.team)}</span>` : '';
+  const blocker = f.blocker && f.health === 'red'
+    ? `<div class="blocker-notice">🚫 ${esc(f.blocker)}</div>` : '';
+
+  return `
+  <div class="feature-card health-${f.health}" data-slug="${f.slug}">
+    <div class="card-header" data-action="toggle-feature" data-slug="${f.slug}">
+      <span class="card-toggle ${isOpen ? 'open' : ''}">▶</span>
+      <span class="card-title">${esc(f.name)}</span>
+      <span class="card-track ${f.track}">${trackLabel(f.track)}</span>
+    </div>
+    <div class="card-body ${isOpen ? 'open' : ''}">
+      ${blocker}
+      <div class="meta">
+        ${teamTag}
+        <span class="tag ${f.health}">${healthEmoji(f.health)} ${f.health}</span>
+        <span class="tag">${allStories.length} stor.</span>
+        ${allStories.filter(s => s.releaseReady).length > 0
+          ? `<span class="tag" style="color:var(--teal)">✓ ${allStories.filter(s=>s.releaseReady).length} rel-ready</span>` : ''}
+      </div>
+      ${epics.length > 0 ? `<div class="epic-list">${epics.map(e => epicRowHTML(f.slug, e)).join('')}</div>` : '<div style="font-size:11px;color:var(--muted)">No epics yet</div>'}
+    </div>
+  </div>`;
+}
+
+function epicRowHTML(featureSlug, epic) {
+  const key    = `${featureSlug}::${epic.slug}`;
+  const isOpen = openEpics.has(key);
+  const stories = epic.stories || [];
+  return `
+  <div class="epic-row" data-epic-key="${key}">
+    <div class="epic-row-header" data-action="toggle-epic" data-key="${key}">
+      <span class="epic-toggle ${isOpen ? 'open' : ''}">▶</span>
+      <span class="epic-status-dot status-${epic.status}"></span>
+      <span class="epic-name">${esc(epic.name)}</span>
+      <span style="font-size:10px;color:var(--muted)">${stories.length}</span>
+    </div>
+    <div class="story-list ${isOpen ? 'open' : ''}">
+      ${stories.length > 0 ? stories.map(s => storyRowHTML(featureSlug, epic.slug, s)).join('') : '<div style="font-size:11px;color:var(--muted);padding:2px 0">No stories</div>'}
+    </div>
+  </div>`;
+}
+
+function storyRowHTML(featureSlug, epicSlug, story) {
+  const key    = `${featureSlug}::${epicSlug}::${story.slug}`;
+  const isOpen = openStories.has(key);
+  const acPct  = story.acTotal > 0 ? Math.round((story.acVerified / story.acTotal) * 100) : null;
+  const testPct = story.testPlan && story.testPlan.totalTests > 0
+    ? Math.round((story.testPlan.passing / story.testPlan.totalTests) * 100) : null;
+
+  const pills = [
+    story.reviewStatus === 'passed'       ? `<span class="pill ok">Review ✓</span>` :
+    story.reviewStatus === 'has-findings' ? `<span class="pill ${story.highFindings > 0 ? 'fail' : 'warn'}">${story.highFindings || 0} HIGH</span>` :
+                                            `<span class="pill none">Review —</span>`,
+
+    story.dorStatus === 'signed-off'  ? `<span class="pill ok">DoR ✓</span>` :
+    story.dorStatus === 'blocked'     ? `<span class="pill fail">DoR ✗</span>` :
+                                        `<span class="pill none">DoR —</span>`,
+
+    story.prStatus === 'merged'  ? `<span class="pill ok">PR merged</span>` :
+    story.prStatus === 'open'    ? `<span class="pill warn">PR open</span>` :
+    story.prStatus === 'draft'   ? `<span class="pill none">PR draft</span>` : '',
+
+    story.dodStatus === 'complete' ? `<span class="pill ok">DoD ✓</span>` : '',
+    story.releaseReady             ? `<span class="pill ok" style="color:var(--teal);border-color:rgba(20,184,166,.4)">Release ready</span>` : '',
+  ].filter(Boolean).join('');
+
+  return `
+  <div class="story-row" data-story-key="${key}" data-action="open-story">
+    <div class="story-row-top">
+      <div class="story-health" style="background:${healthColour(story.health)}"></div>
+      <span class="story-name">${esc(story.name)}</span>
+      <span class="story-stage-badge">${story.stage}</span>
+    </div>
+    ${isOpen ? `
+    <div class="story-details open">
+      ${acPct !== null ? `
+      <div class="story-progress">
+        <div class="progress-label"><span>ACs verified</span><span>${story.acVerified}/${story.acTotal}</span></div>
+        <div class="progress-bar"><div class="progress-fill ${acPct < 100 ? 'partial' : ''}" style="width:${acPct}%"></div></div>
+      </div>` : ''}
+      ${testPct !== null ? `
+      <div class="story-progress" style="margin-top:4px">
+        <div class="progress-label"><span>Tests passing</span><span>${story.testPlan.passing}/${story.testPlan.totalTests}</span></div>
+        <div class="progress-bar"><div class="progress-fill ${testPct < 100 ? 'partial' : ''}" style="width:${testPct}%"></div></div>
+      </div>` : ''}
+      <div class="story-pills">${pills}</div>
+    </div>` : ''}
+  </div>`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STORY DRAWER
+// ─────────────────────────────────────────────────────────────────────────────
+function openDrawer(featureSlug, epicSlug, storySlug) {
+  const feature = allData.features.find(f => f.slug === featureSlug);
+  if (!feature) return;
+  const epic  = (feature.epics || []).find(e => e.slug === epicSlug);
+  const story = epic ? (epic.stories || []).find(s => s.slug === storySlug) : null;
+  if (!story) return;
+
+  const acPct   = story.acTotal > 0 ? Math.round((story.acVerified / story.acTotal) * 100) : null;
+  const testPct = story.testPlan && story.testPlan.totalTests > 0
+    ? Math.round((story.testPlan.passing / story.testPlan.totalTests) * 100) : null;
+
+  const featureSlugPath = featureSlug;
+  const storyPath = `.github/artefacts/${featureSlugPath}/stories/${storySlug}.md`;
+  const testPath  = `.github/artefacts/${featureSlugPath}/test-plans/${storySlug}-test-plan.md`;
+  const dorPath   = `.github/artefacts/${featureSlugPath}/dor/${storySlug}-dor.md`;
+
+  document.getElementById('drawer-content').innerHTML = `
+    <h2>${esc(story.name)}</h2>
+    <div class="drawer-stage">Stage: <strong>${story.stage}</strong> &nbsp;·&nbsp; Health: <strong style="color:${healthColour(story.health)}">${healthEmoji(story.health)} ${story.health}</strong></div>
+
+    ${story.health === 'red' && story.blocker ? `<div class="drawer-blocker">🚫 ${esc(story.blocker)}</div>` : ''}
+
+    <div class="drawer-section">
+      <h3>Progress</h3>
+      ${acPct !== null ? `
+      <div style="margin-bottom:8px">
+        <div class="progress-label"><span>ACs verified</span><span>${story.acVerified}/${story.acTotal} (${acPct}%)</span></div>
+        <div class="progress-bar" style="height:6px"><div class="progress-fill ${acPct<100?'partial':''}" style="width:${acPct}%"></div></div>
+      </div>` : ''}
+      ${testPct !== null ? `
+      <div>
+        <div class="progress-label"><span>Tests passing</span><span>${story.testPlan.passing}/${story.testPlan.totalTests} (${testPct}%)</span></div>
+        <div class="progress-bar" style="height:6px"><div class="progress-fill ${testPct<100?'partial':''}" style="width:${testPct}%"></div></div>
+      </div>` : '<div style="font-size:11px;color:var(--muted)">No test plan yet</div>'}
+    </div>
+
+    <div class="drawer-section">
+      <h3>Gates</h3>
+      <div class="drawer-row"><span class="label">Review</span><span>${reviewBadge(story)}</span></div>
+      <div class="drawer-row"><span class="label">Def of Ready</span><span>${dorBadge(story)}</span></div>
+      <div class="drawer-row"><span class="label">PR</span><span>${prBadge(story)}</span></div>
+      <div class="drawer-row"><span class="label">Def of Done</span><span>${dodBadge(story)}</span></div>
+    </div>
+
+    <div class="drawer-section">
+      <h3>Artefacts</h3>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <a class="drawer-link" href="${storyPath}">📄 Story artefact</a>
+        <a class="drawer-link" href="${testPath}">🧪 Test plan</a>
+        <a class="drawer-link" href="${dorPath}">✅ Definition of Ready</a>
+        ${story.prUrl ? `<a class="drawer-link" href="${story.prUrl}" target="_blank">🔗 Pull request</a>` : ''}
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <h3>Context</h3>
+      <div class="drawer-row"><span class="label">Feature</span><span>${esc(feature.name)}</span></div>
+      <div class="drawer-row"><span class="label">Epic</span><span>${esc(epic.name)}</span></div>
+      <div class="drawer-row"><span class="label">Track</span><span>${trackLabel(feature.track)}</span></div>
+      ${feature.team ? `<div class="drawer-row"><span class="label">Team</span><span>${esc(feature.team)}</span></div>` : ''}
+    </div>
+  `;
+
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+}
+
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EVENT BINDING
+// ─────────────────────────────────────────────────────────────────────────────
+function bindCardEvents() {
+  document.getElementById('board').addEventListener('click', e => {
+    const featureToggle = e.target.closest('[data-action="toggle-feature"]');
+    if (featureToggle) {
+      const slug = featureToggle.dataset.slug;
+      openFeatures.has(slug) ? openFeatures.delete(slug) : openFeatures.add(slug);
+      render(); return;
+    }
+    const epicToggle = e.target.closest('[data-action="toggle-epic"]');
+    if (epicToggle) {
+      const key = epicToggle.dataset.key;
+      openEpics.has(key) ? openEpics.delete(key) : openEpics.add(key);
+      render(); return;
+    }
+    const storyRow = e.target.closest('[data-action="open-story"]');
+    if (storyRow) {
+      const [fSlug, eSlug, sSlug] = storyRow.dataset.storyKey.split('::');
+      openDrawer(fSlug, eSlug, sSlug);
+    }
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FILTER CONTROLS
+// ─────────────────────────────────────────────────────────────────────────────
+function populateTeamFilter() {
+  if (!allData) return;
+  const sel = document.getElementById('filter-team');
+  const current = sel.value;
+  const teams = [...new Set(allData.features.map(f => f.team).filter(Boolean))].sort();
+  sel.innerHTML = `<option value="">All</option>` + teams.map(t => `<option value="${esc(t)}" ${t===current?'selected':''}>${esc(t)}</option>`).join('');
+}
+
+function initFilters() {
+  ['health','track','team'].forEach(k => {
+    document.getElementById(`filter-${k}`).addEventListener('change', e => {
+      activeFilters[k] = e.target.value; render();
+    });
+  });
+  document.getElementById('filter-search').addEventListener('input', e => {
+    activeFilters.search = e.target.value; render();
+  });
+  document.getElementById('expand-all-btn').addEventListener('click', () => {
+    if (!allData) return;
+    allData.features.forEach(f => {
+      openFeatures.add(f.slug);
+      (f.epics||[]).forEach(e => openEpics.add(`${f.slug}::${e.slug}`));
+    });
+    render();
+  });
+  document.getElementById('collapse-all-btn').addEventListener('click', () => {
+    openFeatures.clear(); openEpics.clear(); openStories.clear(); render();
+  });
+  document.getElementById('reload-btn').addEventListener('click', loadState);
+  document.getElementById('drawer-close').addEventListener('click', closeDrawer);
+  document.getElementById('drawer-overlay').addEventListener('click', closeDrawer);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// KEYBOARD
+// ─────────────────────────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+  if (e.key === 'Escape') { closeDrawer(); return; }
+  if (e.key === 'e') { document.getElementById('expand-all-btn').click(); return; }
+  if (e.key === 'c') { document.getElementById('collapse-all-btn').click(); return; }
+  if (e.key === 'f') { document.getElementById('filter-search').focus(); e.preventDefault(); }
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function healthColour(h) { return h==='red' ? 'var(--red)' : h==='amber' ? 'var(--amber)' : 'var(--green)'; }
+function healthEmoji(h)  { return h==='red' ? '🔴' : h==='amber' ? '🟡' : '🟢'; }
+function trackLabel(t)   { return t==='short' ? 'Short' : t==='standard' ? 'Std' : 'Prog'; }
+
+function reviewBadge(s) {
+  if (s.reviewStatus === 'passed')       return `<span style="color:var(--green)">✓ Passed</span>`;
+  if (s.reviewStatus === 'has-findings') return `<span style="color:${s.highFindings>0?'var(--red)':'var(--amber)}">${s.highFindings||0} HIGH finding${s.highFindings!==1?'s':''}</span>`;
+  return `<span style="color:var(--muted)">Not started</span>`;
+}
+function dorBadge(s) {
+  if (s.dorStatus === 'signed-off') return `<span style="color:var(--green)">✓ Signed off</span>`;
+  if (s.dorStatus === 'blocked')    return `<span style="color:var(--red)">✗ Blocked</span>`;
+  return `<span style="color:var(--muted)">Not started</span>`;
+}
+function prBadge(s) {
+  if (!s.prStatus || s.prStatus === 'none') return `<span style="color:var(--muted)">None</span>`;
+  const col = s.prStatus==='merged' ? 'var(--green)' : s.prStatus==='open' ? 'var(--amber)' : 'var(--muted)';
+  const link = s.prUrl ? ` — <a class="drawer-link" href="${esc(s.prUrl)}" target="_blank">open ↗</a>` : '';
+  return `<span style="color:${col}">${s.prStatus}${link}</span>`;
+}
+function dodBadge(s) {
+  if (s.dodStatus === 'complete') return `<span style="color:var(--green)">✓ Complete</span>`;
+  return `<span style="color:var(--muted)">Not started</span>`;
+}
+
+function updateTimestamp() {
+  const el = document.getElementById('last-updated');
+  if (allData && allData.updated) {
+    const d = new Date(allData.updated);
+    el.textContent = `Updated ${d.toLocaleString()}`;
+  } else {
+    el.textContent = '';
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────────────────
+initFilters();
+loadState();
+</script>
+</body>
+</html>

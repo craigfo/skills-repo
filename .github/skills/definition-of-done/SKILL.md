@@ -161,3 +161,14 @@ Save to `.github/artefacts/[feature]/dod/[story-slug]-dod.md`.
 - Does not approve or merge PRs — that is a human action
 - Does not measure metrics — records when measurement becomes possible
 - Does not create follow-up stories — flags what needs follow-up for humans to action
+
+---
+
+## State update
+
+When the DoD artefact is saved:
+
+- Set story `stage: "definition-of-done"`, `dodStatus: "complete"`, `prStatus: "merged"`, `health: "green"`, `updatedAt: [now]`
+- If all ACs are covered: set `releaseReady: true`
+- If deviations or gaps exist: set `releaseReady: false`, `health: "amber"`, note deviation in `blocker`
+- Update the epic `status`: if all stories in the epic are `dodStatus: "complete"`, set epic `status: "complete"`

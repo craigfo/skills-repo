@@ -213,3 +213,13 @@ explained as unknown.
 - Does not define acceptance criteria — those live on stories
 - Does not replace a full OKR or KPI framework
 - Does not update the discovery artefact
+
+---
+
+## State update
+
+When the benefit-metric artefact is saved and marked active, update `.github/pipeline-state.json`:
+
+- Set `stage: "benefit-metric"`, `health: "green"`, `updatedAt: [now]`
+
+**Human review note:** If a human approves or modifies the benefit-metric artefact outside a skill session, run `/workflow` to reconcile.

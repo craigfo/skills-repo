@@ -292,4 +292,14 @@ approved scope note).
 - Does not run /definition-of-ready
 - Does not assign stories to people, sprints, or milestones
 - Does not modify discovery or benefit-metric artefacts except the coverage matrix
-  and approved scope notes
+---
+
+## State update
+
+When all epics and stories for a feature are written and saved:
+
+- Set feature `stage: "definition"`, `health: "green"`, `updatedAt: [now]`
+- Populate `epics[]` array: for each epic, add `{ slug, name, status: "not-started", stories: [] }`
+- For each story under each epic, add `{ slug, name, stage: "definition", health: "green" }`
+
+**Human review note:** If a human adds or modifies stories outside a skill session, run `/workflow` to reconcile — it will diff artefacts against the state file.  and approved scope notes

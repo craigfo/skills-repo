@@ -165,3 +165,15 @@ When triggered on PR open, post a condensed comment:
 - Does not make scope decisions — records deviations, humans decide
 - Does not update any artefact — read-only
 - Does not replace code review
+
+---
+
+## State update
+
+/trace is read-only and does not update artefacts, but it does update the state file to surface findings:
+
+- For any story where a broken chain link is found: set `health: "amber"` (missing artefact) or `"red"` (broken traceability)
+- Set `stage: "trace"` for stories that have completed the full chain
+- Set `updatedAt: [now]` on the feature record
+
+This allows the visualiser to surface traceability gaps as amber/red health.

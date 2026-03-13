@@ -140,3 +140,15 @@ If a commit exists that doesn't correspond to either:
 **Follows:** /subagent-execution or /tdd
 **Blocked by:** failing tests, any ❌ AC
 **When fixing failures:** use /tdd (test first) or /systematic-debugging
+
+---
+
+## State update
+
+After running the verification command and walking all ACs:
+
+- Set story `stage: "verify-completion"`, `updatedAt: [now]`
+- Set `acVerified: [count of ✅ ACs]`, `acTotal: [total ACs]`
+- Set `testPlan.passing: [count of passing tests]`
+- If all ACs pass and all tests pass: set `health: "green"`, clear `blocker`
+- If any AC fails or any test fails: set `health: "red"`, `blocker: "[first failing AC or test suite]"`

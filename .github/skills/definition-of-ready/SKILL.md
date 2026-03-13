@@ -200,3 +200,14 @@ conforming to `.github/templates/definition-of-ready-checklist.md`.
 - Does not run the coding agent
 - Does not approve the PR
 - Does not override a BLOCK — all hard blocks must pass
+
+---
+
+## State update
+
+After producing the DoR output, for each story:
+
+- If all hard blocks pass: set `stage: "definition-of-ready"`, `dorStatus: "signed-off"`, `health: "green"`, `updatedAt: [now]`
+- If any hard block fails: set `dorStatus: "blocked"`, `health: "red"`, `blocker: "[first failing block description]"`, `updatedAt: [now]`
+
+**Human sign-off note:** DoR requires explicit human sign-off. When a human confirms "Proceed", update `dorStatus: "signed-off"` in the state file if not already set, or run `/workflow` to reconcile.

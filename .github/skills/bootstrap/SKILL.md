@@ -88,9 +88,13 @@ Check whether `.github/skills/` already exists:
 
   artefacts/
     .gitkeep                      ← placeholder so directory is committed
+
+  pipeline-state.json             ← live pipeline state (updated by all skills)
+  pipeline-state.schema.json      ← JSON schema for pipeline-state.json
+  pipeline-viz.html               ← interactive pipeline visualiser (open in browser)
 ```
 
-**Total: 23 skill files + 21 templates + 3 root files + artefacts directory**
+**Total: 23 skill files + 21 templates + 3 root files + 3 viz files + artefacts directory**
 
 ---
 

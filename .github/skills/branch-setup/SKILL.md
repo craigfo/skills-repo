@@ -144,3 +144,13 @@ Do not proceed past a failing baseline without explicit acknowledgement.
 **Follows:** /definition-of-ready (DoR sign-off)
 **Precedes:** /implementation-plan
 **Cleanup:** /branch-complete removes the worktree when implementation is done
+
+---
+
+## State update
+
+When the worktree is created and the clean baseline is confirmed:
+
+- Set feature `stage: "branch-setup"`, `health: "green"`, `updatedAt: [now]`
+- Set each story in the feature to `stage: "branch-setup"`
+- If baseline tests fail: set `health: "red"`, `blocker: "Baseline tests failing — clean up before implementing"`

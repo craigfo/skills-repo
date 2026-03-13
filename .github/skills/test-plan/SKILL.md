@@ -283,3 +283,14 @@ Write it so it works equally well for all three without modification:
 - Does not source test data — identifies what is needed and flags gaps
 - Does not replace a full QA test strategy
 - Does not generate E2E test plans — separate concern
+
+---
+
+## State update
+
+When the test plan is saved, for each story update `.github/pipeline-state.json`:
+
+- Set `stage: "test-plan"`, `updatedAt: [now]`
+- Set `testPlan: { status: "written", totalTests: [count], passing: 0 }`
+- Set `acTotal: [count of ACs in the story]`, `acVerified: 0`
+- Set `health: "green"`

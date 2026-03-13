@@ -210,3 +210,16 @@ git worktree remove [worktree-path]
 **Follows:** /verify-completion
 **Precedes:** /definition-of-done (run after the PR is merged)
 **Cleanup for:** /branch-setup worktree
+
+---
+
+## State update
+
+After the chosen option is executed:
+
+- **Draft PR opened:** set story `stage: "branch-complete"`, `prStatus: "draft"`, `prUrl: "[url]"`, `health: "green"`, `updatedAt: [now]`
+- **PR opened (ready for review):** set `prStatus: "open"`, `prUrl: "[url]"`
+- **Merged locally:** set `stage: "branch-complete"`, `prStatus: "merged"`, `health: "green"`
+- **Branch kept / discarded:** set `stage: "verify-completion"` (no PR yet)
+
+**Human action note:** When a human merges the PR, update `prStatus: "merged"` in the state file, or run `/workflow` to reconcile — it will detect the merge from artefacts.

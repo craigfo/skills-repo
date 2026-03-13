@@ -208,3 +208,14 @@ After producing the artefact:
 - Does not write stories or ACs — that is /definition
 - Does not make build/buy/defer decisions
 - Does not update Jira tickets
+
+---
+
+## State update
+
+When the discovery artefact is saved and approved, update `.github/pipeline-state.json`:
+
+- If the feature does not exist in `features[]`: add a new entry with `stage: "discovery"`, `health: "green"`, `updatedAt: [now]`
+- If it exists: set `stage: "discovery"`, `health: "green"`, `updatedAt: [now]`
+
+**Human review note:** If a human approves the discovery outside of a skill session, run `/workflow` — it will reconcile the state file with the artefacts.

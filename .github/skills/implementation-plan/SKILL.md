@@ -219,3 +219,11 @@ Save to `.github/artefacts/[feature]/plans/[story-slug]-plan.md`.
 **Produces:** `.github/artefacts/[feature]/plans/[story-slug]-plan.md`
 **Follows:** /branch-setup
 **Precedes:** /subagent-execution or /tdd (task by task)
+
+---
+
+## State update
+
+When the implementation plan is saved:
+
+- Set the story `stage: "implementation-plan"`, `health: "green"`, `updatedAt: [now]`
