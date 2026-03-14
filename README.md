@@ -36,7 +36,7 @@ flowchart TD
         REV["/review\nCategories A–E\nQuality gate"]
         TP["/test-plan\nTechnical tests +\nAC verification script\n+ E2E / layout detection"]
         DOR["/definition-of-ready\nH1–H9 + H-E2E hard blocks\nCoding instructions"]
-        DOD["/definition-of-done\nPost-merge AC coverage"]
+        DOD["/definition-of-done\nPost-merge AC coverage\n+ CSS gap audit trail"]
         TR["/trace\nFull chain\ntraceability report"]
     end
 
@@ -96,6 +96,8 @@ flowchart TD
         SPIKE["/spike\nTimeboxed investigation\nPROCEED / REDESIGN / DEFER"]
         DEC["/decisions\nRunning log + ADRs\nFeature + repo level"]
         RE["/reverse-engineer\nExtract business rules\nfrom legacy code"]
+        CM["/coverage-map\nVisual AC coverage map\ngap type · risk level"]
+        RS["/record-signal\nRecord benefit metric\nsignal on demand"]
     end
 
     REV -->|Genuine unknown| SPIKE
@@ -105,6 +107,10 @@ flowchart TD
 
     DEC -.->|Any decision point| STANDARD
     RE -.->|Feeds context| DISC
+    TP -.->|suggests after last story| CM
+    TR -.->|calls| CM
+    DOD -.->|on demand| RS
+    CM -.->|gap visibility| DOR
 
     %% ─── RELEASE ───────────────────────────────────────────────
     subgraph REL_BOX["🚀 Release"]
@@ -139,7 +145,7 @@ flowchart TD
     class DOR gate
     class ICL_BS,ICL_IP,ICL_SE,ICL_IR,ICL_VC,BC inner
     class TDD,SDBG inner
-    class SPIKE,DEC,RE support
+    class SPIKE,DEC,RE,CM,RS support
     class PROG,MR,WS1,WS2,WSN prog
     class REL skill
     class AG,REF store
