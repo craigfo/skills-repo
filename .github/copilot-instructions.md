@@ -97,6 +97,7 @@ Skills reference these templates — do not embed format definitions in skill fi
 | Migration story | `.github/templates/migration-story.md` |
 | Consumer registry | `.github/templates/consumer-registry.md` |
 | Coverage map | `.github/templates/coverage-map.md` |
+| Ideation | `.github/templates/ideation.md` |
 
 When a skill produces a structured artefact, it uses the relevant template.
 When reviewing artefacts, check them against the template — missing fields are findings.
@@ -138,6 +139,8 @@ All pipeline artefacts are saved to `.github/artefacts/[feature-slug]/`:
   coverage/
     coverage-map.md
     coverage-map.html
+  research/
+    ideation.md                   ← produced by /ideate
 ```
 
 ---
