@@ -204,6 +204,8 @@
     background: var(--bg); border-radius: 3px; border: 1px solid var(--border);
   }
   .task-name { font-size: 10px; color: var(--text); flex: 1; line-height: 1.3; }
+  a.task-link { color: var(--blue); text-decoration: none; }
+  a.task-link:hover { text-decoration: underline; }
   .tdd-badge {
     font-size: 9px; font-weight: 700; border-radius: 3px; padding: 1px 5px;
     flex-shrink: 0; letter-spacing: .04em;
@@ -1098,7 +1100,9 @@ function taskListInlineHTML(story, storyKey) {
   const items   = story.tasks.map(t => `
     <div class="task-item">
       ${tddBadgeHTML(t.tddState || 'not-started')}
-      <span class="task-name">${esc(t.name)}</span>
+      ${t.file
+        ? `<a class="task-name task-link" href="${t.file}">${esc(t.name)}</a>`
+        : `<span class="task-name">${esc(t.name)}</span>`}
     </div>`).join('');
   return `
   ${taskMiniBarHTML(story)}
@@ -1115,7 +1119,9 @@ function drawerTaskListHTML(story) {
   const items = story.tasks.map((t, i) => `
     <div class="drawer-task-item">
       <span class="drawer-task-num">${i + 1}.</span>
-      <span class="drawer-task-name">${esc(t.name)}</span>
+      ${t.file
+        ? `<a class="drawer-task-name task-link" href="${t.file}">${esc(t.name)}</a>`
+        : `<span class="drawer-task-name">${esc(t.name)}</span>`}
       ${tddBadgeHTML(t.tddState || 'not-started', 'tdd-badge drawer-tdd-badge')}
     </div>`).join('');
   return `

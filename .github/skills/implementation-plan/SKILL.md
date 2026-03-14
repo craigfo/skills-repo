@@ -227,3 +227,13 @@ Save to `.github/artefacts/[feature]/plans/[story-slug]-plan.md`.
 Update `.github/pipeline-state.json` in the **project repository** when the implementation plan is saved:
 
 - Set the story `stage: "implementation-plan"`, `health: "green"`, `updatedAt: [now]`
+- Populate the story `tasks` array from the plan. Each task entry:
+  ```json
+  {
+    "id": "task-1",
+    "name": "Short task title",
+    "tddState": "not-started",
+    "file": ".github/artefacts/[feature-slug]/plans/[story-slug]-plan.md"
+  }
+  ```
+  Set `file` to the path of the plan artefact (all tasks in a story share the same plan file). The visualiser will render each task name as a clickable link to the plan markdown.
