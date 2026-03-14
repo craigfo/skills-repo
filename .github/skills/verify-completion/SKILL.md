@@ -70,11 +70,7 @@ For each scenario:
 - Confirm the test output demonstrates it passes
 - Mark: ✅ Verified / ❌ Not verified
 
-> ## AC verification
->
-> ✅ **AC-1: [title]** — `[test name]` passes: [quote from test output]
-> ✅ **AC-2: [title]** — `[test name]` passes: [quote from test output]
-> ❌ **AC-3: [title]** — `[test name]` is missing / failing: [evidence]
+Report using the AC verification table from `templates/verify-completion.md`.
 
 If any AC is ❌: stop. Do not open a PR. Fix and re-run from Step 1.
 

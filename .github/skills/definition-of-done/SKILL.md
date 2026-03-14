@@ -54,11 +54,7 @@ State what was found:
 For each AC in the story, verify the merged code satisfies it.
 Reference specific test results or observable behaviour where possible.
 
-Present as a table:
-
-| AC | Satisfied? | Evidence | Deviation |
-|----|-----------|----------|-----------|
-| AC1 | ✅ / ⚠️ / ❌ | [test name / behaviour] | [if any] |
+Use the AC coverage table format from `templates/definition-of-done.md`.
 
 **A deviation is any difference between implemented behaviour and the AC** —
 even if minor. Deviations are not failures, but they must be recorded.

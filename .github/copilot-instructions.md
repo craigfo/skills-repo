@@ -98,6 +98,13 @@ Skills reference these templates — do not embed format definitions in skill fi
 | Consumer registry | `.github/templates/consumer-registry.md` |
 | Coverage map | `.github/templates/coverage-map.md` |
 | Ideation | `.github/templates/ideation.md` |
+| Spike outcome | `.github/templates/spike-outcome.md` |
+| Metric review | `.github/templates/metric-review.md` |
+| Programme | `.github/templates/programme.md` |
+| Implementation plan | `.github/templates/implementation-plan.md` |
+| Implementation review | `.github/templates/implementation-review.md` |
+| Compliance bundle | `.github/templates/compliance-bundle.md` |
+| Verify completion | `.github/templates/verify-completion.md` |
 
 When a skill produces a structured artefact, it uses the relevant template.
 When reviewing artefacts, check them against the template — missing fields are findings.

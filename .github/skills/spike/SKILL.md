@@ -154,40 +154,8 @@ the outcome artefact with DEFER and an honest accounting of what remains unknown
 
 ## Outcome artefact
 
-Save to `.github/artefacts/[feature]/spikes/[spike-slug]-outcome.md`
-
-```markdown
-# Spike Outcome: [title]
-
-Opened: [date] | Closed: [date] | Timebox used: [n of n days]
-Done condition met: Yes / Partially / No — [explain if not fully met]
-
-## Outcome: PROCEED / REDESIGN / DEFER
-
-### What was found
-[Factual — what was observed, measured, confirmed, or heard. No interpretation yet.]
-
-### Reasoning
-[How the findings lead to the outcome. Explicit — do not assume the connection is obvious.]
-
-### If PROCEED
-Unblocked stage: [which stage can now continue]
-Conditions: [any constraints that must hold for PROCEED to remain valid]
-
-### If REDESIGN
-What needs to change: [specific — which story, AC, or approach]
-Suggested direction: [options if known]
-Return to: [which pipeline stage to re-enter]
-
-### If DEFER
-Reason: [why this cannot be answered now]
-Impact: [what remains uncertain and what risk that creates]
-Trigger to re-open: [what would need to change]
-Blocked work: [can it proceed with acknowledged risk, or must it defer too?]
-
-## What remains unknown
-[Honest accounting — even for PROCEED outcomes]
-```
+Conforms to `.github/templates/spike-outcome.md`.
+Save to `.github/artefacts/[feature]/spikes/[spike-slug]-outcome.md`.
 
 ---
 

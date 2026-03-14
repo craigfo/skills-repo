@@ -102,18 +102,8 @@ When invoked, the first question is always which track:
 
 ### Log entry output
 
-Append to `## Log entries` section of `decisions.md`:
-
-```markdown
----
-**[DATE] | [CATEGORY] | [pipeline stage]**
-**Decision:** [one sentence]
-**Alternatives considered:** [what else was on the table]
-**Rationale:** [why this option]
-**Made by:** [name + role, or basis for the decision]
-**Revisit trigger:** [what would change this]
----
-```
+Append to the `## Log entries` section of `decisions.md`.
+Format: see `## Log entries` in `templates/decision-log.md`.
 
 > **Logged ✅**
 > [Decision summary — one line]
@@ -182,43 +172,8 @@ Confirm the next ADR number from the existing log, then:
 
 ### ADR output
 
-Append to `## Architecture Decision Records` section of `decisions.md`:
-
-```markdown
----
-## ADR-[N]: [Title]
-
-**Date:** [date]
-**Status:** Accepted
-**Decided by:** [name + role]
-
-### Context
-[Human-provided context from step 2]
-
-### Options considered
-
-**Option 1: [name]**
-Pros: [list]
-Cons: [list]
-
-**Option 2: [name]**
-Pros: [list]
-Cons: [list]
-
-[Additional options if provided]
-
-### Decision
-[What was decided and primary reason]
-
-### Consequences
-**Easier:** [what becomes easier]
-**Harder:** [what becomes harder or constrained]
-**Off the table:** [what is now excluded]
-
-### Revisit trigger
-[What would cause reconsideration]
----
-```
+Append to the `## Architecture Decision Records` section of `decisions.md`.
+Format: see `## Architecture Decision Records` in `templates/decision-log.md`.
 
 > **ADR-[N] recorded ✅**
 > [Title]

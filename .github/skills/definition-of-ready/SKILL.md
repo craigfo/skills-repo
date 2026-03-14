@@ -133,30 +133,7 @@ Surface as:
 
 Produced when all hard blocks pass. Written into the DoR artefact.
 
-```
-## Coding Agent Instructions
-
-Proceed: Yes
-Story: [story title] — [path to story artefact]
-Test plan: [path to test plan artefact]
-
-Goal:
-Make every test in the test plan pass. Do not add scope, behaviour, or
-structure beyond what the tests and ACs specify.
-
-Constraints:
-- [Language, framework, and conventions from copilot-instructions.md]
-- [Files, layers, or components explicitly out of scope for this story]
-- Architecture standards: read `.github/architecture-guardrails.md` before
-  implementing. Do not introduce patterns listed as anti-patterns or violate
-  named mandatory constraints or Active ADRs. If the file does not exist,
-  note this in a PR comment.
-- Open a draft PR when tests pass — do not mark ready for review
-- If you encounter an ambiguity not covered by the ACs or tests:
-  add a PR comment describing the ambiguity and do not mark ready for review
-
-Oversight level: [Low / Medium / High]
-```
+Conforms to the `## Coding Agent Instructions` section of `templates/definition-of-ready-checklist.md`.
 
 Save DoR artefact to `.github/artefacts/[feature]/dor/[story-slug]-dor.md`
 conforming to `.github/templates/definition-of-ready-checklist.md`.

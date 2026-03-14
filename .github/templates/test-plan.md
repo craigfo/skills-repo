@@ -22,14 +22,33 @@
 <!--
   Every AC from the story must map to at least one test.
   Use the exact AC identifier from the story (AC1, AC2, AC3...).
-  If an AC has no test, it is a gap — flag it, do not silently skip.
+  If an AC has no test, it is a gap — flag it with a gap type, do not silently skip.
+  
+  Gap types:
+    CSS-layout-dependent — relies on real browser rendering (drag-drop, getBoundingClientRect, CSS position)
+    DOM-behaviour       — e2e-testable but not jsdom-compatible
+    External-dependency — relies on third-party API/service unavailable in test
+    Untestable-by-nature — inherently non-automatable (e.g. visual aesthetics, physical hardware)
 -->
 
-| AC | Test(s) covering it | Coverage status |
-|----|---------------------|-----------------|
-| AC1 | [Test name(s)] | ✅ Covered / ⚠️ Gap |
-| AC2 | [Test name(s)] | ✅ Covered / ⚠️ Gap |
-| AC3 | [Test name(s)] | ✅ Covered / ⚠️ Gap |
+| AC | Description | Unit | Integration | E2E | Manual | Gap type | Risk |
+|----|-------------|------|-------------|-----|--------|----------|------|
+| AC1 | [summary] | [n tests] | [n tests] | — | — | — | 🟢 |
+| AC2 | [summary] | — | — | — | [scenario name] | CSS-layout-dependent | 🔴 |
+| AC3 | [summary] | [n tests] | — | — | — | — | 🟢 |
+
+---
+
+## Coverage gaps
+
+<!--
+  List every AC that cannot be fully covered by automated tests.
+  "None" is the ideal and expected value. Every gap needs a gap type and handling decision.
+-->
+
+| Gap | AC | Gap type | Reason untestable in Jest | Handling |
+|-----|----|----------|--------------------------|---------|
+| [e.g. drag-drop position verified visually] | AC2 | CSS-layout-dependent | `getBoundingClientRect` returns 0 in jsdom | Manual scenario — see AC verification script 🔴 |
 
 ---
 

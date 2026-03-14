@@ -58,13 +58,30 @@
   Overrides or supplements the copilot-instructions.md defaults.
 -->
 
-**Proceed:** [Yes / No — if No, list which hard blocks failed]
+```
+## Coding Agent Instructions
 
-**Agent instructions:**
-- Implement to make the tests in [test plan link] pass — do not add scope
-- Human oversight level: [Low / Medium / High — from parent epic]
-- [Any story-specific constraints — e.g. "do not modify the auth layer", "use existing CSV util"]
-- Open draft PR when tests pass — do not merge
+Proceed: Yes
+Story: [story title] — [path to story artefact]
+Test plan: [path to test plan artefact]
+
+Goal:
+Make every test in the test plan pass. Do not add scope, behaviour, or
+structure beyond what the tests and ACs specify.
+
+Constraints:
+- [Language, framework, and conventions from copilot-instructions.md]
+- [Files, layers, or components explicitly out of scope for this story]
+- Architecture standards: read `.github/architecture-guardrails.md` before
+  implementing. Do not introduce patterns listed as anti-patterns or violate
+  named mandatory constraints or Active ADRs. If the file does not exist,
+  note this in a PR comment.
+- Open a draft PR when tests pass — do not mark ready for review
+- If you encounter an ambiguity not covered by the ACs or tests:
+  add a PR comment describing the ambiguity and do not mark ready for review
+
+Oversight level: [Low / Medium / High]
+```
 
 ---
 

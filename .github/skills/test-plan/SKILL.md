@@ -234,11 +234,9 @@ note it explicitly if found.
 The Test Data Strategy section is defined in `.github/templates/test-plan.md`.
 Populate it with the answers from Step 3 before writing the individual test entries.
 
-### AC coverage table
+### AC coverage table and gap table
 
-| AC | Description | Unit | Integration | E2E | Manual | Gap type | Risk |
-|----|-------------|------|-------------|-----|--------|----------|------|
-| AC1 | [summary] | [n] | [n] | — | — | — | 🟢 |
+Follow the AC coverage table and gap table formats from `templates/test-plan.md`.
 
 > ⚠️ **Test plan error:** A drag-drop, `getBoundingClientRect`, CSS-position, or
 > pointer-coordinate AC listed as covered by Unit or Integration is flagged as
@@ -264,15 +262,7 @@ NFR tests and state this explicitly.
 
 ### Gap table
 
-| Gap | AC | Gap type | Reason untestable in Jest | Handling |
-|-----|----|----------|--------------------------|----------|
-| [description] | ACn | CSS-layout-dependent | [why] | Manual-only — RISK-ACCEPT: [justification] |
-
-**Gap types:**
-- `CSS-layout-dependent` — default: E2E required. Manual-only handling requires explicit risk-accept justification in the table.
-- `render-only` — default: manual + screenshot evidence
-- `external-service` — default: mock + manual smoke
-- `other` — describe specifically
+Follow the gap table format from `templates/test-plan.md`.
 
 ---
 

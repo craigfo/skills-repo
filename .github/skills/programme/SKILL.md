@@ -221,36 +221,8 @@ Create `.github/artefacts/[programme-slug]/consumer-registry.md` from
 
 ### Step 6 — Programme artefact
 
-Save the programme artefact to `.github/artefacts/[programme-slug]/programme.md`.
-
-Structure:
-```
-# Programme: [name]
-
-Type: [type]
-Status: [Active / On hold / Complete]
-Overall timeline: [start] → [end]
-Phase gates: [list with dates and status]
-
-## Workstreams
-
-| Slug | Team | Pipeline stage | Phase target | Status |
-|------|------|---------------|-------------|--------|
-
-## Cross-workstream dependencies
-
-| Upstream workstream | Delivers | Downstream workstream | Blocked at |
-|--------------------|----------|-----------------------|------------|
-
-## Consumer registry
-
-[Link to consumer-registry.md — if applicable]
-
-## /metric-review schedule
-
-| Phase gate | Target date | Review status |
-|-----------|-------------|---------------|
-```
+Conforms to `.github/templates/programme.md`.
+Save to `.github/artefacts/[programme-slug]/programme.md`.
 
 Output completion:
 
@@ -272,27 +244,9 @@ Output completion:
 ## Programme health view
 
 Run this when the programme artefact already exists, or when asked for a status
-update.
-
-Output the programme status table:
-
-```
-## Programme: [name] — Health [date]
-
-Phase: [current phase] | Timeline: [n days to next gate]
-
-| Workstream | Team | Stage | Status | Blocker |
-|-----------|------|-------|--------|---------|
-| [slug]    | [team] | [step N] | ✅ Moving | — |
-| [slug]    | [team] | [step N] | ⚠️ Stalled | [summary] |
-| [slug]    | [team] | [step N] | 🔴 Blocked | [dependency or finding] |
-
-## Dependency health
-
-| Upstream | Downstream | Gate | Status |
-|---------|-----------|------|--------|
-| [workstream: what it must deliver] | [workstream: what it needs] | [stage] | ✅ Met / ⚠️ At risk / 🔴 Blocking |
-```
+update. Update the Health snapshot section of `templates/programme.md` with
+current workstream stages and dependency status, then present the table
+conversationally.
 
 Then ask:
 

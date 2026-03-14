@@ -130,38 +130,8 @@ writing it to the artefact.
 
 ## Output
 
-Produce a metric review supplement saved to:
-`.github/artefacts/[feature]/benefit-metric-review-[YYYY-MM].md`
-
-Using the structure:
-
-```
-# Metric Review — [feature name]
-
-Review period: [start] → [end]
-Reviewed by: [name]
-Date: [date]
-
-## Summary
-
-| Metric | Baseline | Target | Actual | Status |
-|--------|---------|--------|--------|--------|
-| [name] | [value] | [value] | [value] | ✅ On track / ⚠️ At risk / ❌ Off track |
-
-## Detail
-
-### [Metric name]
-[Narrative of what the data shows, what changed, what the response is]
-
-## Targets revised this cycle
-[None / list with rationale and approver]
-
-## Metrics removed this cycle
-[None / list with rationale]
-
-## Next review
-[Date / phase gate / trigger condition]
-```
+Conforms to `.github/templates/metric-review.md`.
+Save to `.github/artefacts/[feature]/benefit-metric-review-[YYYY-MM].md`.
 
 ---
 

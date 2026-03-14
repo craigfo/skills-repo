@@ -50,16 +50,7 @@ Review the diff against each AC:
 | Every test in the test plan is present | No tests deleted or skipped |
 | Tests test real behaviour | Tests would catch a regression, not just mock calls |
 
-Report:
-
-```
-## Spec compliance
-
-✅ AC-1: [title] — satisfied
-✅ AC-2: [title] — satisfied
-❌ AC-3: [title] — missing: [what is missing]
-⚠️  Extra scope: [describe] — not required by any AC
-```
+Report using the Stage 1 — Spec compliance section from `templates/implementation-review.md`.
 
 **If ❌ or ⚠️ items exist:** fix these before proceeding to code quality.
 
@@ -80,22 +71,7 @@ Review the implementation for quality. Assign severity:
 | Magic numbers or strings without named constants | Minor |
 | Minor style inconsistency with the codebase | Minor |
 
-Report severity-grouped:
-
-```
-## Code quality
-
-Critical:
-  - [finding]
-
-Important:
-  - [finding]
-
-Minor:
-  - [finding]
-
-✅ No Critical or Important findings.
-```
+Report using the Stage 2 — Code quality section from `templates/implementation-review.md`.
 
 **Critical** → must fix before proceeding
 **Important** → must fix before opening a PR

@@ -353,6 +353,13 @@ All structured artefacts conform to templates in `.github/templates/`. Skills re
 | `consumer-registry.md` | `/programme` — tracks adoption for library/service rewrites |
 | `coverage-map.md` | `/coverage-map` — coverage map artefact (per-AC detail + gap register) |
 | `ideation.md` | `/ideate` — opportunity map, assumption inventory, market scan, strategy framing |
+| `spike-outcome.md` | `/spike` — spike outcome artefact (PROCEED / REDESIGN / DEFER) |
+| `metric-review.md` | `/metric-review` — benefit metric health check at phase gates |
+| `programme.md` | `/programme` — programme structure and health snapshot |
+| `implementation-plan.md` | `/implementation-plan` — task-by-task TDD plan for coding agents |
+| `implementation-review.md` | `/implementation-review` — spec compliance and code quality report |
+| `compliance-bundle.md` | `/release` — evidence catalogue for regulated or audited releases |
+| `verify-completion.md` | `/verify-completion` — test suite results and AC verification table |
 | `release-notes-technical.md` | `/release` |
 | `release-notes-plain.md` | `/release` |
 | `change-request.md` | `/release` |
@@ -465,7 +472,7 @@ This creates all skill files, templates, `copilot-instructions.md`, and the arte
   architecture-guardrails.md       ← live guardrails file (create from template)
   pipeline-viz.html                ← pipeline visualiser (open in browser with a local server)
   skills/                          ← 27 skill SKILL.md files
-  templates/                       ← 23 artefact templates
+  templates/                       ← 30 artefact templates
   scripts/                         ← generated helper scripts (e.g. coverage-map.js)
   artefacts/                       ← generated pipeline artefacts (one folder per feature)
 ```

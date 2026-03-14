@@ -83,28 +83,7 @@ State what was found before asking:
 
 If **1 — Compliance bundle:**
 
-Bundle a reference index of all pipeline artefacts for the stories in scope,
-packaged as an evidence catalogue:
-
-```
-## Compliance Evidence Bundle — [Release name / version]
-
-Prepared: [date]
-Scope: [story / stories]
-Prepared by: [name]
-
-| Evidence type | Artefact | Date | Status |
-|---------------|---------|------|--------|
-| Story definition | .github/artefacts/[feature]/stories/ | [date] | Approved |
-| Review report | .github/artefacts/[feature]/review/ | [date] | PASS Run [N] |
-| Test plan | .github/artefacts/[feature]/test-plans/ | [date] | [n] tests |
-| Verification script | .github/artefacts/[feature]/verification-scripts/ | [date] | |
-| Definition of ready | .github/artefacts/[feature]/dor/ | [date] | PROCEED |
-| Sign-off (if High oversight) | [recorded in DoR artefact] | [date] | [name] |
-| Definition of done | .github/artefacts/[feature]/dod/ | [date] | COMPLETE |
-| Trace report | .github/artefacts/[feature]/trace/ | [date] | HEALTHY |
-```
-
+Conforms to `templates/compliance-bundle.md`.
 Save to `.github/artefacts/[feature]/release/[version]-compliance-bundle.md`.
 
 If any artefact is missing from the bundle:

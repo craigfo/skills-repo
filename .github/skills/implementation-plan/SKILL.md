@@ -61,18 +61,7 @@ Rules:
 - Files that change together live together
 - Prefer smaller, focused files over large files that do too much
 
-Output a file map:
-
-```
-## File map
-
-Create:
-  src/[path]/[name].[ext]    — [one-line responsibility]
-  tests/[path]/[name].[ext]  — [what it tests]
-
-Modify:
-  src/[path]/[existing].[ext] — [what changes and why]
-```
+Output a file map using the `## File map` section from `templates/implementation-plan.md`.
 
 Ask for confirmation before writing tasks:
 
@@ -83,84 +72,16 @@ Ask for confirmation before writing tasks:
 
 ## Step 3 — Write the plan
 
-Plan header (copy verbatim into plan file):
+Conforms to `.github/templates/implementation-plan.md`.
+Save to `.github/artefacts/[feature]/plans/[story-slug]-plan.md`.
 
-```markdown
-# [Story Title] — Implementation Plan
-
-> **For agent execution:** Use /subagent-execution (if subagents available)
-> or /tdd per task if executing in this session.
-
-**Goal:** [One sentence from DoR instructions block]
-**Branch:** feature/[story-slug]
-**Worktree:** [path]
-**Test command:** [e.g. `npm test` / `pytest` / `go test ./...`]
-
----
-```
-
-Repeat for each AC → test group:
-
-````markdown
-### Task N: [What this builds — one clear noun phrase]
-
-**Files:**
-- Create: `exact/path/to/file.ts`
-- Test: `tests/exact/path/to/file.test.ts`
-
-- [ ] **Step 1: Write the failing test**
-
-```typescript
-test('[AC description in plain language]', () => {
-  // arrange
-  const input = ...;
-  // act
-  const result = functionUnderTest(input);
-  // assert
-  expect(result).toBe(expected);
-});
-```
-
-- [ ] **Step 2: Run test — must fail**
-
-```bash
-[test command] tests/path/to/file.test.ts
-```
-
-Expected output: `FAIL — [function name] is not defined` (or equivalent)
-
-- [ ] **Step 3: Write minimal implementation**
-
-```typescript
-// Complete implementation — not a stub or reference
-export function functionUnderTest(input: Type): ReturnType {
-  return ...;
-}
-```
-
-- [ ] **Step 4: Run test — must pass**
-
-```bash
-[test command] tests/path/to/file.test.ts
-```
-
-Expected output: `PASS`
-
-- [ ] **Step 5: Run full suite — no regressions**
-
-```bash
-[test command]
-```
-
-Expected output: all tests passing
-
-- [ ] **Step 6: Commit**
-
-```bash
-git add exact/path/to/file.ts tests/exact/path/to/file.test.ts
-git commit -m "feat: [what was implemented in imperative mood]"
-```
-````
+Populate one Task block per AC (or per logical behaviour if an AC is broad).
+Follow the file map produced in Step 2. Every task must have:
+- Exact file paths (no `[placeholder]` remaining in paths)
+- Complete code in Step 3 (not "add validation here")
+- A failing test written before the implementation step
+- Expected output for every run command
+- A commit message in imperative mood
 
 **Task granularity rules:**
 
