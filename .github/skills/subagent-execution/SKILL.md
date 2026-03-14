@@ -192,10 +192,16 @@ Use the least capable model that can handle each role to conserve cost:
 
 ## State update
 
-update `.github/pipeline-state.json` in the **project repository** progressively during execution:
+Update `.github/pipeline-state.json` in the **project repository** progressively during execution:
 
 - When execution begins: set story `stage: "subagent-execution"`, `health: "green"`, `updatedAt: [now]`
-- After each task completes: update `updatedAt`
-- If a task is stuck or a subagent fails a review: set `health: "amber"`, note the task in `blocker`
+- Initialise a `tasks` array on the story — one entry per task in the implementation plan:
+  ```json
+  { "id": 1, "name": "<task name>", "tddState": "not-started" }
+  ```
+- As each task moves through TDD, update its `tddState`:
+  - Failing test written: `"red"` → minimal implementation passes: `"green"` → refactor done: `"refactor"` → committed: `"committed"`
+- After each task commits: update story `updatedAt`
+- If a task is stuck or a subagent fails a review: set story `health: "amber"`, note the task in `blocker`
 - When all tasks complete and two-stage review passes: set `health: "green"`, clear `blocker`
 - If a critical issue blocks progress: set `health: "red"`, `blocker: "[issue description]"`

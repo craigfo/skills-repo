@@ -162,6 +162,27 @@ Keep all tests green throughout refactor.
 
 ---
 
+## State update
+
+Update `.github/pipeline-state.json` in the **project repository** as you progress through each TDD cycle.
+
+For each task, maintain a `tasks` array on the story object. Each task entry:
+```json
+{ "id": 1, "name": "<task name from implementation plan>", "tddState": "not-started" }
+```
+
+Update `tddState` as the cycle progresses:
+- Task begins, failing test written: `"tddState": "red"`
+- Minimal implementation makes test pass: `"tddState": "green"`
+- Refactor complete, all tests still pass: `"tddState": "refactor"`
+- Task committed: `"tddState": "committed"`
+
+Also update `updatedAt` on the story after each state change.
+
+If you can't write or run tests, set the story `health: "amber"` and record the reason in `blocker`.
+
+---
+
 ## Repeat
 
 Move to the next failing test for the next behaviour.

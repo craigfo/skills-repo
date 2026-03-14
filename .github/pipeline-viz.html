@@ -184,6 +184,44 @@
   .story-details { margin-top: 5px; display: none; }
   .story-details.open { display: block; }
   .story-progress { margin-top: 4px; }
+
+  /* ── TDD task list ───────────────────────────────────────────── */
+  .story-row { cursor: default; }
+  .story-row-top { cursor: pointer; }
+  .task-mini-bar { margin-top: 4px; }
+  .task-toggle-btn {
+    display: flex; align-items: center; gap: 4px; margin-top: 4px;
+    background: none; border: none; color: var(--muted); font-size: 10px;
+    cursor: pointer; padding: 0; font-family: inherit;
+  }
+  .task-toggle-btn:hover { color: var(--text); }
+  .task-toggle-arrow { font-size: 9px; transition: transform .15s; }
+  .task-toggle-arrow.open { transform: rotate(90deg); }
+  .task-list-inline { display: none; flex-direction: column; gap: 2px; margin-top: 4px; }
+  .task-list-inline.open { display: flex; }
+  .task-item {
+    display: flex; align-items: center; gap: 5px; padding: 3px 4px;
+    background: var(--bg); border-radius: 3px; border: 1px solid var(--border);
+  }
+  .task-name { font-size: 10px; color: var(--text); flex: 1; line-height: 1.3; }
+  .tdd-badge {
+    font-size: 9px; font-weight: 700; border-radius: 3px; padding: 1px 5px;
+    flex-shrink: 0; letter-spacing: .04em;
+  }
+  .tdd-not-started { background: var(--bg);    color: var(--border);  border: 1px solid var(--border); }
+  .tdd-red         { background: rgba(239,68,68,.15);  color: var(--red);   border: 1px solid rgba(239,68,68,.4); }
+  .tdd-green       { background: rgba(34,197,94,.15);  color: var(--green); border: 1px solid rgba(34,197,94,.4); }
+  .tdd-refactor    { background: rgba(245,158,11,.15); color: var(--amber); border: 1px solid rgba(245,158,11,.4); }
+  .tdd-committed   { background: rgba(20,184,166,.15); color: var(--teal);  border: 1px solid rgba(20,184,166,.4); }
+  /* Drawer task list */
+  .drawer-task-item {
+    display: flex; align-items: flex-start; gap: 8px; padding: 5px 6px;
+    background: var(--bg); border-radius: 4px; border: 1px solid var(--border);
+    margin-bottom: 3px;
+  }
+  .drawer-task-num { font-size: 10px; color: var(--muted); flex-shrink: 0; min-width: 14px; }
+  .drawer-task-name { font-size: 12px; flex: 1; line-height: 1.4; }
+  .drawer-tdd-badge { font-size: 10px; font-weight: 700; border-radius: 3px; padding: 2px 6px; flex-shrink: 0; }
   .progress-label { font-size: 10px; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 2px; }
   .progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
   .progress-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width .3s; }
@@ -425,6 +463,7 @@ let activeFilters = { health: '', track: '', team: '', search: '' };
 let openFeatures = new Set();   // feature slugs with expanded card body
 let openEpics    = new Set();   // epic slugs with expanded story list
 let openStories      = new Set();   // story slugs with expanded detail
+let openTaskLists    = new Set();   // story keys with task list expanded inline
 let openDoneSections = new Set();   // stage ids with 'completed' section expanded
 let drawerStory  = null;
 
@@ -455,7 +494,10 @@ function normalizeData(data) {
     f.slug = f.slug || f.id;
     (f.epics || []).forEach(e => {
       e.slug = e.slug || e.id;
-      (e.stories || []).forEach(s => { s.slug = s.slug || s.id; });
+      (e.stories || []).forEach(s => {
+        s.slug  = s.slug  || s.id;
+        s.tasks = s.tasks || [];
+      });
     });
   });
   (data.programmes || []).forEach(p => { p.slug = p.slug || p.id; });
@@ -757,26 +799,13 @@ function storyRowHTML(featureSlug, epicSlug, story) {
   ].filter(Boolean).join('');
 
   return `
-  <div class="story-row" data-story-key="${key}" data-action="open-story">
-    <div class="story-row-top">
+  <div class="story-row" data-story-key="${key}">
+    <div class="story-row-top" data-action="open-story" data-story-key="${key}">
       <div class="story-health" style="background:${healthColour(story.health)}"></div>
       <span class="story-name">${esc(story.name)}</span>
       <span class="story-stage-badge">${story.stage}</span>
     </div>
-    ${isOpen ? `
-    <div class="story-details open">
-      ${acPct !== null ? `
-      <div class="story-progress">
-        <div class="progress-label"><span>ACs verified</span><span>${story.acVerified}/${story.acTotal}</span></div>
-        <div class="progress-bar"><div class="progress-fill ${acPct < 100 ? 'partial' : ''}" style="width:${acPct}%"></div></div>
-      </div>` : ''}
-      ${testPct !== null ? `
-      <div class="story-progress" style="margin-top:4px">
-        <div class="progress-label"><span>Tests passing</span><span>${story.testPlan.passing}/${story.testPlan.totalTests}</span></div>
-        <div class="progress-bar"><div class="progress-fill ${testPct < 100 ? 'partial' : ''}" style="width:${testPct}%"></div></div>
-      </div>` : ''}
-      <div class="story-pills">${pills}</div>
-    </div>` : ''}
+    ${taskListInlineHTML(story, key)}
   </div>`;
 }
 
@@ -813,11 +842,17 @@ function openDrawer(featureSlug, epicSlug, storySlug) {
         <div class="progress-bar" style="height:6px"><div class="progress-fill ${acPct<100?'partial':''}" style="width:${acPct}%"></div></div>
       </div>` : ''}
       ${testPct !== null ? `
-      <div>
+      <div style="margin-bottom:8px">
         <div class="progress-label"><span>Tests passing</span><span>${story.testPlan.passing}/${story.testPlan.totalTests} (${testPct}%)</span></div>
         <div class="progress-bar" style="height:6px"><div class="progress-fill ${testPct<100?'partial':''}" style="width:${testPct}%"></div></div>
       </div>` : '<div style="font-size:11px;color:var(--muted)">No test plan yet</div>'}
     </div>
+
+    ${story.tasks && story.tasks.length > 0 ? `
+    <div class="drawer-section">
+      <h3>TDD Tasks</h3>
+      ${drawerTaskListHTML(story)}
+    </div>` : ''}
 
     <div class="drawer-section">
       <h3>Gates</h3>
@@ -899,6 +934,12 @@ function bindCardEvents() {
       openEpics.has(key) ? openEpics.delete(key) : openEpics.add(key);
       render(); return;
     }
+    const taskToggle = e.target.closest('[data-action="toggle-tasks"]');
+    if (taskToggle) {
+      const key = taskToggle.dataset.taskKey;
+      openTaskLists.has(key) ? openTaskLists.delete(key) : openTaskLists.add(key);
+      render(); return;
+    }
     const doneToggle = e.target.closest('[data-action="toggle-done"]');
     if (doneToggle) {
       const key = doneToggle.dataset.doneKey;
@@ -912,7 +953,7 @@ function bindCardEvents() {
       render(); return;
     }
     const storyRow = e.target.closest('[data-action="open-story"]');
-    if (storyRow) {
+    if (storyRow && !e.target.closest('[data-action="toggle-tasks"]')) {
       const [fSlug, eSlug, sSlug] = storyRow.dataset.storyKey.split('::');
       openDrawer(fSlug, eSlug, sSlug);
     }
@@ -950,7 +991,7 @@ function initFilters() {
     render();
   });
   document.getElementById('collapse-all-btn').addEventListener('click', () => {
-    openFeatures.clear(); openEpics.clear(); openStories.clear(); openDoneSections.clear(); render();
+    openFeatures.clear(); openEpics.clear(); openStories.clear(); openTaskLists.clear(); openDoneSections.clear(); render();
   });
   document.getElementById('reload-btn').addEventListener('click', loadState);
   document.getElementById('file-input').addEventListener('change', e => {
@@ -1015,6 +1056,75 @@ function prBadge(s) {
 function dodBadge(s) {
   if (s.dodStatus === 'complete') return `<span style="color:var(--green)">✓ Complete</span>`;
   return `<span style="color:var(--muted)">Not started</span>`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TDD TASK HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
+const TDD_META = {
+  'not-started': { cls: 'tdd-not-started', label: '—' },
+  'red':         { cls: 'tdd-red',         label: 'RED' },
+  'green':       { cls: 'tdd-green',       label: 'GREEN' },
+  'refactor':    { cls: 'tdd-refactor',    label: 'REFACTOR' },
+  'committed':   { cls: 'tdd-committed',   label: '✓ done' },
+};
+
+function tddBadgeHTML(state, extraCls = 'tdd-badge') {
+  const m = TDD_META[state] || TDD_META['not-started'];
+  return `<span class="${extraCls} ${m.cls}">${m.label}</span>`;
+}
+
+function taskCommittedPct(story) {
+  if (!story.tasks || story.tasks.length === 0) return null;
+  const done = story.tasks.filter(t => t.tddState === 'committed').length;
+  return { done, total: story.tasks.length, pct: Math.round((done / story.tasks.length) * 100) };
+}
+
+function taskMiniBarHTML(story) {
+  const tp = taskCommittedPct(story);
+  if (!tp) return '';
+  const col = tp.done === tp.total ? 'var(--teal)' : tp.done > 0 ? 'var(--green)' : 'var(--border)';
+  return `
+  <div class="task-mini-bar">
+    <div class="progress-label"><span style="font-size:9px">Tasks</span><span style="font-size:9px">${tp.done}/${tp.total}</span></div>
+    <div class="progress-bar"><div style="height:100%;border-radius:2px;width:${tp.pct}%;background:${col};transition:width .3s"></div></div>
+  </div>`;
+}
+
+function taskListInlineHTML(story, storyKey) {
+  if (!story.tasks || story.tasks.length === 0) return '';
+  const isOpen  = openTaskLists.has(storyKey);
+  const tp      = taskCommittedPct(story);
+  const items   = story.tasks.map(t => `
+    <div class="task-item">
+      ${tddBadgeHTML(t.tddState || 'not-started')}
+      <span class="task-name">${esc(t.name)}</span>
+    </div>`).join('');
+  return `
+  ${taskMiniBarHTML(story)}
+  <button class="task-toggle-btn" data-action="toggle-tasks" data-task-key="${storyKey}">
+    <span class="task-toggle-arrow ${isOpen ? 'open' : ''}">▶</span>
+    <span>${tp ? tp.done + '/' + tp.total : story.tasks.length} task${story.tasks.length !== 1 ? 's' : ''}</span>
+  </button>
+  <div class="task-list-inline ${isOpen ? 'open' : ''}">${items}</div>`;
+}
+
+function drawerTaskListHTML(story) {
+  if (!story.tasks || story.tasks.length === 0) return '<div style="font-size:11px;color:var(--muted)">No tasks defined yet. Add a <code>tasks</code> array to this story in pipeline-state.json.</div>';
+  const tp = taskCommittedPct(story);
+  const items = story.tasks.map((t, i) => `
+    <div class="drawer-task-item">
+      <span class="drawer-task-num">${i + 1}.</span>
+      <span class="drawer-task-name">${esc(t.name)}</span>
+      ${tddBadgeHTML(t.tddState || 'not-started', 'tdd-badge drawer-tdd-badge')}
+    </div>`).join('');
+  return `
+  ${tp ? `
+  <div style="margin-bottom:10px">
+    <div class="progress-label"><span>Tasks committed</span><span>${tp.done}/${tp.total} (${tp.pct}%)</span></div>
+    <div class="progress-bar" style="height:6px"><div style="height:100%;border-radius:3px;width:${tp.pct}%;background:${tp.done===tp.total ? 'var(--teal)' : 'var(--green)'};transition:width .3s"></div></div>
+  </div>` : ''}
+  ${items}`;
 }
 
 function updateTimestamp() {
