@@ -145,7 +145,7 @@ If a commit exists that doesn't correspond to either:
 
 ## State update
 
-After running the verification command and walking all ACs:
+Update `.github/pipeline-state.json` in the **project repository** after running the verification command and walking all ACs:
 
 - Set story `stage: "verify-completion"`, `updatedAt: [now]`
 - Set `acVerified: [count of ✅ ACs]`, `acTotal: [total ACs]`

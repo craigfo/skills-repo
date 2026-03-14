@@ -166,7 +166,7 @@ Save to `.github/artefacts/[feature]/dod/[story-slug]-dod.md`.
 
 ## State update
 
-When the DoD artefact is saved:
+Update `.github/pipeline-state.json` in the **project repository** when the DoD artefact is saved:
 
 - Set story `stage: "definition-of-done"`, `dodStatus: "complete"`, `prStatus: "merged"`, `health: "green"`, `updatedAt: [now]`
 - If all ACs are covered: set `releaseReady: true`

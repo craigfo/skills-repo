@@ -224,6 +224,6 @@ Save to `.github/artefacts/[feature]/plans/[story-slug]-plan.md`.
 
 ## State update
 
-When the implementation plan is saved:
+Update `.github/pipeline-state.json` in the **project repository** when the implementation plan is saved:
 
 - Set the story `stage: "implementation-plan"`, `health: "green"`, `updatedAt: [now]`

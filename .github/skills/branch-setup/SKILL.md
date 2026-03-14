@@ -149,7 +149,7 @@ Do not proceed past a failing baseline without explicit acknowledgement.
 
 ## State update
 
-When the worktree is created and the clean baseline is confirmed:
+Update `.github/pipeline-state.json` in the **project repository** when the worktree is created and the clean baseline is confirmed:
 
 - Set feature `stage: "branch-setup"`, `health: "green"`, `updatedAt: [now]`
 - Set each story in the feature to `stage: "branch-setup"`

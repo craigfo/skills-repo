@@ -205,7 +205,7 @@ conforming to `.github/templates/definition-of-ready-checklist.md`.
 
 ## State update
 
-After producing the DoR output, for each story:
+Update `.github/pipeline-state.json` in the **project repository** after producing the DoR output, for each story:
 
 - If all hard blocks pass: set `stage: "definition-of-ready"`, `dorStatus: "signed-off"`, `health: "green"`, `updatedAt: [now]`
 - If any hard block fails: set `dorStatus: "blocked"`, `health: "red"`, `blocker: "[first failing block description]"`, `updatedAt: [now]`

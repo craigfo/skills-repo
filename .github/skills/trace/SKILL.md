@@ -170,7 +170,7 @@ When triggered on PR open, post a condensed comment:
 
 ## State update
 
-/trace is read-only and does not update artefacts, but it does update the state file to surface findings:
+/trace is read-only and does not update artefacts, but it does update `.github/pipeline-state.json` in the **project repository** to surface findings:
 
 - For any story where a broken chain link is found: set `health: "amber"` (missing artefact) or `"red"` (broken traceability)
 - Set `stage: "trace"` for stories that have completed the full chain

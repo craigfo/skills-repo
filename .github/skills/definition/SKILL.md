@@ -296,7 +296,7 @@ approved scope note).
 
 ## State update
 
-When all epics and stories for a feature are written and saved:
+Update `.github/pipeline-state.json` in the **project repository** when all epics and stories for a feature are written and saved:
 
 - Set feature `stage: "definition"`, `health: "green"`, `updatedAt: [now]`
 - Populate `epics[]` array: for each epic, add `{ slug, name, status: "not-started", stories: [] }`

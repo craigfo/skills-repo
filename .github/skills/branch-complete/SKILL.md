@@ -215,7 +215,7 @@ git worktree remove [worktree-path]
 
 ## State update
 
-After the chosen option is executed:
+Update `.github/pipeline-state.json` in the **project repository** after the chosen option is executed:
 
 - **Draft PR opened:** set story `stage: "branch-complete"`, `prStatus: "draft"`, `prUrl: "[url]"`, `health: "green"`, `updatedAt: [now]`
 - **PR opened (ready for review):** set `prStatus: "open"`, `prUrl: "[url]"`

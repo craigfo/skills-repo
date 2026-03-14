@@ -127,7 +127,7 @@ When all Critical fixed and Important fixed (or acknowledged):
 
 ## State update
 
-After producing the review report:
+Update `.github/pipeline-state.json` in the **project repository** after producing the review report:
 
 - Set story `stage: "implementation-review"`, `updatedAt: [now]`
 - If critical issues found: set `health: "red"`, `blocker: "[summary of critical issue]"`
