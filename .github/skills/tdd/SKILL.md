@@ -179,6 +179,8 @@ Update `tddState` as the cycle progresses:
 - Refactor complete, all tests still pass: `"tddState": "refactor"`
 - Task committed: `"tddState": "committed"`
 
+Update `testPlan.passing` on the story after every test run where you can read the passing count from the output. The visualiser reads this field live — keep it current.
+
 Also update `updatedAt` on the story after each state change.
 
 If you can't write or run tests, set the story `health: "amber"` and record the reason in `blocker`.

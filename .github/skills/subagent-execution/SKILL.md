@@ -203,7 +203,8 @@ Update `.github/pipeline-state.json` in the **project repository** progressively
   ```
 - As each task moves through TDD, update its `tddState`:
   - Failing test written: `"red"` → minimal implementation passes: `"green"` → refactor done: `"refactor"` → committed: `"committed"`
-- After each task commits: update story `updatedAt`
+- After each task commits: run the full test suite and update `testPlan.passing` with the current passing count, and update story `updatedAt`
+- At any point that the running test count is known, keep `testPlan.passing` current — the visualiser reads this live
 - If a task is stuck or a subagent fails a review: set story `health: "amber"`, note the task in `blocker`
 - When all tasks complete and two-stage review passes: set `health: "green"`, clear `blocker`
 - If a critical issue blocks progress: set `health: "red"`, `blocker: "[issue description]"`
