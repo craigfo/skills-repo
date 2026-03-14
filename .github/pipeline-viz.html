@@ -649,9 +649,9 @@ function openDrawer(featureSlug, epicSlug, storySlug) {
     ? Math.round((story.testPlan.passing / story.testPlan.totalTests) * 100) : null;
 
   const featureSlugPath = featureSlug;
-  const storyPath = `.github/artefacts/${featureSlugPath}/stories/${storySlug}.md`;
-  const testPath  = `.github/artefacts/${featureSlugPath}/test-plans/${storySlug}-test-plan.md`;
-  const dorPath   = `.github/artefacts/${featureSlugPath}/dor/${storySlug}-dor.md`;
+  const storyPath = `artefacts/${featureSlugPath}/stories/${storySlug}.md`;
+  const testPath  = `artefacts/${featureSlugPath}/test-plans/${storySlug}-test-plan.md`;
+  const dorPath   = `artefacts/${featureSlugPath}/dor/${storySlug}-dor.md`;
 
   document.getElementById('drawer-content').innerHTML = `
     <h2>${esc(story.name)}</h2>

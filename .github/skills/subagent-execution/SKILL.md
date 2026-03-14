@@ -1,4 +1,4 @@
----
+﻿---
 name: subagent-execution
 description: >
   Executes an implementation plan by dispatching a fresh subagent per task,
@@ -23,26 +23,26 @@ triggers:
 
 If not met:
 
-> ❌ Entry condition not met.
+> âŒ Entry condition not met.
 > Missing: [list what is missing]
 
 ---
 
 ## Core principle
 
-Fresh subagent per task + two-stage review (spec compliance → code quality) = high quality, fast iteration.
+Fresh subagent per task + two-stage review (spec compliance â†’ code quality) = high quality, fast iteration.
 
 **Why fresh subagents:**
 You delegate each task to an agent with precisely constructed context.
-They inherit nothing from this session — you give them exactly what they need.
+They inherit nothing from this session â€” you give them exactly what they need.
 This prevents context pollution and keeps each task focused.
 
-The reviewer subagents also receive precisely constructed context — not your session history.
+The reviewer subagents also receive precisely constructed context â€” not your session history.
 This keeps reviewers objective.
 
 ---
 
-## Step 1 — Read the plan once
+## Step 1 â€” Read the plan once
 
 Read `.github/artefacts/[feature]/plans/[story-slug]-plan.md` fully.
 
@@ -55,19 +55,19 @@ Create a todo list tracking all tasks.
 
 ---
 
-## Step 2 — Per-task loop
+## Step 2 â€” Per-task loop
 
 For each task:
 
-### 2a — Dispatch implementer subagent
+### 2a â€” Dispatch implementer subagent
 
 Construct context for the subagent:
 
-- Full task text (copy verbatim from the plan — do not paraphrase or summarise)
+- Full task text (copy verbatim from the plan â€” do not paraphrase or summarise)
 - Scene-setting context: what has been built so far, where this task fits in the plan
 - Constraints from the DoR: architecture guardrails, out-of-scope items
 - Test command
-- Instruction: "Follow /tdd. RED–GREEN–REFACTOR. Commit after each test passes."
+- Instruction: "Follow /tdd. REDâ€“GREENâ€“REFACTOR. Commit after each test passes."
 
 Wait for the implementer to return one of four statuses:
 
@@ -80,14 +80,14 @@ Wait for the implementer to return one of four statuses:
 
 **Escalation path for `BLOCKED`:**
 
-1. Context problem → provide more context and re-dispatch
-2. Task requires more reasoning → re-dispatch with a more capable model
-3. Task too large → break into smaller pieces and re-dispatch
-4. Plan itself is wrong → escalate to human and stop
+1. Context problem â†’ provide more context and re-dispatch
+2. Task requires more reasoning â†’ re-dispatch with a more capable model
+3. Task too large â†’ break into smaller pieces and re-dispatch
+4. Plan itself is wrong â†’ escalate to human and stop
 
 Never force the same model to retry without changes. Never ignore an escalation.
 
-### 2b — Dispatch spec compliance reviewer
+### 2b â€” Dispatch spec compliance reviewer
 
 Construct context:
 
@@ -98,16 +98,16 @@ Construct context:
 
 Reviewer responds with:
 
-- ✅ Spec compliant — proceed to code quality review (Step 2c)
-- ❌ Issues found — list them specifically
+- âœ… Spec compliant â€” proceed to code quality review (Step 2c)
+- âŒ Issues found â€” list them specifically
 
 If issues found: dispatch the implementer (same subagent, updated context) to fix.
 Re-dispatch the spec reviewer after each fix.
-Repeat until ✅.
+Repeat until âœ….
 
-**Spec compliance must be ✅ before starting code quality review.**
+**Spec compliance must be âœ… before starting code quality review.**
 
-### 2c — Dispatch code quality reviewer
+### 2c â€” Dispatch code quality reviewer
 
 Construct context:
 
@@ -117,19 +117,19 @@ Construct context:
 
 Reviewer responds with:
 
-- ✅ Approved — mark task complete
-- Critical or Important issues → implementer fixes, reviewer re-reviews
+- âœ… Approved â€” mark task complete
+- Critical or Important issues â†’ implementer fixes, reviewer re-reviews
 
-Repeat until ✅.
+Repeat until âœ….
 
-### 2d — Mark task complete
+### 2d â€” Mark task complete
 
 - Check off the task in the implementation plan file
 - Record the ending git SHA for this task
 
 ---
 
-## Step 3 — Final review
+## Step 3 â€” Final review
 
 After all tasks complete:
 
@@ -143,9 +143,9 @@ If issues found: address before proceeding.
 
 ---
 
-## Step 4 — Hand off
+## Step 4 â€” Hand off
 
-> ✅ **All [N] tasks complete.**
+> âœ… **All [N] tasks complete.**
 >
 > Final review: PASSED
 >
@@ -159,7 +159,7 @@ Use the least capable model that can handle each role to conserve cost:
 
 | Role | Recommended model |
 |------|------------------|
-| Mechanical implementation (1–2 files, clear spec) | Fast/cheap model |
+| Mechanical implementation (1â€“2 files, clear spec) | Fast/cheap model |
 | Integration task (multi-file, pattern matching) | Standard model |
 | Architecture, review, final review | Most capable available |
 
@@ -172,11 +172,11 @@ Use the least capable model that can handle each role to conserve cost:
 - Start implementation on main/master without explicit consent
 - Skip spec compliance review
 - Skip code quality review
-- Start code quality review before spec compliance is ✅
+- Start code quality review before spec compliance is âœ…
 - Move to the next task while either review has open issues
 - Let the implementer's self-review replace the reviewer subagent
 - Dispatch multiple implementer subagents in parallel (causes conflicts)
-- Make subagents read the plan file themselves — provide full task text
+- Make subagents read the plan file themselves â€” provide full task text
 
 ---
 
@@ -192,7 +192,7 @@ Use the least capable model that can handle each role to conserve cost:
 
 ## State update
 
-Update `.github/pipeline-state.json` progressively during execution:
+update `.github/pipeline-state.json` in the **project repository** progressively during execution:
 
 - When execution begins: set story `stage: "subagent-execution"`, `health: "green"`, `updatedAt: [now]`
 - After each task completes: update `updatedAt`

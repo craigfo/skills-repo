@@ -309,6 +309,11 @@ When multiple features are active, after the status table:
 `/workflow` is the designated reconciler of `.github/pipeline-state.json`.
 Run this process on every invocation — it is fast and non-destructive.
 
+> **Repository scope:** All state file reads and writes target `.github/pipeline-state.json`
+> in the **current project repository** (the repo the user is working in), never
+> the skills repo. When a skill says "update `.github/pipeline-state.json`", it
+> means the project repo's copy.
+
 ### When to reconcile
 
 - Session start (always)

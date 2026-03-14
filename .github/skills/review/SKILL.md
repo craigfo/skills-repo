@@ -1,4 +1,4 @@
----
+﻿---
 name: review
 description: >
   Reviews story artefacts for quality, completeness, traceability, and scope
@@ -205,7 +205,7 @@ comparing this run's findings to the previous run.
 
 ## State update
 
-After producing a review report, for each story reviewed update the story entry in `.github/pipeline-state.json`:
+After producing a review report, for each story reviewed update the story entry in `.github/pipeline-state.json` in the **project repository**:
 
 - Set `stage: "review"`, `updatedAt: [now]`
 - Set `reviewStatus: "passed"` if no HIGH findings, `"has-findings"` if any remain
