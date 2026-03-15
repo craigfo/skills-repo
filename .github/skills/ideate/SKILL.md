@@ -251,7 +251,7 @@ Present the extracted assumptions:
 > - [assumption — e.g. "The workshop canvas can be offered as a free tool and funded by adjacent paid features"]
 >
 > *Feasibility:*
-> - [assumption — e.g. "Client-side drag-and-drop can be implemented in two sprints"]
+> - [assumption — e.g. "Client-side drag-and-drop can be implemented in one delivery cycle"]
 >
 > *Ethical:*
 > - [assumption — e.g. "Storing session data locally is acceptable to users"]

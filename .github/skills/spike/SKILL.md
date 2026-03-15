@@ -28,7 +28,7 @@ Ask this first. Do not proceed until answered.
 > **What is the specific question this spike must answer?**
 >
 > A good spike question is answerable with PROCEED, REDESIGN, or DEFER.
-> Example: "Can E6 handle partial-authorisation natively, or does it require custom code?"
+> Example: "Can [configured platform / vendor] handle [requirement] natively, or does it require custom code?"
 > Not: "We need to understand the fraud engine better."
 >
 > Reply: state the question in one sentence

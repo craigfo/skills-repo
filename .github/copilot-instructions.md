@@ -4,8 +4,20 @@
   This file is always loaded into every Copilot interaction in this repository.
   It is the primary source of workflow configuration.
   
-  To evolve: open a PR, tag engineering lead for review.
+  To evolve: open a PR, tag the tech lead for review.
   Do not make ad-hoc changes — this file governs all agent behaviour in the repo.
+-->
+
+## Active context
+
+Active pipeline context: `.github/context.yml`
+
+<!--
+  context.yml holds toolchain settings (source control platform, test framework,
+  roles, CI, ITSM, compliance frameworks, etc.) and is read by all skills.
+  To switch profiles: cp .github/contexts/personal.yml .github/context.yml
+                   or: cp .github/contexts/work.yml    .github/context.yml
+  Available profiles: .github/contexts/personal.yml | .github/contexts/work.yml
 -->
 
 ---
@@ -272,17 +284,27 @@ Every skill has a `## State update — mandatory final step` section. **Completi
 
 ## Tool integrations
 
-<!-- OPTIONAL: Fill in the tools your team uses.
-     The /release skill reads this section to generate tool-specific deployment
-     checklists, change requests, and monitoring references.
-     Leave blank or comment out any tools not in use. -->
+<!-- SUPERSEDED: Tool configuration has moved to .github/context.yml (tools.* and
+     change_management.* fields). The /release skill reads context.yml directly.
+     This table is kept for reference only — context.yml is the canonical source.
+     
+     To configure tools, edit .github/context.yml:
+       tools.project_management: jira | linear | github-issues | ...
+       tools.monitoring:         dynatrace | datadog | newrelic | ...
+       tools.log_aggregation:    splunk | elk | cloudwatch | ...
+       tools.alerting:           pagerduty | opsgenie | ...
+       tools.ci_platform:        github-actions | jenkins | gitlab-ci | ...
+       tools.artifact_registry:  nexus | artifactory | github-packages | ...
+       change_management.tool:   servicenow | jira-sm | none
+       change_management.base_url, assignment_group, change_category
+-->
 
 | Tool | Purpose | Configuration |
 |------|---------|---------------|
-| ServiceNow | Change management | Base URL: `[FILL IN — e.g. https://yourorg.service-now.com]` · Assignment group: `[FILL IN]` · Change category: `[FILL IN]` |
-| Jenkins / CloudBees | CI/CD pipeline | Base URL: `[FILL IN — e.g. https://jenkins.yourorg.com]` |
-| Dynatrace | Monitoring / APM | Environment URL: `[FILL IN — e.g. https://yourenv.live.dynatrace.com]` |
-| Splunk | Log aggregation | Base URL: `[FILL IN — e.g. https://splunk.yourorg.com]` · App: `[FILL IN — e.g. search]` |
-| PagerDuty | On-call alerting | Service URL: `[FILL IN — e.g. https://yourorg.pagerduty.com/services/PXXXXXX]` |
-| Jira | Issue tracking | Base URL: `[FILL IN — e.g. https://yourorg.atlassian.net]` · Project key: `[FILL IN]` |
-| Nexus / Artifactory | Artefact repository | Base URL: `[FILL IN — e.g. https://nexus.yourorg.com]` |
+| ServiceNow | Change management | Set in `context.yml: change_management.*` |
+| CI/CD platform | Build + deploy | Set in `context.yml: tools.ci_platform` |
+| Monitoring / APM | Observability | Set in `context.yml: tools.monitoring` |
+| Log aggregation | Log querying | Set in `context.yml: tools.log_aggregation` |
+| On-call alerting | Incident response | Set in `context.yml: tools.alerting` |
+| Issue tracking | Project management | Set in `context.yml: tools.project_management` |
+| Artefact repository | Build artefacts | Set in `context.yml: tools.artifact_registry` |

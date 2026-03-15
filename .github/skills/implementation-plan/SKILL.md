@@ -56,7 +56,7 @@ Before writing tasks, identify every file to be created or modified.
 
 Rules:
 - One clear responsibility per file
-- Test files mirror source files (e.g. `src/foo.ts` → `tests/foo.test.ts`)
+- Test files mirror source files (e.g. `src/foo.ts` → `tests/foo.test.ts` for TypeScript, `src/foo.py` → `tests/test_foo.py` for Python, etc.)
 - Follow existing patterns in the codebase — do not restructure unilaterally
 - Files that change together live together
 - Prefer smaller, focused files over large files that do too much
