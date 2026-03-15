@@ -54,7 +54,7 @@ State what was found before asking anything:
 
 > **What environment and framework applies?**
 >
-> 1. Use what's specified in copilot-instructions.md (standard â€” no need to ask)
+> 1. Use what's configured for this repo (standard — no need to ask)
 > 2. Different stack for this story â€” I'll specify
 >
 > Reply: 1 or 2
@@ -88,7 +88,7 @@ After answer, ask one follow-up if relevant:
 
 **If 3 (de-identified production data):**
 > **Is this data in PCI scope, or does it contain other sensitive fields?**
-> (e.g. PANs, CVVs, account numbers, NHI numbers, IRD numbers)
+> (e.g. PANs, CVVs, account numbers — or any sensitive identifiers relevant to your domain)
 >
 > 1. Yes â€” PCI or sensitivity constraints apply
 > 2. No â€” standard test data handling is fine
@@ -114,7 +114,7 @@ flag it:
 
 ## Step 3a — E2E / browser-layout detection
 
-Before writing any tests, scan every AC for language that signals behaviour that **cannot be reliably tested in Jest/jsdom**. jsdom does not compute CSS layout, render stacking contexts, or resolve which DOM element sits at given screen coordinates.
+Before writing any tests, scan every AC for language that signals behaviour that **cannot be reliably tested without a real browser**. DOM simulation environments (jsdom, happy-dom, etc.) do not compute CSS layout, render stacking contexts, or resolve which DOM element sits at given screen coordinates.
 
 **Trigger patterns — flag any AC that mentions:**
 - Drag-and-drop (which element is the drop target depends on CSS layout)
@@ -127,12 +127,12 @@ Before writing any tests, scan every AC for language that signals behaviour that
 **For each triggered AC, present:**
 
 > ⚠️ **AC[n] is browser-layout-dependent.**
-> This cannot be reliably tested in Jest/jsdom.
+> This cannot be reliably tested without a real browser.
 >
 > Required action — choose one:
-> 1. **E2E browser test** — add a Playwright (or equivalent) test that exercises
->    this AC in a real browser. Preferred for any behaviour where correctness
->    depends on CSS layout or rendered position.
+> 1. **E2E browser test** — add a test using your configured E2E framework
+>    (e.g. Playwright, Cypress, Selenium) that exercises this AC in a real browser.
+>    Preferred for any behaviour where correctness depends on CSS layout or rendered position.
 > 2. **Manual verification only** — accepted if E2E tooling is not configured.
 >    The verification script scenario must be written to the higher standard below.
 > 3. **Rewrite the AC** — restructure so it can be tested at a lower level.
@@ -142,7 +142,7 @@ Before writing any tests, scan every AC for language that signals behaviour that
 **If option 1 is chosen but no E2E tooling is configured:**
 
 > ⚠️ **E2E TOOLING GAP: No E2E framework is configured for this repo.**
-> Playwright (or equivalent) must be set up before this test can be written.
+> An E2E framework (e.g. Playwright, Cypress, Selenium) must be set up before this test can be written.
 > Add to /decisions as DEPENDENCY and block /definition-of-ready until resolved.
 
 **If no E2E tooling exists and any AC is layout-dependent, surface this once (not per-AC):**
@@ -151,8 +151,8 @@ Before writing any tests, scan every AC for language that signals behaviour that
 > This story has [n] AC(s) that depend on CSS layout or rendered position.
 >
 > Options:
-> 1. Add Playwright now — before implementing this story (correct approach)
-> 2. Accept manual-only for this story, add Playwright in a follow-up —
+> 1. Add an E2E framework now — before implementing this story (correct approach)
+> 2. Accept manual-only for this story, add E2E tooling in a follow-up —
 >    record as tech-debt in /decisions; manual scenarios written to higher standard
 > 3. Accept manual-only permanently — only for low-change, low-risk internal tools.
 >    Record as explicit RISK-ACCEPT in /decisions.
@@ -240,7 +240,7 @@ Follow the AC coverage table and gap table formats from `templates/test-plan.md`
 
 > ⚠️ **Test plan error:** A drag-drop, `getBoundingClientRect`, CSS-position, or
 > pointer-coordinate AC listed as covered by Unit or Integration is flagged as
-> incorrectly categorised. jsdom cannot verify this class of behaviour.
+> incorrectly categorised. A DOM simulation environment cannot verify this class of behaviour.
 
 Every AC must have at least one test. Untestable ACs must have a manual scenario
 in the verification script.
@@ -293,7 +293,7 @@ Write it so it works equally well for all three without modification:
    before the coding agent implements. Reviewing the *specification*, not the code.
 2. **Post-merge smoke test** â€” confirms shipped behaviour matches the script.
    Reviewing the *implementation* against the specification.
-3. **Sprint demo** â€” structured walkthrough for stakeholders.
+3. **Delivery review** — structured walkthrough for stakeholders (sprint demo, iteration review, or equivalent).
 
 ---
 

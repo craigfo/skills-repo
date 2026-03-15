@@ -55,12 +55,14 @@ test('rejects an empty email address', () => {
 
 **Bad test:**
 
-```typescript
-test('email validation works', () => {
-  const mock = jest.fn().mockReturnValue(true);
-  expect(mock()).toBe(true);
-});
 ```
+test('email validation works') {
+  mock = createMock().returns(true);
+  expect(mock.call()).toBe(true);
+}
+```
+
+*(Pseudocode — adapt to your test framework's mock API, e.g. `jest.fn()`, `vi.fn()`, `mocker.patch`, `allow(...).to receive`)*
 
 - Vague name
 - Tests a mock, not real code

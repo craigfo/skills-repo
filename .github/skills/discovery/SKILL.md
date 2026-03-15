@@ -3,7 +3,7 @@ name: discovery
 description: >
   Structures a raw idea, problem statement, or opportunity into a formal discovery
   artefact. Use when someone says "I have an idea", "we should build",
-  "there's a problem with", "can we explore", or pastes a rough Jira description.
+  "there's a problem with", "can we explore", or pastes a rough ticket, brief, or idea.
   Produces a discovery artefact that, once approved, unlocks /benefit-metric.
   Does not produce metrics, stories, or technical design â€” those are downstream skills.
   Asks clarifying questions one at a time â€” never presents a form to fill in.
@@ -207,7 +207,7 @@ After producing the artefact:
 - Does not define metrics â€” that is /benefit-metric
 - Does not write stories or ACs â€” that is /definition
 - Does not make build/buy/defer decisions
-- Does not update Jira tickets
+- Does not update your issue tracker or backlog tool
 
 ---
 

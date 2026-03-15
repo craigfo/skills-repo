@@ -49,8 +49,11 @@ Ask before reading the code. One or two at a time -- not as a form.
 > These are the highest-value extraction targets."
 
 **Q2 -- Regulatory context**
-> "What regulatory frameworks apply?
-> (e.g. RBNZ BS11, PCI DSS, AML/CFT, CCCFA, Visa/Mastercard scheme rules)
+> "What regulatory frameworks apply to this system?
+> List any that are relevant (e.g. PCI DSS, GDPR, HIPAA, SOX, AML/CFT,
+> or any jurisdiction-specific financial, health, or data-protection standards).
+> If your repo has a `context.yml`, the `compliance.frameworks` list is used
+> automatically — only describe frameworks here if they are not yet configured.
 > This determines how aggressively I flag regulatory sensitivity."
 
 **Q3 -- Interface landscape**

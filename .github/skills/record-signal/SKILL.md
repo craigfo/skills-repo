@@ -3,7 +3,7 @@ name: record-signal
 description: >
   Records a benefit metric signal outside of a /definition-of-done run.
   Use when you have measurement evidence for a metric — e.g. after running
-  a real session, reviewing usage data, or receiving facilitator feedback —
+  a real session, reviewing usage data, or receiving user feedback —
   and want to update the pipeline without running a full DoD.
   Asks which feature, which metric, what you observed, then writes signal,
   evidence, and lastMeasured to pipeline-state.json.
