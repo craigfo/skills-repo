@@ -70,8 +70,9 @@ Ask this before presenting any pipeline guidance:
 > 3. Small bounded change, refactor, or dependency update — short track
 > 4. We don't know enough to proceed on something — spike
 > 5. Large initiative, programme, or migration (multi-team / multi-phase) — programme track
+> 6. Organisation-level application/interface registry query or update — EA registry
 >
-> Reply: 1, 2, 3, 4, or 5
+> Reply: 1, 2, 3, 4, 5, or 6
 
 **If 1 — Standard pipeline:** route to /discovery unless a later stage is already active.
 
@@ -116,6 +117,18 @@ Ask this before presenting any pipeline guidance:
 >
 > Ready to run /programme? Reply: yes
 
+**If 6 — EA registry route:**
+> **EA registry route confirmed.**
+> Path: /ea-registry
+>
+> Use this when you need organisation-level architecture context:
+> - application portfolio inventory
+> - interface inventory and dependency graph
+> - blast radius for replacing a system
+> - registry contribution or audit
+>
+> Ready to run /ea-registry? Reply: yes
+
 ---
 
 ## Standard pipeline reference
@@ -144,6 +157,10 @@ Step  Skill                  Entry condition                   Exit condition
 `/tdd` — RED-GREEN-REFACTOR enforcement per task
 `/systematic-debugging` — 4-phase root cause process when a task is stuck
 `/implementation-review` — spec + quality review between task batches
+
+**Cross-cutting architecture support:**
+`/ea-registry` — organisation-level application/interface registry queries,
+contributions, audits, and dependency context feeds
 
 **Programme track** (runs above the standard pipeline per workstream):
 

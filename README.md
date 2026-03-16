@@ -19,6 +19,7 @@ flowchart TD
     RT -->|New feature /\nuser-facing scope| DISC
     RT -->|Unknown blocking\nprogress| SPIKE
     RT -->|Large programme /\nmigration / rewrite| PROG
+    RT -->|Org architecture /\ninterface registry| EAR
 
     %% ─── SHORT TRACK ───────────────────────────────────────────
     subgraph SHORT["⚡ Short Track"]
@@ -96,6 +97,7 @@ flowchart TD
         SPIKE["/spike\nScoped investigation\nPROCEED / REDESIGN / DEFER"]
         DEC["/decisions\nRunning log + ADRs\nFeature + repo level"]
         RE["/reverse-engineer\nExtract business rules\nfrom legacy code"]
+      EAR["/ea-registry\nApplication + interface registry\nquery · contribute · audit"]
         CM["/coverage-map\nVisual AC coverage map\ngap type · risk level"]
         RS["/record-signal\nRecord benefit metric\nsignal on demand"]
         IDEATE["/ideate\nOpportunity · Assumption · Market scan\nStrategy framing · JTBD (Torres + Cagan + Moesta)"]
@@ -108,6 +110,9 @@ flowchart TD
 
     DEC -.->|Any decision point| STANDARD
     RE -.->|Feeds context| DISC
+    EAR -.->|dependency context| DISC
+    EAR -.->|dependency context| DEF
+    RE -.->|contributes findings| EAR
     TP -.->|suggests after last story| CM
     TR -.->|calls| CM
     DOD -.->|on demand| RS
@@ -146,7 +151,7 @@ flowchart TD
     class DOR gate
     class ICL_BS,ICL_IP,ICL_SE,ICL_IR,ICL_VC,BC inner
     class TDD,SDBG inner
-    class SPIKE,DEC,RE,CM,RS,IDEATE support
+    class SPIKE,DEC,RE,EAR,CM,RS,IDEATE support
     IDEATE -.->|enriches| DISC
     IDEATE -.->|feeds assumptions| DEC
     class PROG,MR,WS1,WS2,WSN prog
@@ -322,6 +327,7 @@ When in doubt about which track, run `/workflow` — it will route you.
 | `/decisions` | Records ADRs and in-flight decisions | At any pipeline decision point |
 | `/ideate` | Structured product discovery — five lenses: opportunity mapping, assumption inventory, market scan, product strategy framing (Torres + Cagan), and jobs-to-be-done (Christensen / Moesta). Suggests lenses based on current pipeline stage and artefacts | Run at any point: blank-slate exploration, enrich an active discovery, or stress-test assumptions before definition |
 | `/spike` | Scoped investigation for genuine unknowns | When a step is blocked by something unknown |
+| `/ea-registry` | Maintains and queries an organisation-level application/interface registry; supports QUERY, CONTRIBUTE, AUDIT, and FEED modes | When you need app/interface inventory, dependency context, blast radius, or registry updates |
 | `/reverse-engineer` | Extracts business rules from legacy code | When modernising or replacing a legacy system |
 | `/programme` | Programme-level navigator for multi-team work | Large initiatives, migrations, library rewrites |
 | `/metric-review` | Re-baselines benefit metrics at phase gates | Quarterly, at phase gates, or when targets are questioned |
@@ -553,7 +559,7 @@ This creates all skill files, templates, the instruction file, and the artefacts
   pull_request_template.md         ← PR checklist with AC and chain traceability fields
   architecture-guardrails.md       ← live guardrails file (create from template)
   pipeline-viz.html                ← pipeline visualiser (open in browser with a local server)
-  skills/                          ← 27 skill SKILL.md files
+  skills/                          ← 28 skill SKILL.md files
   templates/                       ← 30 artefact templates
   scripts/                         ← generated helper scripts (e.g. coverage-map.js)
   artefacts/                       ← generated pipeline artefacts (one folder per feature)

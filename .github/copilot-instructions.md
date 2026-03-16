@@ -68,6 +68,11 @@ Step  Skill                  Entry condition                     Exit condition
 `/systematic-debugging` — 4-phase root cause process when a task is stuck
 `/implementation-review` — spec + quality review between task batches
 
+**Cross-cutting architecture support:**
+`/ea-registry` — organisation-level application/interface registry query,
+contribution, audit, and dependency context feed to /discovery, /definition,
+and /reverse-engineer
+
 **Short-track** (bugs, small fixes, bounded refactors): 
 `/test-plan → /definition-of-ready → coding agent`
 
@@ -228,6 +233,7 @@ Before closing a session:
 -->
 
 **Architecture guardrails:** `.github/architecture-guardrails.md`
+**EA registry repo (optional):** [FILL IN — URL or path to your organisation EA registry repo]
 **Pattern library:** [FILL IN — URL or path to your pattern / component library]
 **Style guide:** [FILL IN — URL or path to your style guide]
 **Reference implementation:** [FILL IN — path in repo, e.g. `src/reference/`]

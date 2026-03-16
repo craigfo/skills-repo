@@ -60,6 +60,10 @@ Ask before reading the code. One or two at a time -- not as a form.
 > "What do you know about the systems this integrates with -- even roughly?
 > Anything known upfront helps find hidden interfaces that don't appear
 > in API definitions: shared database tables, file drops, polling patterns."
+>
+> "If your organisation maintains an EA registry repository, should I feed
+> extracted application/interface candidates into `/ea-registry` after this run
+> as unverified entries for owner review?"
 
 **Q4 -- Target platform constraints**
 > "Are there known gaps in the target platform -- behaviours you already
@@ -174,6 +178,12 @@ For each interface found -- obvious or hidden:
 - Record in Section 3 (interface contracts)
 - Note how it was found
 - Hidden interfaces require counterparty confirmation before rating [VERIFIED]
+
+If `/ea-registry` is available in the current skill pack, include a handoff list
+for registry contribution:
+- application candidates (name, slug, owner/domain if known)
+- interface candidates (source, target, type/subtype, criticality)
+- verification caveats and evidence links
 
 **Step 3: Confidence per interface**
 - Formal contract (spec, schema, agreed format) ? [VERIFIED]
