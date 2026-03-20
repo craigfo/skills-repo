@@ -419,6 +419,7 @@
       <option value="short">Short</option>
       <option value="standard">Standard</option>
       <option value="programme-workstream">Programme</option>
+      <option value="library">Library</option>
     </select>
   </div>
 
@@ -490,6 +491,10 @@
 const STATE_FILE = 'pipeline-state.json';
 
 const STAGES = [
+  { id: 'loop-design',         label: 'Loop Design' },
+  { id: 'token-optimization',  label: 'Token Opt' },
+  { id: 'org-mapping',         label: 'Org Mapping' },
+  { id: 'scale-pipeline',      label: 'Scale Pipeline' },
   { id: 'ideation',            label: 'Ideation' },
   { id: 'discovery',           label: 'Discovery' },
   { id: 'benefit-metric',      label: 'Benefit Metric' },
@@ -833,7 +838,8 @@ function renderBoard(features) {
   const stageIdx = {};
   STAGES.forEach((s, i) => { stageIdx[s.id] = i; });
 
-  const coreStages = ['ideation','discovery','benefit-metric','definition','review','test-plan',
+  const coreStages = ['loop-design','token-optimization','org-mapping','scale-pipeline',
+    'ideation','discovery','benefit-metric','definition','review','test-plan',
     'definition-of-ready','subagent-execution','verify-completion','branch-complete',
     'definition-of-done','release-pending','released'];
   const stagesToShow = STAGES.filter(s =>
@@ -914,6 +920,10 @@ function featureCardHTML(f) {
 // COMPLETED-STAGE TRAIL
 // ─────────────────────────────────────────────────────────────────────────────
 const STAGE_ARTEFACTS = {
+  'loop-design':          f => [{ label: '🧭 Loop design', path: `artefacts/${f.slug}/loop-design.md` }],
+  'token-optimization':   f => [{ label: '💸 Token optimization', path: `artefacts/${f.slug}/token-optimization.md` }],
+  'org-mapping':          f => [{ label: '🗺 Org mapping', path: `artefacts/${f.slug}/org-mapping.md` }],
+  'scale-pipeline':       f => [{ label: '📈 Scale pipeline', path: `artefacts/${f.slug}/scale-pipeline.md` }],
   'discovery':           f => [{ label: '📄 Discovery',     path: `artefacts/${f.slug}/discovery.md` }],
   'benefit-metric':      f => [{ label: '📊 Benefit metric', path: `artefacts/${f.slug}/benefit-metric.md` }],
   'definition':          f => [
@@ -1002,7 +1012,7 @@ function storyRowHTML(featureSlug, epicSlug, story) {
     <div class="story-row-top" data-action="open-story" data-story-key="${key}">
       <div class="story-health" style="background:${healthColour(story.health)}"></div>
       <span class="story-name">${esc(story.name)}</span>
-      <span class="story-stage-badge">${story.stage}</span>
+      <span class="story-stage-badge">${stageLabel(story.stage)}</span>
     </div>
     ${taskListInlineHTML(story, key)}
   </div>`;
@@ -1029,7 +1039,7 @@ function openDrawer(featureSlug, epicSlug, storySlug) {
 
   document.getElementById('drawer-content').innerHTML = `
     <h2>${esc(story.name)}</h2>
-    <div class="drawer-stage">Stage: <strong>${story.stage}</strong> &nbsp;·&nbsp; Health: <strong style="color:${healthColour(story.health)}">${healthEmoji(story.health)} ${story.health}</strong></div>
+    <div class="drawer-stage">Stage: <strong>${stageLabel(story.stage)}</strong> &nbsp;·&nbsp; Health: <strong style="color:${healthColour(story.health)}">${healthEmoji(story.health)} ${story.health}</strong></div>
 
     ${story.health === 'red' && story.blocker ? `<div class="drawer-blocker">🚫 ${esc(story.blocker)}</div>` : ''}
 
@@ -1291,7 +1301,18 @@ function esc(str) {
 }
 function healthColour(h) { return h==='red' ? 'var(--red)' : h==='amber' ? 'var(--amber)' : 'var(--green)'; }
 function healthEmoji(h)  { return h==='red' ? '🔴' : h==='amber' ? '🟡' : '🟢'; }
-function trackLabel(t)   { return t==='short' ? 'Short' : t==='standard' ? 'Std' : 'Prog'; }
+function trackLabel(t) {
+  if (t === 'short') return 'Short';
+  if (t === 'standard') return 'Std';
+  if (t === 'programme-workstream') return 'Prog';
+  if (t === 'library') return 'Library';
+  return t ? t : 'Std';
+}
+
+function stageLabel(id) {
+  const s = STAGES.find(x => x.id === id);
+  return s ? s.label : id;
+}
 
 function reviewBadge(s) {
   if (s.reviewStatus === 'passed')       return `<span style="color:var(--green)">✓ Passed</span>`;
@@ -1401,7 +1422,8 @@ function updateTimestamp() {
 // AUTO-POLL  (only while a pipeline is actively running)
 // ─────────────────────────────────────────────────────────────────────────────
 const ACTIVE_STAGES = new Set([
-  'branch-setup', 'implementation-plan', 'subagent-execution', 'verify-completion'
+  'branch-setup', 'implementation-plan', 'subagent-execution', 'verify-completion',
+  'loop-design', 'token-optimization', 'org-mapping', 'scale-pipeline'
 ]);
 
 function hasActiveFeature() {

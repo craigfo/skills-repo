@@ -468,7 +468,7 @@ Skills that enforce it: `/review` (Category E), `/definition` (Step 1.5), `/defi
 - Inline metric editing — click ✏️ Edit on any metric row to update signal, evidence, and date
 - ⬇ Download button exports the updated `pipeline-state.json` (turns green when unsaved edits exist)
 - Test progress bar reads `testPlan.passing` from `pipeline-state.json` — `/tdd` and `/subagent-execution` update this field after every task commit so the bar advances in real time during implementation
-- Auto-polls `pipeline-state.json` every 10 seconds **only while a pipeline is actively running** (a feature at `branch-setup`, `implementation-plan`, `subagent-execution`, or `verify-completion`) — the timer stops itself when no active features remain, so there is zero overhead at rest
+- Auto-polls `pipeline-state.json` every 10 seconds **only while a pipeline is actively running** (a feature at `branch-setup`, `implementation-plan`, `subagent-execution`, `verify-completion`, `loop-design`, `token-optimization`, `org-mapping`, or `scale-pipeline`) — the timer stops itself when no active features remain, so there is zero overhead at rest
 
 **Running it:**
 Open with VS Code Live Server or any local HTTP server. Works on GitHub Pages. Falls back to a file-drop zone when opened directly from `file://` (fetching local files is blocked by browsers).
