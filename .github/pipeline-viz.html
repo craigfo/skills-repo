@@ -491,10 +491,6 @@
 const STATE_FILE = 'pipeline-state.json';
 
 const STAGES = [
-  { id: 'loop-design',         label: 'Loop Design' },
-  { id: 'token-optimization',  label: 'Token Opt' },
-  { id: 'org-mapping',         label: 'Org Mapping' },
-  { id: 'scale-pipeline',      label: 'Scale Pipeline' },
   { id: 'ideation',            label: 'Ideation' },
   { id: 'discovery',           label: 'Discovery' },
   { id: 'benefit-metric',      label: 'Benefit Metric' },
@@ -838,19 +834,18 @@ function renderBoard(features) {
   const stageIdx = {};
   STAGES.forEach((s, i) => { stageIdx[s.id] = i; });
 
-  const coreStages = ['loop-design','token-optimization','org-mapping','scale-pipeline',
-    'ideation','discovery','benefit-metric','definition','review','test-plan',
+  const coreStages = ['ideation','discovery','benefit-metric','definition','review','test-plan',
     'definition-of-ready','subagent-execution','verify-completion','branch-complete',
     'definition-of-done','release-pending','released'];
   const stagesToShow = STAGES.filter(s =>
-    coreStages.includes(s.id) || features.some(f => f.stage === s.id));
+    coreStages.includes(s.id) || features.some(f => boardStageId(f.stage) === s.id));
 
   board.innerHTML = stagesToShow.map(s => {
     const sIdx   = stageIdx[s.id] ?? 999;
     // Active: feature is currently AT this stage
-    const active = features.filter(f => f.stage === s.id);
+    const active = features.filter(f => boardStageId(f.stage) === s.id);
     // Done:   feature has already passed THROUGH this stage
-    const done   = features.filter(f => (stageIdx[f.stage] ?? 999) > sIdx);
+    const done   = features.filter(f => (stageIdx[boardStageId(f.stage)] ?? 999) > sIdx);
 
     const hasRed   = active.some(f => f.health === 'red');
     const hasAmber = active.some(f => f.health === 'amber');
@@ -904,6 +899,7 @@ function featureCardHTML(f) {
     <div class="card-body ${isOpen ? 'open' : ''}">
       ${blocker}
       <div class="meta">
+        ${metaStageBadge(f.stage)}
         ${teamTag}
         <span class="tag ${f.health}">${healthEmoji(f.health)} ${f.health}</span>
         <span class="tag">${allStories.length} stor.</span>
@@ -1309,9 +1305,30 @@ function trackLabel(t) {
   return t ? t : 'Std';
 }
 
+const META_STAGE_MAP = {
+  'loop-design': 'ideation',
+  'token-optimization': 'ideation',
+  'org-mapping': 'ideation',
+  'scale-pipeline': 'ideation',
+};
+
+function boardStageId(id) {
+  return META_STAGE_MAP[id] || id;
+}
+
 function stageLabel(id) {
   const s = STAGES.find(x => x.id === id);
-  return s ? s.label : id;
+  if (s) return s.label;
+  if (id === 'loop-design') return 'Meta: Loop Design';
+  if (id === 'token-optimization') return 'Meta: Token Opt';
+  if (id === 'org-mapping') return 'Meta: Org Mapping';
+  if (id === 'scale-pipeline') return 'Meta: Scale Pipeline';
+  return id;
+}
+
+function metaStageBadge(stageId) {
+  if (!META_STAGE_MAP[stageId]) return '';
+  return `<span class="tag" style="color:var(--purple)">Meta: ${stageLabel(stageId).replace('Meta: ','')}</span>`;
 }
 
 function reviewBadge(s) {
@@ -1422,8 +1439,7 @@ function updateTimestamp() {
 // AUTO-POLL  (only while a pipeline is actively running)
 // ─────────────────────────────────────────────────────────────────────────────
 const ACTIVE_STAGES = new Set([
-  'branch-setup', 'implementation-plan', 'subagent-execution', 'verify-completion',
-  'loop-design', 'token-optimization', 'org-mapping', 'scale-pipeline'
+  'branch-setup', 'implementation-plan', 'subagent-execution', 'verify-completion'
 ]);
 
 function hasActiveFeature() {
