@@ -52,6 +52,9 @@
   #last-updated { color: var(--muted); font-size: 11px; white-space: nowrap; }
   #reload-btn { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 4px; padding: 3px 8px; font-size: 11px; cursor: pointer; }
   #reload-btn:hover { color: var(--text); border-color: var(--text); }
+  .range-wrap { display: flex; align-items: center; gap: 6px; }
+  input[type="range"] { width: 120px; accent-color: var(--blue); }
+  .range-val { color: var(--muted); font-size: 11px; min-width: 44px; text-align: right; }
 
   /* ── Legend ─────────────────────────────────────────────────── */
   .legend { display: flex; gap: 12px; align-items: center; }
@@ -66,6 +69,24 @@
     display: flex; gap: var(--gap); padding: var(--gap) 16px;
     overflow-x: auto; align-items: flex-start; min-height: calc(100vh - 60px);
   }
+  #board.loop-grouped {
+    display: block; padding: 10px 16px; overflow-x: visible;
+    min-height: calc(100vh - 120px);
+  }
+  .loop-lane {
+    border: 1px solid var(--border); border-radius: 8px;
+    background: rgba(15,23,42,.45); margin-bottom: 10px;
+  }
+  .loop-lane-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 10px; border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .loop-lane-title { font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .loop-lane-title.outer { color: #93c5fd; }
+  .loop-lane-title.inner { color: #5eead4; }
+  .loop-lane-meta { color: var(--muted); font-size: 10px; }
+  .loop-lane-row { display: flex; gap: var(--gap); overflow-x: auto; padding: 10px; align-items: flex-start; }
   .col {
     flex-shrink: 0; width: var(--col-w);
     background: var(--surface); border-radius: 8px;
@@ -77,10 +98,20 @@
     letter-spacing: .06em; color: var(--muted);
     display: flex; align-items: center; justify-content: space-between;
   }
+  .col-header-main { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .col-header-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .col-tools { display: flex; align-items: center; gap: 4px; }
   .col-count {
     background: var(--surface2); border-radius: 10px;
     padding: 1px 6px; font-size: 10px; color: var(--muted);
   }
+  .col-size-btn {
+    background: none; border: 1px solid var(--border); color: var(--muted);
+    border-radius: 3px; width: 18px; height: 18px; font-size: 11px;
+    line-height: 1; cursor: pointer; padding: 0;
+  }
+  .col-size-btn:hover { color: var(--text); border-color: var(--text); }
+  .col-empty .col-header-title { opacity: 0.8; }
   .col-body { padding: 8px; display: flex; flex-direction: column; gap: 6px; min-height: 60px; }
 
   /* active column accent — draws the eye to current work */
@@ -134,6 +165,23 @@
   .card-track.standard { color: var(--blue); }
   .card-track.programme-workstream { color: var(--purple); }
 
+  .card-state-chip {
+    font-size: 9px; border-radius: 3px; padding: 1px 5px; flex-shrink: 0;
+    border: 1px solid transparent; text-transform: uppercase; letter-spacing: .04em;
+  }
+  .card-state-chip.human {
+    color: #93c5fd; background: rgba(59,130,246,.12); border-color: rgba(59,130,246,.35);
+  }
+  .card-state-chip.processing {
+    color: #5eead4; background: rgba(20,184,166,.12); border-color: rgba(20,184,166,.35);
+  }
+  .card-state-chip.blocked {
+    color: #fca5a5; background: rgba(239,68,68,.12); border-color: rgba(239,68,68,.35);
+  }
+  .card-state-chip.done {
+    color: #86efac; background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.35);
+  }
+
   .card-body { border-top: 1px solid var(--border); padding: 8px 10px; display: none; }
   .card-body.open { display: block; }
 
@@ -150,6 +198,25 @@
     border-radius: 4px; padding: 5px 8px; font-size: 11px; color: var(--red);
     margin-bottom: 8px;
   }
+  .next-action {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 4px;
+    padding: 5px 7px; font-size: 11px; margin-bottom: 8px;
+  }
+  .next-action .label { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .04em; margin-right: 6px; }
+  .next-action.human { border-color: rgba(59,130,246,.35); }
+  .next-action.processing { border-color: rgba(20,184,166,.35); }
+  .next-action.blocked { border-color: rgba(239,68,68,.35); }
+  .next-action.done { border-color: rgba(34,197,94,.35); }
+  .next-action-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .next-action-controls { display: inline-flex; align-items: center; gap: 6px; }
+  .next-action-btn {
+    border: 1px solid var(--border); background: var(--surface2); color: var(--text);
+    border-radius: 4px; padding: 2px 8px; font-size: 10px; cursor: pointer;
+  }
+  .next-action-btn:hover { border-color: var(--text); }
+  .next-action-btn:disabled { opacity: .45; cursor: not-allowed; }
+  .next-action-age { color: var(--muted); font-size: 10px; }
+  .next-action-warning { color: var(--amber); font-size: 10px; margin-top: 4px; }
 
   /* ── Epic tree ────────────────────────────────────────────────── */
   .epic-list { display: flex; flex-direction: column; gap: 4px; }
@@ -255,6 +322,64 @@
   .summary-stat { display: flex; gap: 5px; align-items: center; }
   .summary-stat .val { color: var(--text); font-weight: 600; }
 
+  /* ── Action queue panel ─────────────────────────────────────── */
+  #action-queue {
+    display: none; padding: 8px 16px; border-bottom: 1px solid var(--border);
+    background: rgba(15,23,42,.35);
+  }
+  #action-queue.active { display: block; }
+  .aq-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 6px; font-size: 11px;
+  }
+  .aq-title { color: #93c5fd; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+  .aq-meta { color: var(--muted); }
+  .aq-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .aq-item {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid var(--border); border-radius: 999px;
+    background: var(--surface2); padding: 3px 8px; font-size: 11px;
+    max-width: 100%;
+  }
+  .aq-item button {
+    background: none; border: none; color: var(--text); cursor: pointer;
+    font: inherit; padding: 0; text-decoration: underline; text-underline-offset: 2px;
+  }
+  .aq-item .aq-state.human { color: #93c5fd; }
+  .aq-item .aq-state.blocked { color: #fca5a5; }
+  .aq-item .aq-age { color: var(--muted); font-size: 10px; }
+  .aq-empty { color: var(--muted); font-size: 11px; }
+
+  /* ── Loop structure strip (pipeline view only) ───────────────── */
+  #loop-structure {
+    display: none; gap: 10px; align-items: center;
+    padding: 6px 16px; border-bottom: 1px solid var(--border);
+    background: rgba(15,23,42,.45); overflow-x: auto;
+  }
+  #loop-structure.active { display: flex; }
+  .loop-band {
+    display: inline-flex; align-items: center; gap: 8px;
+    border-radius: 999px; border: 1px solid var(--border);
+    padding: 4px 10px; white-space: nowrap; font-size: 11px;
+  }
+  .loop-band strong { font-size: 11px; }
+  .loop-band .loop-stage-list { font-size: 10px; color: var(--muted); }
+  .loop-band.outer {
+    background: rgba(59,130,246,.08);
+    border-color: rgba(59,130,246,.3);
+    color: #93c5fd;
+  }
+  .loop-band.inner {
+    background: rgba(20,184,166,.1);
+    border-color: rgba(20,184,166,.35);
+    color: #5eead4;
+  }
+  .col-loop-outer { box-shadow: inset 0 2px 0 rgba(59,130,246,.5); }
+  .col-loop-inner { box-shadow: inset 0 2px 0 rgba(20,184,166,.65); }
+  .tag.loop-outer { color: #93c5fd; border: 1px solid rgba(59,130,246,.3); }
+  .tag.loop-inner { color: #5eead4; border: 1px solid rgba(20,184,166,.35); }
+  .tag.loop-library { color: #d8b4fe; border: 1px solid rgba(168,85,247,.35); }
+
   /* ── Story drawer (slide-in from right) ─────────────────────── */
   #drawer-overlay {
     display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 200;
@@ -350,6 +475,78 @@
   /* ── OUTCOMES VIEW ────────────────────────────────────────────── */
   #outcomes-board { display:none; padding:12px 16px; }
   #outcomes-board.active { display:block; }
+  #library-board {
+    display: none; gap: var(--gap); padding: var(--gap) 16px;
+    overflow-x: auto; align-items: flex-start; min-height: calc(100vh - 120px);
+  }
+  #library-board.active { display: flex; }
+  #governance-board { display:none; padding:12px 16px; }
+  #governance-board.active { display:block; }
+  .gov-summary {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;
+  }
+  .gov-controls {
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px;
+  }
+  .gov-pill {
+    border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px;
+    font-size: 11px; background: var(--surface);
+  }
+  .gov-pill.pass { color: var(--green); border-color: rgba(34,197,94,.35); }
+  .gov-pill.warn { color: var(--amber); border-color: rgba(245,158,11,.35); }
+  .gov-pill.fail { color: var(--red); border-color: rgba(239,68,68,.35); }
+  .gov-pill.filter-active { background: rgba(239,68,68,.12); border-color: rgba(239,68,68,.45); }
+  .gov-btn {
+    border: 1px solid var(--border); border-radius: 6px; padding: 4px 9px;
+    background: var(--surface2); color: var(--text); font-size: 11px; cursor: pointer;
+  }
+  .gov-btn:hover { border-color: var(--text); }
+  .gov-btn.active { border-color: rgba(245,158,11,.5); color: var(--amber); }
+  .gov-note { color: var(--muted); font-size: 10px; }
+  .gov-ref {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 12px; margin-bottom: 10px;
+  }
+  .gov-ref h3 { font-size: 12px; margin-bottom: 8px; color: var(--text); }
+  .gov-ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap: 8px; }
+  .gov-ref-item { border: 1px solid var(--border); border-radius: 6px; padding: 8px; background: var(--surface2); }
+  .gov-ref-item .name { font-size: 11px; font-weight: 700; margin-bottom: 2px; }
+  .gov-ref-item .skill { font-size: 10px; color: #93c5fd; margin-bottom: 4px; }
+  .gov-ref-item .criteria { font-size: 10px; color: var(--muted); line-height: 1.4; }
+  .gov-ref-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .gov-ref-header h3 { margin-bottom: 0; }
+  .gov-ref-item-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
+  .skill-source-badge {
+    font-size: 9px; border-radius: 999px; padding: 1px 6px;
+    border: 1px solid var(--border); white-space: nowrap;
+  }
+  .skill-source-badge.live    { color: var(--green);  border-color: rgba(34,197,94,.35);  background: rgba(34,197,94,.08); }
+  .skill-source-badge.partial { color: var(--amber);  border-color: rgba(245,158,11,.35); background: rgba(245,158,11,.08); }
+  .skill-source-badge.default { color: var(--muted);  border-color: var(--border); }
+  .gov-meta-ref { margin-top: 10px; font-size: 10px; color: var(--muted); }
+  .gov-meta-ref summary { cursor: pointer; font-size: 10px; color: var(--muted); user-select: none; }
+  .gov-meta-ref summary:hover { color: var(--text); }
+  .gov-matrix-wrap {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    overflow-x: auto;
+  }
+  .gov-matrix { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 950px; }
+  .gov-matrix th, .gov-matrix td { border-bottom: 1px solid var(--border); padding: 7px 8px; text-align: left; vertical-align: middle; }
+  .gov-matrix th { color: var(--muted); text-transform: uppercase; font-size: 10px; letter-spacing: .04em; background: var(--surface2); }
+  .gov-feature-cell { min-width: 240px; }
+  .gov-feature-name { font-weight: 600; color: var(--text); }
+  .gov-feature-meta { color: var(--muted); font-size: 10px; margin-top: 2px; }
+  .gov-cell { white-space: nowrap; }
+  .gov-status {
+    display: inline-flex; align-items: center; gap: 4px; font-size: 10px;
+    border-radius: 999px; border: 1px solid var(--border); padding: 1px 7px;
+  }
+  .gov-status.pass { color: var(--green); border-color: rgba(34,197,94,.35); background: rgba(34,197,94,.08); }
+  .gov-status.warn { color: var(--amber); border-color: rgba(245,158,11,.35); background: rgba(245,158,11,.08); }
+  .gov-status.fail { color: var(--red); border-color: rgba(239,68,68,.35); background: rgba(239,68,68,.08); }
+  .gov-status.na { color: var(--muted); }
+  .gov-status.policy { box-shadow: inset 0 0 0 1px rgba(245,158,11,.45); }
+  .gov-link { margin-left: 6px; font-size: 10px; }
   .outcome-feature { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:16px; margin-bottom:12px; }
   .outcome-feature-header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:8px; }
   .outcome-feature-name { font-size:14px; font-weight:600; color:var(--text); }
@@ -403,8 +600,8 @@
   <span class="sep">|</span>
 
   <div class="filter-group">
-    <label>Health</label>
-    <select id="filter-health">
+    <label>Risk</label>
+    <select id="filter-health" title="Risk signal: blocked / at risk / moving">
       <option value="">All</option>
       <option value="red">🔴 Blocked</option>
       <option value="amber">🟡 At risk</option>
@@ -431,13 +628,37 @@
   </div>
 
   <div class="filter-group">
+    <label>Action</label>
+    <select id="filter-action" title="Who/what owns the next move">
+      <option value="">All</option>
+      <option value="human">Needs human</option>
+      <option value="processing">Processing</option>
+      <option value="blocked">Blocked</option>
+      <option value="done">Done</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
     <label>Search</label>
     <input type="text" id="filter-search" placeholder="feature / story name…" style="width:160px">
   </div>
 
   <button class="btn" id="expand-all-btn" title="Expand all (e)">Expand all</button>
   <button class="btn" id="collapse-all-btn" title="Collapse all (c)">Collapse all</button>
+  <button class="btn" id="toggle-loop-group-btn" title="Toggle grouped loop layout (g)">Loop grouped</button>
+  <button class="btn" id="governance-btn" title="Governance and compliance view (v)">🛡 Governance</button>
   <button class="btn" id="outcomes-btn" title="Outcomes view (o)">📊 Outcomes</button>
+  <button class="btn" id="library-btn" title="Library evolution view (l)">🧱 Library</button>
+
+  <div class="filter-group">
+    <label>Columns</label>
+    <div class="range-wrap">
+      <input type="range" id="column-width-slider" min="160" max="360" step="10" value="220">
+      <span class="range-val" id="column-width-label">220px</span>
+    </div>
+  </div>
+  <button class="btn active" id="toggle-empty-shrink-btn" title="Auto-shrink columns with no cards">Auto-shrink empty</button>
+  <button class="btn" id="reset-col-width-btn" title="Reset column widths">Reset cols</button>
 
   <div class="spacer"></div>
 
@@ -458,12 +679,16 @@
 
 <!-- ───────────── SUMMARY ───────────── -->
 <div id="summary-bar"></div>
+<div id="action-queue"></div>
+<div id="loop-structure"></div>
 
 <!-- ───────────── BOARD ───────────── -->
 <div id="board"></div>
 
 <!-- ───────────── OUTCOMES VIEW ───────────── -->
 <div id="outcomes-board"></div>
+<div id="library-board"></div>
+<div id="governance-board"></div>
 
 <!-- ───────────── STORY DRAWER ───────────── -->
 <div id="drawer-overlay"></div>
@@ -482,7 +707,7 @@
   <div id="md-body"><div class="md-content" id="md-content"></div></div>
 </div>
 
-<div id="kbd-hint">e = expand all &nbsp;·&nbsp; c = collapse all &nbsp;·&nbsp; o = outcomes &nbsp;·&nbsp; Esc = close &nbsp;·&nbsp; in Outcomes: ✏️ to edit a metric</div>
+<div id="kbd-hint">e = expand all &nbsp;·&nbsp; c = collapse all &nbsp;·&nbsp; g = loop grouped &nbsp;·&nbsp; v = governance &nbsp;·&nbsp; o = outcomes &nbsp;·&nbsp; l = library &nbsp;·&nbsp; [ / ] = narrower / wider &nbsp;·&nbsp; 0 = reset widths &nbsp;·&nbsp; Esc = close &nbsp;·&nbsp; in Outcomes: ✏️ to edit a metric</div>
 
 <script>
 // ─────────────────────────────────────────────────────────────────────────────
@@ -495,6 +720,7 @@ const STAGES = [
   { id: 'discovery',           label: 'Discovery' },
   { id: 'benefit-metric',      label: 'Benefit Metric' },
   { id: 'definition',          label: 'Definition' },
+  { id: 'spike',               label: 'Spike' },
   { id: 'review',              label: 'Review' },
   { id: 'test-plan',           label: 'Test Plan' },
   { id: 'definition-of-ready', label: 'Def of Ready' },
@@ -508,24 +734,60 @@ const STAGES = [
   { id: 'trace',               label: 'Trace' },
   { id: 'release-pending',     label: 'Release Pending' },
   { id: 'released',            label: 'Released' },
-  { id: 'spike',               label: 'Spike' },
   { id: 'stalled',             label: 'Stalled' },
+];
+
+const META_STAGES = ['loop-design', 'token-optimization', 'org-mapping', 'scale-pipeline'];
+const INNER_LOOP_STAGE_ORDER = ['branch-setup', 'implementation-plan', 'subagent-execution', 'implementation-review', 'verify-completion', 'branch-complete'];
+const OUTER_LOOP_STAGE_ORDER = ['ideation', 'discovery', 'benefit-metric', 'definition', 'spike', 'review', 'test-plan', 'definition-of-ready', 'definition-of-done', 'trace', 'release-pending', 'released'];
+const INNER_LOOP_STAGES = new Set(INNER_LOOP_STAGE_ORDER);
+const PIPELINE_STAGE_ORDER = ['ideation', 'discovery', 'benefit-metric', 'definition', 'spike', 'review', 'test-plan', 'definition-of-ready', 'branch-setup', 'implementation-plan', 'subagent-execution', 'implementation-review', 'verify-completion', 'branch-complete', 'definition-of-done', 'trace', 'release-pending', 'released'];
+
+const GOVERNANCE_GATES = [
+  { id: 'review',              label: 'Review',    skill: '/review',              skillPath: 'skills/review/SKILL.md',              criteria: 'No HIGH findings before progression',                      artefact: f => `artefacts/${f.slug}/review/` },
+  { id: 'test-plan',           label: 'Test Plan', skill: '/test-plan',           skillPath: 'skills/test-plan/SKILL.md',           criteria: 'Failing tests and verification script prepared',            artefact: f => `artefacts/${f.slug}/test-plans/` },
+  { id: 'definition-of-ready', label: 'DoR',       skill: '/definition-of-ready', skillPath: 'skills/definition-of-ready/SKILL.md', criteria: 'All hard blocks pass and sign-off complete',                artefact: f => `artefacts/${f.slug}/dor/` },
+  { id: 'verify-completion',   label: 'Verify',    skill: '/verify-completion',   skillPath: 'skills/verify-completion/SKILL.md',   criteria: 'Fresh evidence run before completion claims',               artefact: f => `artefacts/${f.slug}/verification-scripts/` },
+  { id: 'definition-of-done',  label: 'DoD',       skill: '/definition-of-done',  skillPath: 'skills/definition-of-done/SKILL.md',  criteria: 'Post-merge AC/test coverage validated',                     artefact: f => `artefacts/${f.slug}/dod/` },
+  { id: 'trace',               label: 'Trace',     skill: '/trace',               skillPath: 'skills/trace/SKILL.md',               criteria: 'Traceability chain intact across artefacts',                artefact: f => `artefacts/${f.slug}/trace/trace.md` },
+  { id: 'release',             label: 'Release',   skill: '/release',             skillPath: 'skills/release/SKILL.md',             criteria: 'Release bundle/checklist produced for deployment',          artefact: f => `artefacts/${f.slug}/release/release-notes-technical.md` },
+];
+
+// Pipeline-authority skills referenced in the governance view but not gate-checked directly.
+// Their descriptions and step requirements inform the gate criteria context.
+const META_SKILL_REFS = [
+  { id: 'workflow',    label: 'Workflow',    skill: '/workflow',    skillPath: 'skills/workflow/SKILL.md',    fallback: 'Pipeline navigator — defines what stage each feature is at and what skill runs next.' },
+  { id: 'org-mapping', label: 'Org Mapping', skill: '/org-mapping', skillPath: 'skills/org-mapping/SKILL.md', fallback: 'Maps pipeline steps to org-specific terminology, governance gates, and approval processes.' },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────────────────────────────────────────
 let allData = null;
-let activeFilters = { health: '', track: '', team: '', search: '' };
+let activeFilters = { health: '', track: '', team: '', action: '', search: '' };
 let openFeatures = new Set();   // feature slugs with expanded card body
 let openEpics    = new Set();   // epic slugs with expanded story list
 let openStories      = new Set();   // story slugs with expanded detail
 let openTaskLists    = new Set();   // story keys with task list expanded inline
 let openDoneSections = new Set();   // stage ids with 'completed' section expanded
 let drawerStory  = null;
-let viewMode = 'stage'; // 'stage' | 'outcomes'
+let viewMode = 'stage'; // 'stage' | 'governance' | 'outcomes' | 'library'
 let editingMetric = null; // { featureSlug, metricId }
 let isDirty = false;
+let pipelineLayout = 'flat'; // 'flat' | 'loop-grouped'
+let governanceGateFilter = ''; // gate id for fail-focused filtering
+let governanceStrictPolicy = false; // when true, warn => fail for regulated features
+let skillMetadata = {}; // { gateId | metaId: { description: '...', loaded: true } }
+let columnUi = {
+  globalWidth: 220,
+  autoShrinkEmpty: true,
+  stageWidths: {},
+};
+
+const COL_MIN = 160;
+const COL_MAX = 360;
+const COL_STEP = 10;
+const PROCESSING_STALE_MINUTES = 120;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // DATA LOADING
@@ -545,6 +807,9 @@ async function loadState() {
   // render() is outside the fetch catch — a JS render error shows as an error,
   // not a false "no data" drop zone.
   try { render(); } catch (re) { showError('render error: ' + re.message + '\n' + re.stack); }
+  // Attempt to load live skill descriptions in the background; re-render when done
+  // so the governance view picks up any updates without blocking initial display.
+  loadSkillMetadata().then(() => { try { render(); } catch (_) {} });
 }
 
 function normalizeData(data) {
@@ -572,7 +837,10 @@ function loadFromText(text) {
     try { render(); } catch (re) { showError('render error: ' + re.message + '\n' + re.stack); }
   } catch (e) {
     showError('parse error: ' + e.message);
+    return;
   }
+  // Also attempt skill metadata when loading via file picker.
+  loadSkillMetadata().then(() => { try { render(); } catch (_) {} });
 }
 
 function showError(msg) {
@@ -590,7 +858,63 @@ function readFile(file) {
   reader.readAsText(file);
 }
 
-function showDropZone() {
+// ─────────────────────────────────────────────────────────────────────────────
+// SKILL METADATA LOADING
+// Fetches SKILL.md files relative to this page's URL and parses their YAML
+// frontmatter description. Works when served (VS Code Live Server, GitHub Pages).
+// Silently falls back to hardcoded criteria on file:// or if file is absent.
+// ─────────────────────────────────────────────────────────────────────────────
+function parseFrontmatterDescription(text) {
+  // Match YAML frontmatter block: --- ... ---
+  const fmMatch = text.match(/^---\s*\n([\s\S]*?)\n---/);
+  if (!fmMatch) return null;
+  const fm = fmMatch[1];
+  // Block scalar (folded) description: description: >\n  line1\n  line2
+  const blockMatch = fm.match(/description:\s*>\s*\n((?:[ \t]+[^\n]*\n?)+)/);
+  if (blockMatch) {
+    return blockMatch[1]
+      .split('\n')
+      .map(l => l.trim())
+      .filter(Boolean)
+      .join(' ')
+      .trim();
+  }
+  // Single-line description: description: some text
+  const lineMatch = fm.match(/description:\s*(.+)/);
+  return lineMatch ? lineMatch[1].trim() : null;
+}
+
+async function loadSkillMetadata() {
+  const allSkills = [
+    ...GOVERNANCE_GATES.map(g => ({ id: g.id, path: g.skillPath })),
+    ...META_SKILL_REFS.map(m => ({ id: m.id, path: m.skillPath })),
+  ];
+  const results = await Promise.allSettled(
+    allSkills.map(async ({ id, path }) => {
+      const resp = await fetch(path + '?_=' + Date.now());
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const text = await resp.text();
+      const description = parseFrontmatterDescription(text);
+      if (!description) throw new Error('no description in frontmatter');
+      return { id, description };
+    })
+  );
+  results.forEach((r, i) => {
+    if (r.status === 'fulfilled') {
+      skillMetadata[r.value.id] = { description: r.value.description, loaded: true };
+    }
+  });
+}
+
+function skillCriteria(gateId) {
+  return skillMetadata[gateId]?.description || null;
+}
+
+function skillLoaded(id) {
+  return !!skillMetadata[id]?.loaded;
+}
+
+
   const board = document.getElementById('board');
   board.innerHTML = `
     <div id="drop-zone">
@@ -621,6 +945,9 @@ function showDropZone() {
   });
 
   document.getElementById('summary-bar').innerHTML = '';
+  const aq = document.getElementById('action-queue');
+  aq.classList.remove('active');
+  aq.innerHTML = '';
   document.getElementById('last-updated').textContent = '';
 }
 
@@ -633,6 +960,10 @@ function filteredFeatures() {
     if (activeFilters.health && f.health !== activeFilters.health) return false;
     if (activeFilters.track  && f.track  !== activeFilters.track)  return false;
     if (activeFilters.team   && f.team   !== activeFilters.team)   return false;
+    if (activeFilters.action) {
+      const actionState = featureActionMeta(f).state;
+      if (actionState !== activeFilters.action) return false;
+    }
     if (activeFilters.search) {
       const q = activeFilters.search.toLowerCase();
       const inFeature = f.name.toLowerCase().includes(q) || f.slug.toLowerCase().includes(q);
@@ -654,6 +985,8 @@ function renderSummary(features) {
   const blocked = features.filter(f => f.health === 'red').length;
   const amber   = features.filter(f => f.health === 'amber').length;
   const green   = features.filter(f => f.health === 'green').length;
+  const human   = features.filter(f => featureActionMeta(f).state === 'human').length;
+  const processing = features.filter(f => featureActionMeta(f).state === 'processing').length;
   const stories = features.flatMap(f => (f.epics || []).flatMap(e => e.stories || []));
   const relReady = stories.filter(s => s.releaseReady).length;
   bar.innerHTML = `
@@ -661,6 +994,8 @@ function renderSummary(features) {
     <div class="summary-stat"><span class="val" style="color:var(--red)">${blocked}</span> blocked</div>
     <div class="summary-stat"><span class="val" style="color:var(--amber)">${amber}</span> at risk</div>
     <div class="summary-stat"><span class="val" style="color:var(--green)">${green}</span> moving</div>
+    <div class="summary-stat"><span class="val" style="color:#93c5fd">${human}</span> needs human</div>
+    <div class="summary-stat"><span class="val" style="color:#5eead4">${processing}</span> processing</div>
     <div class="summary-stat"><span class="val">${stories.length}</span> stories total</div>
     ${relReady > 0 ? `<div class="summary-stat"><span class="val" style="color:var(--teal)">${relReady}</span> release-ready</div>` : ''}
   `;
@@ -672,20 +1007,101 @@ function renderSummary(features) {
 function render() {
   const features = filteredFeatures();
   renderSummary(features);
-  if (viewMode === 'outcomes') {
-    document.getElementById('board').style.display = 'none';
-    const ob = document.getElementById('outcomes-board');
-    ob.classList.add('active');
+  const board = document.getElementById('board');
+  const governance = document.getElementById('governance-board');
+  const outcomes = document.getElementById('outcomes-board');
+  const library = document.getElementById('library-board');
+  const loopStructure = document.getElementById('loop-structure');
+  const actionQueue = document.getElementById('action-queue');
+
+  if (viewMode === 'governance') {
+    board.style.display = 'none';
+    actionQueue.classList.remove('active');
+    loopStructure.classList.remove('active');
+    outcomes.classList.remove('active');
+    outcomes.innerHTML = '';
+    library.classList.remove('active');
+    library.innerHTML = '';
+    governance.classList.add('active');
+    renderGovernance(features);
+  } else if (viewMode === 'outcomes') {
+    board.style.display = 'none';
+    actionQueue.classList.remove('active');
+    loopStructure.classList.remove('active');
+    governance.classList.remove('active');
+    governance.innerHTML = '';
+    library.classList.remove('active');
+    outcomes.classList.add('active');
     renderOutcomes(features);
+  } else if (viewMode === 'library') {
+    board.style.display = 'none';
+    actionQueue.classList.remove('active');
+    loopStructure.classList.remove('active');
+    governance.classList.remove('active');
+    governance.innerHTML = '';
+    outcomes.classList.remove('active');
+    outcomes.innerHTML = '';
+    library.classList.add('active');
+    renderLibrary(features);
   } else {
-    document.getElementById('board').style.display = '';
-    const ob = document.getElementById('outcomes-board');
-    ob.classList.remove('active');
-    ob.innerHTML = '';
+    board.style.display = '';
+    actionQueue.classList.add('active');
+    loopStructure.classList.add('active');
+    governance.classList.remove('active');
+    governance.innerHTML = '';
+    outcomes.classList.remove('active');
+    outcomes.innerHTML = '';
+    library.classList.remove('active');
+    library.innerHTML = '';
+    renderActionQueue(features);
+    renderLoopStructure(features);
     renderBoard(features);
   }
   populateTeamFilter();
   updateTimestamp();
+}
+
+function renderActionQueue(features) {
+  const panel = document.getElementById('action-queue');
+  const actionable = features
+    .map(f => ({ feature: f, meta: featureActionMeta(f) }))
+    .filter(x => x.meta.state === 'human' || x.meta.state === 'blocked')
+    .sort((a, b) => featureAgeMinutes(b.feature) - featureAgeMinutes(a.feature));
+
+  if (actionable.length === 0) {
+    panel.innerHTML = `<div class="aq-empty">No human actions waiting right now.</div>`;
+    return;
+  }
+
+  panel.innerHTML = `
+    <div class="aq-header">
+      <span class="aq-title">Action queue</span>
+      <span class="aq-meta">${actionable.length} waiting</span>
+    </div>
+    <div class="aq-list">
+      ${actionable.slice(0, 12).map(({ feature, meta }) => `
+        <div class="aq-item">
+          <span class="aq-state ${meta.state}">${meta.label}</span>
+          <button data-action="focus-feature" data-slug="${esc(feature.slug)}">${esc(feature.name)}</button>
+          <span class="aq-age">${formatAge(featureAgeMinutes(feature))}</span>
+        </div>`).join('')}
+    </div>`;
+}
+
+function renderLoopStructure(features) {
+  const outerCount = features.filter(f => loopType(f.stage) === 'outer').length;
+  const innerCount = features.filter(f => loopType(f.stage) === 'inner').length;
+  const outerStages = OUTER_LOOP_STAGE_ORDER.map(stageLabel).join(' -> ');
+  const innerStages = INNER_LOOP_STAGE_ORDER.map(stageLabel).join(' -> ');
+  document.getElementById('loop-structure').innerHTML = `
+    <div class="loop-band outer">
+      <strong>Outer loop (${outerCount})</strong>
+      <span class="loop-stage-list">${outerStages}</span>
+    </div>
+    <div class="loop-band inner">
+      <strong>Inner loop (${innerCount})</strong>
+      <span class="loop-stage-list">${innerStages}</span>
+    </div>`;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -814,6 +1230,293 @@ function renderOutcomes(features) {
   ob.innerHTML = features.map(f => outcomesFeatureHTML(f)).join('');
 }
 
+function renderLibrary(features) {
+  const board = document.getElementById('library-board');
+  const metaCols = META_STAGES.map(stageId => ({
+    id: stageId,
+    label: stageLabel(stageId).replace('Meta: ', ''),
+    items: features.filter(f => f.stage === stageId),
+  }));
+  const otherLibrary = features.filter(f => f.track === 'library' && !META_STAGES.includes(f.stage));
+  if (otherLibrary.length > 0) {
+    metaCols.push({ id: 'library-other', label: 'Other Library', items: otherLibrary });
+  }
+
+  const hasCards = metaCols.some(col => col.items.length > 0);
+  if (!hasCards) {
+    board.innerHTML = `
+      <div class="empty-state" style="width:100%">
+        <h2>No library-evolution cards in meta stages</h2>
+        <p>When features are at <code>loop-design</code>, <code>token-optimization</code>, <code>org-mapping</code>, or <code>scale-pipeline</code>, they will appear here.</p>
+      </div>`;
+    return;
+  }
+
+  board.innerHTML = metaCols.map(col => `
+    <div class="col" data-stage="${col.id}" style="width:${clampColWidth(columnUi.stageWidths[col.id] || columnUi.globalWidth)}px">
+      <div class="col-header">
+        <div class="col-header-main"><span class="col-header-title">${esc(col.label)}</span></div>
+        <div class="col-tools">${col.items.length > 0 ? `<span class="col-count">${col.items.length}</span>` : ''}</div>
+      </div>
+      <div class="col-body">
+        ${col.items.length > 0 ? col.items.map(f => featureCardHTML(f)).join('') : '<div style="color:var(--border);font-size:11px;padding:4px 0">—</div>'}
+      </div>
+    </div>`).join('');
+}
+
+function renderGovernance(features) {
+  const board = document.getElementById('governance-board');
+  if (features.length === 0) {
+    board.innerHTML = '<div class="empty-state"><h2>No features match your filters</h2><p>Try clearing filters to inspect governance coverage.</p></div>';
+    return;
+  }
+
+  const rowsUnfiltered = features.map(f => ({
+    feature: f,
+    gates: GOVERNANCE_GATES.map(g => ({ gate: g, status: gateStatus(f, g.id) })),
+  }));
+
+  const rows = governanceGateFilter
+    ? rowsUnfiltered.filter(r => {
+        const g = r.gates.find(x => x.gate.id === governanceGateFilter);
+        return g && g.status.state === 'fail';
+      })
+    : rowsUnfiltered;
+
+  const allStatuses = rowsUnfiltered.flatMap(r => r.gates.map(g => g.status.state));
+  const passCount = allStatuses.filter(s => s === 'pass').length;
+  const warnCount = allStatuses.filter(s => s === 'warn').length;
+  const failCount = allStatuses.filter(s => s === 'fail').length;
+  const gateFailCounts = GOVERNANCE_GATES.map(g => ({
+    gate: g,
+    count: rowsUnfiltered.filter(r => {
+      const gr = r.gates.find(x => x.gate.id === g.id);
+      return gr && gr.status.state === 'fail';
+    }).length,
+  }));
+
+  board.innerHTML = `
+    <div class="gov-summary">
+      <span class="gov-pill">Features ${features.length}</span>
+      <span class="gov-pill pass">Pass ${passCount}</span>
+      <span class="gov-pill warn">Warn ${warnCount}</span>
+      <span class="gov-pill fail">Fail ${failCount}</span>
+    </div>
+    <div class="gov-controls">
+      <button class="gov-btn ${governanceStrictPolicy ? 'active' : ''}" data-action="toggle-gov-policy">Strict policy mode ${governanceStrictPolicy ? 'ON' : 'OFF'}</button>
+      <button class="gov-btn" data-action="export-gov-csv">Export CSV</button>
+      ${governanceGateFilter ? `<button class="gov-btn" data-action="clear-gov-filter">Clear gate filter</button>` : ''}
+      <span class="gov-note">${governanceStrictPolicy ? 'Warn statuses for regulated features are treated as fail.' : 'Warn and fail are shown separately.'}</span>
+    </div>
+    <div class="gov-summary">
+      ${gateFailCounts.map(gf => `<button class="gov-pill fail ${governanceGateFilter === gf.gate.id ? 'filter-active' : ''}" data-action="filter-gov-gate" data-gate="${gf.gate.id}">${esc(gf.gate.label)} fails ${gf.count}</button>`).join('')}
+    </div>
+    <div class="gov-ref">
+      <div class="gov-ref-header">
+        <h3>Gate Criteria Reference</h3>
+        ${(()=>{
+          const loaded = GOVERNANCE_GATES.filter(g => skillLoaded(g.id)).length;
+          const total  = GOVERNANCE_GATES.length;
+          return loaded === total
+            ? `<span class="skill-source-badge live">📄 ${loaded}/${total} skills live</span>`
+            : loaded > 0
+              ? `<span class="skill-source-badge partial">📄 ${loaded}/${total} skills live</span>`
+              : `<span class="skill-source-badge default" title="Open via VS Code Live Server or GitHub Pages to load live criteria from SKILL.md files">📋 default criteria (serve to load live)</span>`;
+        })()}
+      </div>
+      <div class="gov-ref-grid">
+        ${GOVERNANCE_GATES.map(g => {
+          const live = skillLoaded(g.id);
+          const desc = skillCriteria(g.id) || g.criteria;
+          return `
+          <div class="gov-ref-item">
+            <div class="gov-ref-item-head">
+              <div class="name">${esc(g.label)}</div>
+              <span class="skill-source-badge ${live ? 'live' : 'default'}">${live ? 'live' : 'default'}</span>
+            </div>
+            <div class="skill">Skill ${esc(g.skill)}</div>
+            <div class="criteria">${esc(desc)}</div>
+          </div>`;
+        }).join('')}
+      </div>
+      <details class="gov-meta-ref">
+        <summary>Pipeline authority skills (workflow &amp; org-mapping)</summary>
+        <div class="gov-ref-grid" style="margin-top:8px">
+          ${META_SKILL_REFS.map(m => {
+            const live = skillLoaded(m.id);
+            const desc = skillCriteria(m.id) || m.fallback;
+            return `
+            <div class="gov-ref-item">
+              <div class="gov-ref-item-head">
+                <div class="name">${esc(m.label)}</div>
+                <span class="skill-source-badge ${live ? 'live' : 'default'}">${live ? 'live' : 'default'}</span>
+              </div>
+              <div class="skill">Skill ${esc(m.skill)}</div>
+              <div class="criteria">${esc(desc)}</div>
+            </div>`;
+          }).join('')}
+        </div>
+      </details>
+    </div>
+    <div class="gov-matrix-wrap">
+      <table class="gov-matrix">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            ${GOVERNANCE_GATES.map(g => `<th>${esc(g.label)}<br><span style="font-size:9px;color:var(--muted)">${esc(g.skill)}</span></th>`).join('')}
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(r => governanceRowHTML(r.feature, r.gates)).join('')}
+        </tbody>
+      </table>
+    </div>
+    ${rows.length === 0 ? '<div class="aq-empty" style="margin-top:8px">No features currently failing the selected gate.</div>' : ''}`;
+}
+
+function governanceRowHTML(feature, gateResults) {
+  return `
+    <tr>
+      <td class="gov-feature-cell">
+        <div class="gov-feature-name">${esc(feature.name)}</div>
+        <div class="gov-feature-meta">${esc(feature.slug)} · ${esc(stageLabel(feature.stage))}</div>
+      </td>
+      ${gateResults.map(gr => `
+        <td class="gov-cell">
+          <span class="gov-status ${gr.status.state}${gr.status.policyEscalated ? ' policy' : ''}">${govStateIcon(gr.status.state)} ${esc(gr.status.label)}</span>
+          ${gr.status.artefact ? `<a class="drawer-link gov-link" href="${esc(gr.status.artefact)}">artefact</a>` : ''}
+        </td>`).join('')}
+    </tr>`;
+}
+
+function govStateIcon(state) {
+  if (state === 'pass') return '✓';
+  if (state === 'warn') return '!';
+  if (state === 'fail') return 'x';
+  return '·';
+}
+
+function stageRank(stageId) {
+  const i = PIPELINE_STAGE_ORDER.indexOf(stageId);
+  return i >= 0 ? i : -1;
+}
+
+function hasReachedStage(feature, stageId) {
+  return stageRank(feature.stage) >= stageRank(stageId) && stageRank(stageId) >= 0;
+}
+
+function isRegulatedFeature(feature) {
+  return feature.complianceProfile === 'regulated' || feature.regulated === true;
+}
+
+function applyGovernancePolicy(feature, status) {
+  if (!governanceStrictPolicy) return status;
+  if (!isRegulatedFeature(feature)) return status;
+  if (status.state !== 'warn') return status;
+  return {
+    ...status,
+    state: 'fail',
+    label: `${status.label} (policy)`,
+    policyEscalated: true,
+  };
+}
+
+function gateStatus(feature, gateId) {
+  const stories = allStories(feature);
+  const artefactFor = id => {
+    const g = GOVERNANCE_GATES.find(x => x.id === id);
+    return g ? g.artefact(feature) : '';
+  };
+
+  let status = { state: 'na', label: 'N/A', artefact: artefactFor(gateId) };
+
+  if (gateId === 'review') {
+    if (stories.length === 0) status = { state: 'na', label: 'N/A', artefact: artefactFor(gateId) };
+    else if (stories.some(s => (s.highFindings || 0) > 0)) status = { state: 'fail', label: 'HIGH findings', artefact: artefactFor(gateId) };
+    else if (stories.every(s => s.reviewStatus === 'passed')) status = { state: 'pass', label: 'Passed', artefact: artefactFor(gateId) };
+    else status = { state: 'warn', label: 'In progress', artefact: artefactFor(gateId) };
+  }
+
+  if (gateId === 'test-plan') {
+    if (stories.length === 0) status = { state: 'na', label: 'N/A', artefact: artefactFor(gateId) };
+    const written = stories.filter(s => s.testPlan && s.testPlan.status === 'written' && (s.testPlan.totalTests || 0) > 0).length;
+    if (written === stories.length) status = { state: 'pass', label: 'Written', artefact: artefactFor(gateId) };
+    else if (written > 0) status = { state: 'warn', label: 'Partial', artefact: artefactFor(gateId) };
+    else status = { state: 'fail', label: 'Missing', artefact: artefactFor(gateId) };
+  }
+
+  if (gateId === 'definition-of-ready') {
+    if (stories.length === 0) status = { state: 'na', label: 'N/A', artefact: artefactFor(gateId) };
+    else if (stories.some(s => s.dorStatus === 'blocked')) status = { state: 'fail', label: 'Blocked', artefact: artefactFor(gateId) };
+    else if (stories.every(s => s.dorStatus === 'signed-off')) status = { state: 'pass', label: 'Signed off', artefact: artefactFor(gateId) };
+    else status = { state: 'warn', label: 'Pending', artefact: artefactFor(gateId) };
+  }
+
+  if (gateId === 'verify-completion') {
+    if (stories.length === 0) status = { state: 'na', label: 'N/A', artefact: artefactFor(gateId) };
+    else if (hasReachedStage(feature, 'branch-complete')) status = { state: 'pass', label: 'Verified', artefact: artefactFor(gateId) };
+    else if (hasReachedStage(feature, 'verify-completion')) status = { state: 'warn', label: 'Running', artefact: artefactFor(gateId) };
+    else status = { state: 'warn', label: 'Not started', artefact: artefactFor(gateId) };
+  }
+
+  if (gateId === 'definition-of-done') {
+    if (stories.length === 0) status = { state: 'na', label: 'N/A', artefact: artefactFor(gateId) };
+    else if (stories.every(s => s.dodStatus === 'complete')) status = { state: 'pass', label: 'Complete', artefact: artefactFor(gateId) };
+    else if (hasReachedStage(feature, 'definition-of-done')) status = { state: 'warn', label: 'In progress', artefact: artefactFor(gateId) };
+    else status = { state: 'warn', label: 'Not started', artefact: artefactFor(gateId) };
+  }
+
+  if (gateId === 'trace') {
+    if (hasReachedStage(feature, 'trace')) status = { state: 'pass', label: 'Traced', artefact: artefactFor(gateId) };
+    else if (hasReachedStage(feature, 'definition-of-done')) status = { state: 'warn', label: 'Pending', artefact: artefactFor(gateId) };
+    else status = { state: 'na', label: 'N/A', artefact: artefactFor(gateId) };
+  }
+
+  if (gateId === 'release') {
+    if (feature.stage === 'released') status = { state: 'pass', label: 'Released', artefact: artefactFor(gateId) };
+    else if (feature.stage === 'release-pending') status = { state: 'warn', label: 'Pending', artefact: artefactFor(gateId) };
+    else status = { state: 'na', label: 'N/A', artefact: artefactFor(gateId) };
+  }
+
+  return applyGovernancePolicy(feature, status);
+}
+
+function exportGovernanceCsv(features) {
+  const rows = features.map(f => {
+    const gateStatuses = GOVERNANCE_GATES.map(g => gateStatus(f, g.id));
+    return { feature: f, gateStatuses };
+  });
+
+  const header = ['feature_slug', 'feature_name', 'track', 'team', 'stage', ...GOVERNANCE_GATES.map(g => `${g.id}_status`)];
+  const lines = [header.join(',')];
+
+  rows.forEach(r => {
+    const values = [
+      r.feature.slug,
+      r.feature.name,
+      r.feature.track || '',
+      r.feature.team || '',
+      r.feature.stage || '',
+      ...r.gateStatuses.map(s => s.state),
+    ].map(csvEscape);
+    lines.push(values.join(','));
+  });
+
+  const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'governance-matrix.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function csvEscape(value) {
+  const s = String(value ?? '');
+  if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+  return s;
+}
+
 
 
 function renderBoard(features) {
@@ -834,31 +1537,71 @@ function renderBoard(features) {
   const stageIdx = {};
   STAGES.forEach((s, i) => { stageIdx[s.id] = i; });
 
-  const coreStages = ['ideation','discovery','benefit-metric','definition','review','test-plan',
-    'definition-of-ready','subagent-execution','verify-completion','branch-complete',
+  const coreStages = ['ideation','discovery','benefit-metric','definition','spike','review','test-plan',
+    'definition-of-ready','branch-setup','implementation-plan','subagent-execution','implementation-review','verify-completion','branch-complete',
     'definition-of-done','release-pending','released'];
   const stagesToShow = STAGES.filter(s =>
     coreStages.includes(s.id) || features.some(f => boardStageId(f.stage) === s.id));
 
+  if (pipelineLayout === 'loop-grouped') {
+    board.classList.add('loop-grouped');
+    const outerStages = stagesToShow.filter(s => loopType(s.id) === 'outer');
+    const innerStages = stagesToShow.filter(s => loopType(s.id) === 'inner');
+    const outerCards = features.filter(f => loopType(boardStageId(f.stage)) === 'outer').length;
+    const innerCards = features.filter(f => loopType(boardStageId(f.stage)) === 'inner').length;
+    board.innerHTML = `
+      ${loopLaneHTML('outer', 'Outer loop', outerCards, outerStages, features, stageIdx)}
+      ${loopLaneHTML('inner', 'Inner loop', innerCards, innerStages, features, stageIdx)}`;
+    return;
+  }
+
+  board.classList.remove('loop-grouped');
+
   board.innerHTML = stagesToShow.map(s => {
+    return renderStageColumn(s, features, stageIdx);
+  }).join('');
+}
+
+function loopLaneHTML(kind, title, cardCount, stages, features, stageIdx) {
+  const stageNames = stages.map(s => s.label).join(' -> ');
+  return `
+    <section class="loop-lane">
+      <div class="loop-lane-header">
+        <span class="loop-lane-title ${kind}">${title}</span>
+        <span class="loop-lane-meta">${cardCount} card${cardCount !== 1 ? 's' : ''} · ${stages.length} stage${stages.length !== 1 ? 's' : ''} · ${stageNames}</span>
+      </div>
+      <div class="loop-lane-row">
+        ${stages.map(s => renderStageColumn(s, features, stageIdx)).join('')}
+      </div>
+    </section>`;
+}
+
+function renderStageColumn(s, features, stageIdx) {
     const sIdx   = stageIdx[s.id] ?? 999;
     // Active: feature is currently AT this stage
     const active = features.filter(f => boardStageId(f.stage) === s.id);
     // Done:   feature has already passed THROUGH this stage
     const done   = features.filter(f => (stageIdx[boardStageId(f.stage)] ?? 999) > sIdx);
+    const colWidth = resolveColumnWidth(s.id, active.length, done.length);
+    const isEmptyCol = active.length === 0 && done.length === 0;
 
     const hasRed   = active.some(f => f.health === 'red');
     const hasAmber = active.some(f => f.health === 'amber');
+    const loopCls = loopType(s.id) === 'inner' ? ' col-loop-inner' : ' col-loop-outer';
     const colCls   = active.length > 0
-      ? 'col col-active' + (hasRed ? ' has-red' : hasAmber ? ' has-amber' : '')
-      : 'col';
+      ? 'col col-active' + loopCls + (hasRed ? ' has-red' : hasAmber ? ' has-amber' : '')
+      : 'col' + loopCls;
     const isDoneOpen = openDoneSections.has(s.id);
 
     return `
-    <div class="${colCls}" data-stage="${s.id}">
+    <div class="${colCls}${isEmptyCol ? ' col-empty' : ''}" data-stage="${s.id}" style="width:${colWidth}px">
       <div class="col-header">
-        <span>${s.label}</span>
-        <div style="display:flex;gap:4px;align-items:center">
+        <div class="col-header-main">
+          <span class="col-header-title">${s.label}</span>
+        </div>
+        <div class="col-tools">
+          <button class="col-size-btn" data-action="narrow-col" data-stage="${s.id}" title="Narrow column">−</button>
+          <button class="col-size-btn" data-action="widen-col" data-stage="${s.id}" title="Widen column">+</button>
           ${active.length > 0 ? `<span class="col-count">${active.length}</span>` : ''}
           ${done.length  > 0 ? `<span class="col-count-done">${done.length}✓</span>` : ''}
         </div>
@@ -875,7 +1618,6 @@ function renderBoard(features) {
           </div>` : ''}
       </div>
     </div>`;
-  }).join('');
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -885,6 +1627,9 @@ function featureCardHTML(f) {
   const isOpen = openFeatures.has(f.slug);
   const epics  = f.epics || [];
   const allStories = epics.flatMap(e => e.stories || []);
+  const action = featureActionMeta(f);
+  const nextStage = getNextStage(f.stage);
+  const advance = nextStage ? canAdvanceFeature(f, nextStage) : { ok: false, reason: 'No next stage' };
   const teamTag = f.team ? `<span class="tag">${esc(f.team)}</span>` : '';
   const blocker = f.blocker && f.health === 'red'
     ? `<div class="blocker-notice">🚫 ${esc(f.blocker)}</div>` : '';
@@ -894,11 +1639,23 @@ function featureCardHTML(f) {
     <div class="card-header" data-action="toggle-feature" data-slug="${f.slug}">
       <span class="card-toggle ${isOpen ? 'open' : ''}">▶</span>
       <span class="card-title">${esc(f.name)}</span>
+      <span class="card-state-chip ${action.state}">${esc(action.label)}</span>
       <span class="card-track ${f.track}">${trackLabel(f.track)}</span>
     </div>
     <div class="card-body ${isOpen ? 'open' : ''}">
       ${blocker}
+      <div class="next-action ${action.state}">
+        <div class="next-action-row">
+          <div><span class="label">Next</span>${esc(action.nextAction)}</div>
+          <div class="next-action-controls">
+            <span class="next-action-age">${formatAge(featureAgeMinutes(f))}</span>
+            ${nextStage ? `<button class="next-action-btn" data-action="advance-feature" data-slug="${esc(f.slug)}" ${advance.ok ? '' : 'disabled'} title="${esc(advance.reason || '')}">Move to ${esc(stageLabel(nextStage))}</button>` : ''}
+          </div>
+        </div>
+        ${nextStage && !advance.ok ? `<div class="next-action-warning">Guardrail: ${esc(advance.reason)}</div>` : ''}
+      </div>
       <div class="meta">
+        ${loopStageBadge(f.stage)}
         ${metaStageBadge(f.stage)}
         ${teamTag}
         <span class="tag ${f.health}">${healthEmoji(f.health)} ${f.health}</span>
@@ -1125,8 +1882,66 @@ function closeDrawer() {
 // ─────────────────────────────────────────────────────────────────────────────
 // EVENT BINDING
 // ─────────────────────────────────────────────────────────────────────────────
-function bindCardEvents() {
-  document.getElementById('board').addEventListener('click', e => {
+function handleBoardClick(e) {
+    const toggleGovPolicy = e.target.closest('[data-action="toggle-gov-policy"]');
+    if (toggleGovPolicy) {
+      governanceStrictPolicy = !governanceStrictPolicy;
+      render();
+      return;
+    }
+    const filterGovGate = e.target.closest('[data-action="filter-gov-gate"]');
+    if (filterGovGate) {
+      const gate = filterGovGate.dataset.gate || '';
+      governanceGateFilter = governanceGateFilter === gate ? '' : gate;
+      render();
+      return;
+    }
+    const clearGovFilter = e.target.closest('[data-action="clear-gov-filter"]');
+    if (clearGovFilter) {
+      governanceGateFilter = '';
+      render();
+      return;
+    }
+    const exportGovCsv = e.target.closest('[data-action="export-gov-csv"]');
+    if (exportGovCsv) {
+      exportGovernanceCsv(filteredFeatures());
+      return;
+    }
+    const focusFeature = e.target.closest('[data-action="focus-feature"]');
+    if (focusFeature) {
+      focusFeatureBySlug(focusFeature.dataset.slug);
+      return;
+    }
+    const advanceFeature = e.target.closest('[data-action="advance-feature"]');
+    if (advanceFeature) {
+      const slug = advanceFeature.dataset.slug;
+      const feature = allData && allData.features ? allData.features.find(f => f.slug === slug) : null;
+      if (!feature) return;
+      const nextStage = getNextStage(feature.stage);
+      if (!nextStage) return;
+      const check = canAdvanceFeature(feature, nextStage);
+      if (!check.ok) return;
+      feature.stage = nextStage;
+      feature.updatedAt = new Date().toISOString();
+      isDirty = true;
+      const dl = document.getElementById('download-btn');
+      dl.classList.add('dirty');
+      dl.title = 'Unsaved changes — click to download updated pipeline-state.json';
+      render();
+      return;
+    }
+    const narrowCol = e.target.closest('[data-action="narrow-col"]');
+    if (narrowCol) {
+      resizeStageColumn(narrowCol.dataset.stage, -COL_STEP);
+      render();
+      return;
+    }
+    const widenCol = e.target.closest('[data-action="widen-col"]');
+    if (widenCol) {
+      resizeStageColumn(widenCol.dataset.stage, COL_STEP);
+      render();
+      return;
+    }
     const featureToggle = e.target.closest('[data-action="toggle-feature"]');
     if (featureToggle) {
       const slug = featureToggle.dataset.slug;
@@ -1162,7 +1977,13 @@ function bindCardEvents() {
       const [fSlug, eSlug, sSlug] = storyRow.dataset.storyKey.split('::');
       openDrawer(fSlug, eSlug, sSlug);
     }
-  });
+}
+
+function bindCardEvents() {
+  document.getElementById('board').addEventListener('click', handleBoardClick);
+  document.getElementById('library-board').addEventListener('click', handleBoardClick);
+  document.getElementById('governance-board').addEventListener('click', handleBoardClick);
+  document.getElementById('action-queue').addEventListener('click', handleBoardClick);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1178,7 +1999,7 @@ function populateTeamFilter() {
 
 function initFilters() {
   bindCardEvents(); // bind once — not on every render()
-  ['health','track','team'].forEach(k => {
+  ['health','track','team','action'].forEach(k => {
     document.getElementById(`filter-${k}`).addEventListener('change', e => {
       activeFilters[k] = e.target.value; render();
     });
@@ -1198,9 +2019,33 @@ function initFilters() {
   document.getElementById('collapse-all-btn').addEventListener('click', () => {
     openFeatures.clear(); openEpics.clear(); openStories.clear(); openTaskLists.clear(); openDoneSections.clear(); render();
   });
+  document.getElementById('toggle-loop-group-btn').addEventListener('click', () => {
+    pipelineLayout = pipelineLayout === 'loop-grouped' ? 'flat' : 'loop-grouped';
+    updatePipelineLayoutUi();
+    render();
+  });
+  document.getElementById('governance-btn').addEventListener('click', () => {
+    setViewMode(viewMode === 'governance' ? 'stage' : 'governance');
+  });
   document.getElementById('outcomes-btn').addEventListener('click', () => {
-    viewMode = viewMode === 'outcomes' ? 'stage' : 'outcomes';
-    document.getElementById('outcomes-btn').classList.toggle('active', viewMode === 'outcomes');
+    setViewMode(viewMode === 'outcomes' ? 'stage' : 'outcomes');
+  });
+  document.getElementById('library-btn').addEventListener('click', () => {
+    setViewMode(viewMode === 'library' ? 'stage' : 'library');
+  });
+  document.getElementById('column-width-slider').addEventListener('input', e => {
+    const width = clampColWidth(Number(e.target.value) || columnUi.globalWidth);
+    columnUi.globalWidth = width;
+    updateColumnWidthUi();
+    render();
+  });
+  document.getElementById('toggle-empty-shrink-btn').addEventListener('click', e => {
+    columnUi.autoShrinkEmpty = !columnUi.autoShrinkEmpty;
+    e.currentTarget.classList.toggle('active', columnUi.autoShrinkEmpty);
+    render();
+  });
+  document.getElementById('reset-col-width-btn').addEventListener('click', () => {
+    resetColumnSizing();
     render();
   });
   document.getElementById('reload-btn').addEventListener('click', loadState);
@@ -1284,7 +2129,27 @@ document.addEventListener('keydown', e => {
   }
   if (e.key === 'e') { document.getElementById('expand-all-btn').click(); return; }
   if (e.key === 'c') { document.getElementById('collapse-all-btn').click(); return; }
+  if (e.key === 'g') { document.getElementById('toggle-loop-group-btn').click(); return; }
+  if (e.key === 'v') { document.getElementById('governance-btn').click(); return; }
   if (e.key === 'o') { document.getElementById('outcomes-btn').click(); return; }
+  if (e.key === 'l') { document.getElementById('library-btn').click(); return; }
+  if (e.key === '[') {
+    columnUi.globalWidth = clampColWidth(columnUi.globalWidth - COL_STEP);
+    updateColumnWidthUi();
+    render();
+    return;
+  }
+  if (e.key === ']') {
+    columnUi.globalWidth = clampColWidth(columnUi.globalWidth + COL_STEP);
+    updateColumnWidthUi();
+    render();
+    return;
+  }
+  if (e.key === '0') {
+    resetColumnSizing();
+    render();
+    return;
+  }
   if (e.key === 'f') { document.getElementById('filter-search').focus(); e.preventDefault(); }
 });
 
@@ -1303,6 +2168,164 @@ function trackLabel(t) {
   if (t === 'programme-workstream') return 'Prog';
   if (t === 'library') return 'Library';
   return t ? t : 'Std';
+}
+
+function hasHighFindings(feature) {
+  const stories = allStories(feature);
+  return stories.some(s => (s.highFindings || 0) > 0);
+}
+
+function isReleaseReady(feature) {
+  const stories = allStories(feature);
+  return stories.length > 0 && stories.every(s => s.releaseReady || s.dodStatus === 'complete' || s.prStatus === 'merged');
+}
+
+function allStories(feature) {
+  return (feature.epics || []).flatMap(e => e.stories || []);
+}
+
+function featureTimestamp(feature) {
+  return feature.updatedAt || feature.updated || (allData ? allData.updated : null) || null;
+}
+
+function featureAgeMinutes(feature) {
+  const ts = featureTimestamp(feature);
+  if (!ts) return 0;
+  const then = new Date(ts).getTime();
+  if (!Number.isFinite(then)) return 0;
+  return Math.max(0, Math.floor((Date.now() - then) / 60000));
+}
+
+function formatAge(minutes) {
+  if (minutes < 60) return `${minutes}m`;
+  if (minutes < 1440) return `${Math.floor(minutes / 60)}h ${minutes % 60}m`;
+  return `${Math.floor(minutes / 1440)}d ${Math.floor((minutes % 1440) / 60)}h`;
+}
+
+function getNextStage(stage) {
+  const order = [
+    'ideation', 'discovery', 'benefit-metric', 'definition', 'spike', 'review', 'test-plan',
+    'definition-of-ready', 'branch-setup', 'implementation-plan', 'subagent-execution',
+    'implementation-review', 'verify-completion', 'branch-complete', 'definition-of-done',
+    'trace', 'release-pending', 'released'
+  ];
+  const i = order.indexOf(stage);
+  return i >= 0 && i < order.length - 1 ? order[i + 1] : null;
+}
+
+function canAdvanceFeature(feature, nextStage) {
+  if (!feature) return { ok: false, reason: 'Feature not found' };
+  if (feature.health === 'red' || feature.stage === 'stalled') return { ok: false, reason: 'Resolve blocker first' };
+
+  const stage = feature.stage;
+  const stories = allStories(feature);
+
+  if (stage === 'review' && hasHighFindings(feature)) {
+    return { ok: false, reason: 'HIGH findings must be cleared before test planning' };
+  }
+  if (stage === 'definition-of-ready') {
+    const allSigned = stories.length > 0 && stories.every(s => s.dorStatus === 'signed-off');
+    if (!allSigned) return { ok: false, reason: 'All stories must be DoR signed-off' };
+  }
+  if (stage === 'implementation-review') {
+    const hasReviewHigh = stories.some(s => (s.highFindings || 0) > 0);
+    if (hasReviewHigh) return { ok: false, reason: 'Implementation/review HIGH findings still present' };
+  }
+  if (stage === 'release-pending' && !isReleaseReady(feature)) {
+    return { ok: false, reason: 'Not all stories are release ready' };
+  }
+  if (nextStage === 'released' && stage !== 'release-pending') {
+    return { ok: false, reason: 'Release can only follow release-pending' };
+  }
+  return { ok: true, reason: '' };
+}
+
+function focusFeatureBySlug(slug) {
+  if (!slug || !allData || !allData.features) return;
+  const feature = allData.features.find(f => f.slug === slug);
+  if (!feature) return;
+  if (!openFeatures.has(slug)) openFeatures.add(slug);
+  render();
+  setTimeout(() => {
+    const el = document.querySelector(`.feature-card[data-slug="${slug}"]`);
+    if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+  }, 0);
+}
+
+function featureActionMeta(feature) {
+  if (feature.health === 'red' || feature.stage === 'stalled') {
+    return {
+      state: 'blocked',
+      label: 'Blocked',
+      nextAction: feature.blocker ? `Unblock: ${feature.blocker}` : 'Resolve blocker and update stage',
+    };
+  }
+
+  const stage = feature.stage;
+  if (stage === 'released') {
+    return { state: 'done', label: 'Done', nextAction: 'No action needed' };
+  }
+
+  if (stage === 'review' && hasHighFindings(feature)) {
+    return { state: 'human', label: 'Needs human', nextAction: 'Address HIGH findings and rerun /review' };
+  }
+
+  if (stage === 'release-pending' && isReleaseReady(feature)) {
+    return { state: 'human', label: 'Needs human', nextAction: 'Run /release and complete deployment checklist' };
+  }
+
+  const processingStageActions = {
+    'branch-setup': 'Branch/worktree setup in progress',
+    'implementation-plan': 'Implementation planning in progress',
+    'subagent-execution': 'Subagent task execution in progress',
+    'verify-completion': 'Verification checks running',
+  };
+  if (processingStageActions[stage]) {
+    const stale = featureAgeMinutes(feature) >= PROCESSING_STALE_MINUTES;
+    return {
+      state: 'processing',
+      label: stale ? 'Stale proc' : 'Processing',
+      nextAction: stale ? `No update for ${formatAge(featureAgeMinutes(feature))}. Check run status / blockers.` : processingStageActions[stage],
+    };
+  }
+
+  const humanStageActions = {
+    'ideation': 'Capture idea and decide whether to run /discovery',
+    'discovery': 'Complete discovery artefact and get approval',
+    'benefit-metric': 'Define measurable outcomes via /benefit-metric',
+    'definition': 'Break into epics/stories via /definition',
+    'spike': 'Run/close spike with PROCEED, REDESIGN, or DEFER',
+    'test-plan': 'Write failing tests via /test-plan',
+    'definition-of-ready': 'Complete DoR checks and sign off',
+    'implementation-review': 'Review implementation findings and decide fixes',
+    'branch-complete': 'Choose branch completion option (draft PR/merge/keep/discard)',
+    'definition-of-done': 'Validate post-merge completion evidence',
+    'trace': 'Run traceability check and resolve chain gaps',
+    'release-pending': 'Prepare and run /release',
+    'loop-design': 'Refine outer/inner operating model',
+    'token-optimization': 'Update routing/token policy and rollout plan',
+    'org-mapping': 'Update organization stage mappings and approvals',
+    'scale-pipeline': 'Advance scaling decisions and operating model',
+  };
+
+  return {
+    state: 'human',
+    label: 'Needs human',
+    nextAction: humanStageActions[stage] || `Review stage '${stage}' and decide next skill`,
+  };
+}
+
+function loopType(stageId) {
+  if (META_STAGES.includes(stageId)) return 'library';
+  if (INNER_LOOP_STAGES.has(stageId)) return 'inner';
+  return 'outer';
+}
+
+function loopStageBadge(stageId) {
+  const kind = loopType(stageId);
+  if (kind === 'inner') return '<span class="tag loop-inner">Inner loop</span>';
+  if (kind === 'library') return '<span class="tag loop-library">Library evolution</span>';
+  return '<span class="tag loop-outer">Outer loop</span>';
 }
 
 const META_STAGE_MAP = {
@@ -1435,6 +2458,54 @@ function updateTimestamp() {
   }
 }
 
+function clampColWidth(w) {
+  return Math.max(COL_MIN, Math.min(COL_MAX, w));
+}
+
+function resolveColumnWidth(stageId, activeCount, doneCount) {
+  const base = clampColWidth(columnUi.stageWidths[stageId] || columnUi.globalWidth);
+  if (!columnUi.autoShrinkEmpty) return base;
+  if (activeCount === 0 && doneCount === 0) return Math.max(96, Math.round(base * 0.48));
+  if (activeCount === 0 && doneCount > 0) return Math.max(120, Math.round(base * 0.72));
+  return base;
+}
+
+function resizeStageColumn(stageId, delta) {
+  const current = clampColWidth(columnUi.stageWidths[stageId] || columnUi.globalWidth);
+  columnUi.stageWidths[stageId] = clampColWidth(current + delta);
+}
+
+function updateColumnWidthUi() {
+  const slider = document.getElementById('column-width-slider');
+  const label  = document.getElementById('column-width-label');
+  if (slider) slider.value = String(columnUi.globalWidth);
+  if (label) label.textContent = `${columnUi.globalWidth}px`;
+}
+
+function setViewMode(mode) {
+  viewMode = mode;
+  document.getElementById('governance-btn').classList.toggle('active', viewMode === 'governance');
+  document.getElementById('outcomes-btn').classList.toggle('active', viewMode === 'outcomes');
+  document.getElementById('library-btn').classList.toggle('active', viewMode === 'library');
+  render();
+}
+
+function updatePipelineLayoutUi() {
+  const btn = document.getElementById('toggle-loop-group-btn');
+  if (!btn) return;
+  btn.classList.toggle('active', pipelineLayout === 'loop-grouped');
+  btn.textContent = pipelineLayout === 'loop-grouped' ? 'Flat flow' : 'Loop grouped';
+}
+
+function resetColumnSizing() {
+  columnUi.globalWidth = 220;
+  columnUi.stageWidths = {};
+  columnUi.autoShrinkEmpty = true;
+  const autoBtn = document.getElementById('toggle-empty-shrink-btn');
+  if (autoBtn) autoBtn.classList.add('active');
+  updateColumnWidthUi();
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // AUTO-POLL  (only while a pipeline is actively running)
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1478,6 +2549,8 @@ function startPollingIfActive() {
 // INIT
 // ─────────────────────────────────────────────────────────────────────────────
 initFilters();
+updateColumnWidthUi();
+updatePipelineLayoutUi();
 loadState().then(startPollingIfActive);
 </script>
 </body>
