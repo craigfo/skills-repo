@@ -71,8 +71,9 @@ Ask this before presenting any pipeline guidance:
 > 4. We don't know enough to proceed on something — spike
 > 5. Large initiative, programme, or migration (multi-team / multi-phase) — programme track
 > 6. Organisation-level application/interface registry query or update — EA registry
+> 7. Pipeline operating model, optimization, mapping, or scale design
 >
-> Reply: 1, 2, 3, 4, 5, or 6
+> Reply: 1, 2, 3, 4, 5, 6, or 7
 
 **If 1 — Standard pipeline:** route to /discovery unless a later stage is already active.
 
@@ -128,6 +129,17 @@ Ask this before presenting any pipeline guidance:
 > - registry contribution or audit
 >
 > Ready to run /ea-registry? Reply: yes
+
+**If 7 — Pipeline evolution route:**
+> **Pipeline evolution route confirmed.**
+>
+> Choose the focus:
+> 1. Two-loop model + swappable inner loop — `/loop-design`
+> 2. Token/model usage optimization — `/token-optimization`
+> 3. Org language + governance mapping — `/org-mapping`
+> 4. Multi-team scale operating model — `/scale-pipeline`
+>
+> Reply: 1, 2, 3, or 4
 
 ---
 

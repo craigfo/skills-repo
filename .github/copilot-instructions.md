@@ -73,6 +73,12 @@ Step  Skill                  Entry condition                     Exit condition
 contribution, audit, and dependency context feed to /discovery, /definition,
 and /reverse-engineer
 
+**Pipeline evolution support:**
+`/loop-design` — define outer/inner loop model and swappable inner-loop contract
+`/token-optimization` — tune model routing and token budgets by stage
+`/org-mapping` — map pipeline language/artefacts to organisation governance
+`/scale-pipeline` — design multi-team enterprise operating model
+
 **Short-track** (bugs, small fixes, bounded refactors): 
 `/test-plan → /definition-of-ready → coding agent`
 
@@ -122,6 +128,10 @@ Skills reference these templates — do not embed format definitions in skill fi
 | Implementation review | `.github/templates/implementation-review.md` |
 | Compliance bundle | `.github/templates/compliance-bundle.md` |
 | Verify completion | `.github/templates/verify-completion.md` |
+| Loop design | `.github/templates/loop-design.md` |
+| Token optimization | `.github/templates/token-optimization.md` |
+| Org mapping | `.github/templates/org-mapping.md` |
+| Scale pipeline | `.github/templates/scale-pipeline.md` |
 
 When a skill produces a structured artefact, it uses the relevant template.
 When reviewing artefacts, check them against the template — missing fields are findings.

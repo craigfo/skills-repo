@@ -49,6 +49,10 @@ Check whether `.github/skills/` already exists:
     trace/SKILL.md                ← full chain traceability report
     decisions/SKILL.md            ← ADR + decision log writer
     ea-registry/SKILL.md          ← org-level app/interface registry query + update
+    loop-design/SKILL.md          ← outer/inner loop model + swappable inner-loop contract
+    token-optimization/SKILL.md   ← model routing and token budget policy
+    org-mapping/SKILL.md          ← map pipeline to org language/governance
+    scale-pipeline/SKILL.md       ← enterprise scaling operating model
     reverse-engineer/SKILL.md     ← legacy codebase rule extraction + vendor Q&A
     bootstrap/SKILL.md            ← this file
     spike/SKILL.md                ← timeboxed investigation for genuine unknowns
@@ -86,6 +90,10 @@ Check whether `.github/skills/` already exists:
     reference-index.md            ← index template for feature-scoped source documents
     migration-story.md            ← migration / cutover / parallel-run story template
     consumer-registry.md          ← downstream consumer adoption tracker (library rewrites)
+    loop-design.md                ← two-loop model and swappable inner-loop contract template
+    token-optimization.md         ← token budget and model-routing plan template
+    org-mapping.md                ← org language/governance mapping template
+    scale-pipeline.md             ← multi-team scale operating model template
 
   artefacts/
     .gitkeep                      ← placeholder so directory is committed
@@ -101,7 +109,7 @@ Check whether `.github/skills/` already exists:
   pipeline-viz.html               ← interactive pipeline visualiser (open in browser)
 ```
 
-**Total: 24 skill files + 21 templates + 3 root files + 3 viz files + artefacts directory + 2 context profiles**
+**Total: 32 skill files + 34 templates + 3 root files + 3 viz files + artefacts directory + 2 context profiles**
 
 ---
 

@@ -32,6 +32,31 @@ architecture:
   # If true, application/interface registry updates are made in ea_registry_repo
   # and referenced from product repos via /ea-registry FEED mode.
 
+optimization:
+  token_policy:
+    per_turn_soft_budget: 12000
+    per_story_budget: 120000
+    per_feature_budget: 800000
+  routing:
+    default_model_class: "balanced"
+    escalation_model_class: "deep-reasoning"
+    escalation_triggers:
+      - "high-severity review findings"
+      - "root-cause debugging unresolved after one pass"
+      - "cross-system design ambiguity"
+
+mapping:
+  stage_aliases: {}
+  artefact_aliases: {}
+  governance:
+    gates: []
+
+scaling:
+  maturity_level: "team"
+  target_team_count: 2
+  state_strategy: "per-repo-json"
+  shared_skill_pack: false
+
 runtime:
   language: typescript              # primary language: typescript | python | java | go | rust | other
   test_framework: jest              # jest | vitest | pytest | rspec | junit | mocha | other

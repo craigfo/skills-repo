@@ -183,6 +183,16 @@ For new features and user-facing scope.
 /discovery → /benefit-metric → /definition → /review → /test-plan → /definition-of-ready → inner coding loop → /definition-of-done → /trace
 ```
 
+### Two-loop operating model
+Treat the pipeline as two linked loops:
+
+- **Outer loop**: discover, define, invoke delivery, release/deploy, monitor, measure, learn
+- **Inner loop**: setup, plan, build/test, quality review, verify completion, branch/PR completion
+
+Use `/loop-design` to formalise this model and define a **swappable inner-loop contract**.
+That lets teams keep the default inner loop in this repo or map an alternative
+skill pack/toolchain while preserving entry/exit contracts and evidence gates.
+
 **Inner coding loop** (expands Step 7):
 ```
 /branch-setup → /implementation-plan → /subagent-execution (or /tdd per task) → /verify-completion → /branch-complete
@@ -328,6 +338,10 @@ When in doubt about which track, run `/workflow` — it will route you.
 | `/ideate` | Structured product discovery — five lenses: opportunity mapping, assumption inventory, market scan, product strategy framing (Torres + Cagan), and jobs-to-be-done (Christensen / Moesta). Suggests lenses based on current pipeline stage and artefacts | Run at any point: blank-slate exploration, enrich an active discovery, or stress-test assumptions before definition |
 | `/spike` | Scoped investigation for genuine unknowns | When a step is blocked by something unknown |
 | `/ea-registry` | Maintains and queries an organisation-level application/interface registry; supports QUERY, CONTRIBUTE, AUDIT, and FEED modes | When you need app/interface inventory, dependency context, blast radius, or registry updates |
+| `/loop-design` | Defines outer/inner loop operating model and swappable inner-loop contract | When you want to model delivery as two loops or substitute a custom inner loop |
+| `/token-optimization` | Creates model-routing and token budget policies by stage | When cost/latency/token usage needs to be controlled without losing quality |
+| `/org-mapping` | Maps skills, stages, and artefacts to organisation language and governance | When adopting pipeline terminology into enterprise process/governance language |
+| `/scale-pipeline` | Designs operating model for scaling from small pilots to enterprise multi-team use | When planning rollout from 1-2 teams to 20-30 teams |
 | `/reverse-engineer` | Extracts business rules from legacy code | When modernising or replacing a legacy system |
 | `/programme` | Programme-level navigator for multi-team work | Large initiatives, migrations, library rewrites |
 | `/metric-review` | Re-baselines benefit metrics at phase gates | Quarterly, at phase gates, or when targets are questioned |
@@ -365,6 +379,10 @@ All structured artefacts conform to templates in `.github/templates/`. Skills re
 | `implementation-plan.md` | `/implementation-plan` — task-by-task TDD plan for coding agents |
 | `implementation-review.md` | `/implementation-review` — spec compliance and code quality report |
 | `compliance-bundle.md` | `/release` — evidence catalogue for regulated or audited releases |
+| `loop-design.md` | `/loop-design` — two-loop model and swappable inner-loop contract |
+| `token-optimization.md` | `/token-optimization` — model-routing and token budget plan |
+| `org-mapping.md` | `/org-mapping` — pipeline-to-organisation terminology and governance map |
+| `scale-pipeline.md` | `/scale-pipeline` — enterprise scale operating model and rollout plan |
 | `verify-completion.md` | `/verify-completion` — test suite results and AC verification table |
 | `release-notes-technical.md` | `/release` |
 | `release-notes-plain.md` | `/release` |
@@ -492,6 +510,24 @@ architecture:
   ea_registry_local_path: "C:/Users/Hamis/code/ea-registry-repo"
   ea_registry_authoritative: true
 
+optimization:
+  token_policy:
+    per_turn_soft_budget: 12000
+    per_story_budget: 120000
+    per_feature_budget: 800000
+  routing:
+    default_model_class: "balanced"
+    escalation_model_class: "deep-reasoning"
+
+mapping:
+  stage_aliases: {}
+  artefact_aliases: {}
+
+scaling:
+  maturity_level: "team"
+  target_team_count: 2
+  state_strategy: "per-repo-json"
+
 runtime:
   language: typescript
   test_framework: jest     # jest | vitest | pytest | rspec | junit | mocha | other
@@ -509,7 +545,7 @@ delivery:
     tool: null             # null | servicenow | jira-sm | other
 ```
 
-Skills that read `context.yml`: `/release` (tool detection for CR body, deployment checklist, and release notes), `/branch-setup` (base branch), `/branch-complete` (PR command), `/definition-of-ready` (tech lead label), `/bootstrap` (profile selection and instruction file wiring), `/ea-registry` (authoritative registry repo/path targeting).
+Skills that read `context.yml`: `/release` (tool detection for CR body, deployment checklist, and release notes), `/branch-setup` (base branch), `/branch-complete` (PR command), `/definition-of-ready` (tech lead label), `/bootstrap` (profile selection and instruction file wiring), `/ea-registry` (authoritative registry repo/path targeting), `/token-optimization` (budget/routing policy), `/org-mapping` (aliases/governance mapping), `/scale-pipeline` (maturity and state strategy).
 
 ### EA registry canonical source
 
@@ -575,8 +611,8 @@ This creates all skill files, templates, the instruction file, and the artefacts
   pull_request_template.md         ← PR checklist with AC and chain traceability fields
   architecture-guardrails.md       ← live guardrails file (create from template)
   pipeline-viz.html                ← pipeline visualiser (open in browser with a local server)
-  skills/                          ← 28 skill SKILL.md files
-  templates/                       ← 30 artefact templates
+  skills/                          ← 32 skill SKILL.md files
+  templates/                       ← 34 artefact templates
   scripts/                         ← generated helper scripts (e.g. coverage-map.js)
   artefacts/                       ← generated pipeline artefacts (one folder per feature)
 ```
