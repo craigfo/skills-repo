@@ -6,7 +6,42 @@ Designed to work for a single developer shipping a small feature and equally for
 
 ---
 
-## Pipeline flow
+## Typical flow (standard feature)
+
+For most features this is all you need. Invoke each skill by name in Copilot chat.
+
+```mermaid
+flowchart LR
+    A(["💡 Raw idea"]) --> B["/discovery"]
+    B --> C["/benefit-metric"]
+    C --> D["/definition"]
+    D --> E["/review"]
+    E --> F["/test-plan"]
+    F --> G["/definition-of-ready"]
+    G --> H["/branch-setup"]
+    H --> I["/implementation-plan"]
+    I --> J["/subagent-execution"]
+    J --> K["/verify-completion"]
+    K --> L["/branch-complete\nDraft PR"]
+    L --> M["/definition-of-done"]
+    M --> N["/release"]
+
+    style A fill:#1e293b,stroke:#475569,color:#94a3b8
+    style L fill:#166534,stroke:#14532d,color:#fff
+    style N fill:#0f766e,stroke:#0d544c,color:#fff
+```
+
+**Start every session with `/workflow`** — it reads `pipeline-state.json` and tells you exactly which skill to run next.
+
+**Stuck or uncertain?** `/spike` for a scoped investigation. `/systematic-debugging` when a task is failing and a quick fix isn't obvious.
+
+**Bug or small fix?** Short-track: `/test-plan → /definition-of-ready → inner coding loop`.
+
+---
+
+## Full pipeline flow
+
+> The diagram below shows every track, support skill, and integration point. For day-to-day use, the simpler diagram above is enough.
 
 ```mermaid
 flowchart TD
