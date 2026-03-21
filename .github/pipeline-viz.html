@@ -484,6 +484,32 @@
   .md-content strong { font-weight: 700; }
   .md-content em { font-style: italic; }
 
+  /* ── MD VALIDATION PANEL ─────────────────────────────────────── */
+  #md-validation { display: none; padding: 4px 16px 6px; border-bottom: 1px solid var(--border); }
+  #md-validation.has-findings { display: block; }
+  .md-val-item { font-size: 11px; padding: 2px 0; display: flex; align-items: flex-start; gap: 5px; }
+  .md-val-error { color: var(--red); }
+  .md-val-warn  { color: var(--amber); }
+  .md-val-ok    { color: var(--green); }
+  .md-val-info  { color: var(--muted); }
+
+  /* ── MD FORM EDITOR ───────────────────────────────────────────── */
+  #md-form { display: none; }
+  #md-form.active { display: block; }
+  .ac-card { border: 1px solid var(--border); border-radius: 6px; padding: 12px; margin-bottom: 10px; background: var(--surface); }
+  .ac-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .ac-id { font-size: 11px; font-weight: 700; color: var(--blue); font-family: monospace; }
+  .ac-delete { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 13px; padding: 0 4px; line-height: 1; }
+  .ac-delete:hover { color: var(--red); }
+  .ac-field { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 5px; }
+  .ac-field-label { font-size: 10px; font-weight: 600; color: var(--muted); width: 38px; padding-top: 5px; flex-shrink: 0; text-transform: uppercase; letter-spacing: .05em; }
+  .ac-input { flex: 1; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; font-size: 12px; font-family: inherit; line-height: 1.4; resize: vertical; min-height: 28px; box-sizing: border-box; }
+  .ac-input:focus { outline: none; border-color: rgba(59,130,246,.5); }
+  .ac-freetext { min-height: 48px; }
+  #md-form-add-ac { background: none; border: 1px dashed var(--border); color: var(--muted); border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 11px; width: 100%; margin-top: 4px; }
+  #md-form-add-ac:hover { border-color: var(--blue); color: var(--blue); }
+  .form-unsupported { color: var(--muted); font-size: 12px; font-style: italic; padding: 24px 0; text-align: center; }
+
   /* ── OUTCOMES VIEW ────────────────────────────────────────────── */
   #outcomes-board { display:none; padding:12px 16px; }
   #outcomes-board.active { display:block; }
@@ -717,13 +743,16 @@
     <span id="md-status"></span>
     <button class="md-tab-btn active" id="md-tab-preview">Preview</button>
     <button class="md-tab-btn" id="md-tab-raw">Markdown</button>
+    <button class="md-tab-btn" id="md-tab-form" style="display:none">Form</button>
     <button id="md-save-draft">Save draft</button>
     <button id="md-reset-draft">Reset</button>
     <button id="md-close">✕ Close</button>
   </div>
+  <div id="md-validation"></div>
   <div id="md-body">
     <div class="md-content active" id="md-content"></div>
     <textarea id="md-editor" spellcheck="false"></textarea>
+    <div id="md-form"></div>
   </div>
 </div>
 
@@ -796,7 +825,8 @@ let editingMetric = null; // { featureSlug, metricId }
 let mdCurrentPath  = '';
 let mdOriginalText = '';
 let mdDraftText    = '';
-let mdMode         = 'preview'; // 'preview' | 'raw'
+let mdMode         = 'preview'; // 'preview' | 'raw' | 'form'
+let mdArtefactType = 'generic'; // detected from path for validation + form
 let isDirty = false;
 let pipelineLayout = 'flat'; // 'flat' | 'loop-grouped'
 let governanceGateFilter = ''; // gate id for fail-focused filtering
@@ -1897,6 +1927,165 @@ function loadDraft(path)          { try { return localStorage.getItem(draftStora
 function saveDraft(path, text)    { try { localStorage.setItem(draftStorageKey(path), text); return true; } catch (_) { return false; } }
 function clearDraft(path)         { try { localStorage.removeItem(draftStorageKey(path)); return true; } catch (_) { return false; } }
 
+function detectArtefactType(path) {
+  if (/\/stories\/[^/]+\.md$/.test(path))   return 'story';
+  if (/\/benefit-metric\.md$/.test(path))    return 'benefit-metric';
+  if (/\/test-plans\/[^/]+\.md$/.test(path)) return 'test-plan';
+  if (/\/discovery\.md$/.test(path))         return 'discovery';
+  if (/\/dor\/[^/]+\.md$/.test(path))        return 'dor';
+  if (/\/review\/[^/]+\.md$/.test(path))     return 'review';
+  if (/\/dod\/[^/]+\.md$/.test(path))        return 'dod';
+  if (/SKILL\.md$/.test(path))               return 'skill';
+  return 'generic';
+}
+
+function validateArtefact(type, text) {
+  const v = [];
+  if (type === 'story') {
+    if (!/## Acceptance Criteria/i.test(text))
+      v.push({ level: 'error', msg: 'Acceptance Criteria section missing' });
+    const acMatches = [...text.matchAll(/\*\*AC\d+:\*\*/g)];
+    if (acMatches.length === 0)
+      v.push({ level: 'error', msg: 'No ACs found — minimum 3 required' });
+    else if (acMatches.length < 3)
+      v.push({ level: 'warn', msg: `Only ${acMatches.length} AC${acMatches.length > 1 ? 's' : ''} found — minimum 3 required` });
+    const acBodyRe = /\*\*AC(\d+):\*\*\s*([^\n]+)/g;
+    let m;
+    while ((m = acBodyRe.exec(text)) !== null) {
+      if (!/given.+when.+then/i.test(m[2]))
+        v.push({ level: 'warn', msg: `AC${m[1]} does not follow Given / When / Then format` });
+    }
+    if (!/## Out of Scope/i.test(text))
+      v.push({ level: 'warn', msg: 'Out of Scope section missing' });
+    if (!/## Benefit Linkage/i.test(text))
+      v.push({ level: 'warn', msg: 'Benefit Linkage section missing' });
+  } else if (type === 'benefit-metric') {
+    if (!/### Metric|## Tier 1/i.test(text))
+      v.push({ level: 'warn', msg: 'No Tier 1 metrics defined' });
+    if (/\|\s*\*\*Baseline\*\*\s*\|\s*\[/.test(text))
+      v.push({ level: 'warn', msg: 'Baseline is still a placeholder — fill in actual value' });
+    if (/\|\s*\*\*Target\*\*\s*\|\s*\[/.test(text))
+      v.push({ level: 'warn', msg: 'Target is still a placeholder — fill in actual value' });
+  } else if (type === 'test-plan') {
+    if (!/## AC Coverage/i.test(text))
+      v.push({ level: 'error', msg: 'AC Coverage section missing' });
+    if (!/## Test Data Strategy/i.test(text))
+      v.push({ level: 'warn', msg: 'Test Data Strategy section missing' });
+  } else if (type === 'dor') {
+    const checked   = (text.match(/- \[x\]/gi) || []).length;
+    const unchecked = (text.match(/- \[ \]/g)  || []).length;
+    const total = checked + unchecked;
+    if (total > 0 && unchecked > 0)   v.push({ level: 'warn', msg: `${checked}/${total} checklist items checked — ${unchecked} remaining` });
+    if (total > 0 && unchecked === 0) v.push({ level: 'ok',   msg: `All ${total} checklist items checked` });
+  }
+  return v;
+}
+
+function renderValidation() {
+  const el = document.getElementById('md-validation');
+  if (!el) return;
+  const findings = validateArtefact(mdArtefactType, mdDraftText);
+  if (findings.length === 0) { el.className = ''; el.innerHTML = ''; return; }
+  el.className = 'has-findings';
+  el.innerHTML = findings.map(f =>
+    `<div class="md-val-item md-val-${f.level}">${f.level === 'error' ? '✖' : f.level === 'ok' ? '✔' : '⚠'} ${esc(f.msg)}</div>`
+  ).join('');
+}
+
+function parseStoryACs(text) {
+  const acs = [];
+  const re = /\*\*(AC\d+):\*\*\s*([^\n]*(?:\n(?![*#\n])[^\n]*)*)/g;
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    const id   = m[1];
+    const body = m[2].trim().replace(/\.$/, '');
+    const gwt  = body.match(/^Given\s+([\s\S]+?)[,;]\s*When\s+([\s\S]+?)[,;]\s*Then\s+([\s\S]+)$/i);
+    if (gwt) {
+      acs.push({ id, given: gwt[1].trim(), when: gwt[2].trim(), then: gwt[3].trim() });
+    } else {
+      acs.push({ id, given: '', when: '', then: '', raw: body });
+    }
+  }
+  return acs;
+}
+
+function renderFormBody() {
+  const formEl = document.getElementById('md-form');
+  if (!formEl) return;
+  if (mdArtefactType !== 'story') {
+    formEl.innerHTML = '<p class="form-unsupported">Structured form editing is not available for this artefact type.</p>';
+    return;
+  }
+  const acs = parseStoryACs(mdDraftText);
+  if (acs.length === 0) {
+    formEl.innerHTML = `<p class="form-unsupported">No <strong>AC</strong> entries found. Switch to Markdown tab to add them.</p>
+      <button id="md-form-add-ac">+ Add first AC</button>`;
+    return;
+  }
+  const cardsHtml = acs.map(ac => {
+    const isFree = ac.raw !== undefined && !ac.given && !ac.when && !ac.then;
+    if (isFree) {
+      return `<div class="ac-card" data-ac-id="${esc(ac.id)}">
+        <div class="ac-card-header"><span class="ac-id">${esc(ac.id)}</span><button class="ac-delete" data-id="${esc(ac.id)}" title="Remove">✕</button></div>
+        <div class="ac-field"><label class="ac-field-label">Text</label><textarea class="ac-input ac-freetext" rows="3">${esc(ac.raw)}</textarea></div>
+      </div>`;
+    }
+    return `<div class="ac-card" data-ac-id="${esc(ac.id)}">
+      <div class="ac-card-header"><span class="ac-id">${esc(ac.id)}</span><button class="ac-delete" data-id="${esc(ac.id)}" title="Remove">✕</button></div>
+      <div class="ac-field"><label class="ac-field-label">Given</label><textarea class="ac-input ac-given" rows="2">${esc(ac.given)}</textarea></div>
+      <div class="ac-field"><label class="ac-field-label">When</label><textarea class="ac-input ac-when" rows="2">${esc(ac.when)}</textarea></div>
+      <div class="ac-field"><label class="ac-field-label">Then</label><textarea class="ac-input ac-then" rows="2">${esc(ac.then)}</textarea></div>
+    </div>`;
+  }).join('');
+  formEl.innerHTML = cardsHtml + `<button id="md-form-add-ac">+ Add AC</button>`;
+}
+
+function applyFormChangesToDraft() {
+  const formEl = document.getElementById('md-form');
+  if (!formEl) return;
+  let newDraft = mdDraftText;
+  formEl.querySelectorAll('.ac-card').forEach(card => {
+    const id        = card.dataset.acId;
+    const escapedId = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const freeEl    = card.querySelector('.ac-freetext');
+    let newLine;
+    if (freeEl) {
+      newLine = `**${id}:** ${freeEl.value.trim()}`;
+    } else {
+      const given = (card.querySelector('.ac-given')?.value || '').trim();
+      const when_ = (card.querySelector('.ac-when')?.value  || '').trim();
+      const then_ = (card.querySelector('.ac-then')?.value  || '').trim();
+      newLine = `**${id}:** Given ${given}, When ${when_}, Then ${then_}.`;
+    }
+    const re = new RegExp(`\\*\\*${escapedId}:\\*\\*[^\\n]*(?:\\n(?![*#\\n])[^\\n]*)*`);
+    newDraft = newDraft.replace(re, newLine);
+  });
+  mdDraftText = newDraft;
+}
+
+function deleteAC(acId) {
+  const escapedId = acId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(`\\n?\\*\\*${escapedId}:\\*\\*[^\\n]*(?:\\n(?![*#\\n])[^\\n]*)*`);
+  mdDraftText = mdDraftText.replace(re, '');
+  renderMdStatus();
+  renderMdBody();
+}
+
+function addNewAC() {
+  const acs     = parseStoryACs(mdDraftText);
+  const nextNum = acs.length > 0 ? Math.max(...acs.map(a => parseInt(a.id.replace('AC', ''), 10))) + 1 : 1;
+  const newLine = `\n\n**AC${nextNum}:** Given [context], When [action], Then [observable outcome].`;
+  if (mdDraftText.includes('<!-- Add more ACs')) {
+    mdDraftText = mdDraftText.replace('<!-- Add more ACs', newLine + '\n\n<!-- Add more ACs');
+  } else if (mdDraftText.includes('## Out of Scope')) {
+    mdDraftText = mdDraftText.replace('## Out of Scope', newLine + '\n\n## Out of Scope');
+  } else {
+    mdDraftText += newLine;
+  }
+  renderMdStatus();
+  renderMdBody();
+}
+
 function renderMdStatus() {
   const statusEl = document.getElementById('md-status');
   if (!statusEl) return;
@@ -1912,27 +2101,36 @@ function renderMdStatus() {
 function renderMdBody() {
   const contentEl  = document.getElementById('md-content');
   const editorEl   = document.getElementById('md-editor');
+  const formEl     = document.getElementById('md-form');
   const previewBtn = document.getElementById('md-tab-preview');
   const rawBtn     = document.getElementById('md-tab-raw');
+  const formBtn    = document.getElementById('md-tab-form');
   if (!contentEl || !editorEl || !previewBtn || !rawBtn) return;
   previewBtn.classList.toggle('active', mdMode === 'preview');
   rawBtn.classList.toggle('active',     mdMode === 'raw');
+  if (formBtn) formBtn.classList.toggle('active', mdMode === 'form');
   contentEl.classList.toggle('active',  mdMode === 'preview');
   editorEl.classList.toggle('active',   mdMode === 'raw');
+  if (formEl) formEl.classList.toggle('active',  mdMode === 'form');
   editorEl.value = mdDraftText;
   const html = typeof marked !== 'undefined'
     ? marked.parse(mdDraftText || '')
     : `<pre style="white-space:pre-wrap;font-size:12px;line-height:1.6">${esc(mdDraftText || '')}</pre>`;
   contentEl.innerHTML = html;
+  if (mdMode === 'form') renderFormBody();
+  renderValidation();
   renderMdStatus();
 }
 
 async function openMdViewer(path) {
-  mdCurrentPath = path;
-  mdMode = 'preview';
+  mdCurrentPath  = path;
+  mdMode         = 'preview';
+  mdArtefactType = detectArtefactType(path);
   document.getElementById('md-title').textContent = path;
   document.getElementById('md-content').innerHTML = '<div style="color:var(--muted);font-size:12px;padding:8px 0">Loading…</div>';
   document.getElementById('md-editor').value = '';
+  const formTab = document.getElementById('md-tab-form');
+  if (formTab) formTab.style.display = mdArtefactType === 'story' ? '' : 'none';
   document.getElementById('md-overlay').classList.add('open');
   document.getElementById('md-pane').classList.add('open');
   try {
@@ -1957,6 +2155,7 @@ function closeMdViewer() {
   mdCurrentPath  = '';
   mdOriginalText = '';
   mdDraftText    = '';
+  mdArtefactType = 'generic';
 }
 
 function closeDrawer() {
@@ -2154,6 +2353,7 @@ function initFilters() {
   document.getElementById('md-editor').addEventListener('input', e => {
     mdDraftText = e.target.value;
     renderMdStatus();
+    renderValidation();
   });
   document.getElementById('md-save-draft').addEventListener('click', () => {
     if (!mdCurrentPath) return;
@@ -2169,6 +2369,22 @@ function initFilters() {
     clearDraft(mdCurrentPath);
     mdDraftText = mdOriginalText;
     renderMdBody();
+  });
+  document.getElementById('md-tab-form').addEventListener('click', () => {
+    mdMode = 'form';
+    renderMdBody();
+  });
+  document.getElementById('md-form').addEventListener('input', e => {
+    if (e.target.classList.contains('ac-input')) {
+      applyFormChangesToDraft();
+      renderMdStatus();
+      renderValidation();
+    }
+  });
+  document.getElementById('md-form').addEventListener('click', e => {
+    const deleteBtn = e.target.closest('.ac-delete');
+    if (deleteBtn) { deleteAC(deleteBtn.dataset.id); return; }
+    if (e.target.id === 'md-form-add-ac') { addNewAC(); }
   });
   // Outcomes board — metric edit/save/cancel
   document.getElementById('outcomes-board').addEventListener('click', e => {
