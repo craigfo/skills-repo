@@ -510,6 +510,29 @@
   #md-form-add-ac:hover { border-color: var(--blue); color: var(--blue); }
   .form-unsupported { color: var(--muted); font-size: 12px; font-style: italic; padding: 24px 0; text-align: center; }
 
+  /* ── MD DIFF VIEW ────────────────────────────────────────────── */
+  #md-diff { display: none; font-family: monospace; font-size: 12px; line-height: 1.5; }
+  #md-diff.active { display: block; }
+  .diff-hdr  { font-size: 11px; color: var(--muted); padding: 0 0 10px; }
+  .diff-line { display: flex; gap: 6px; padding: 0 4px; white-space: pre-wrap; word-break: break-all; min-height: 18px; }
+  .diff-add  { background: rgba(34,197,94,.10); }
+  .diff-del  { background: rgba(239,68,68,.10); }
+  .diff-sign { width: 14px; flex-shrink: 0; user-select: none; font-weight: 700; }
+  .diff-add .diff-sign { color: var(--green); }
+  .diff-del .diff-sign { color: var(--red); }
+  .diff-eq  .diff-sign { color: transparent; }
+  .diff-linenum { width: 32px; flex-shrink: 0; text-align: right; color: var(--muted); user-select: none; font-size: 11px; padding-top: 1px; }
+  .diff-skip { color: var(--muted); font-style: italic; padding: 3px 8px; border-top: 1px dashed var(--border); border-bottom: 1px dashed var(--border); margin: 2px 0; font-size: 11px; }
+  #md-copy-patch { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 4px; padding: 2px 10px; cursor: pointer; font-size: 11px; }
+  #md-copy-patch:hover { color: var(--text); }
+
+  /* ── MD CONFLICT BANNER ──────────────────────────────────────── */
+  #md-conflict { display: none; padding: 6px 16px; background: rgba(239,68,68,.08); border-bottom: 1px solid rgba(239,68,68,.3); font-size: 11px; color: var(--red); gap: 6px; align-items: center; flex-wrap: wrap; }
+  #md-conflict.visible { display: flex; }
+  #md-conflict span { flex: 1; }
+  #md-conflict button { background: none; border: 1px solid rgba(239,68,68,.4); color: var(--red); border-radius: 4px; padding: 1px 8px; cursor: pointer; font-size: 11px; }
+  #md-conflict button:hover { background: rgba(239,68,68,.1); }
+
   /* ── OUTCOMES VIEW ────────────────────────────────────────────── */
   #outcomes-board { display:none; padding:12px 16px; }
   #outcomes-board.active { display:block; }
@@ -744,15 +767,19 @@
     <button class="md-tab-btn active" id="md-tab-preview">Preview</button>
     <button class="md-tab-btn" id="md-tab-raw">Markdown</button>
     <button class="md-tab-btn" id="md-tab-form" style="display:none">Form</button>
+    <button class="md-tab-btn" id="md-tab-diff" style="display:none">Diff</button>
+    <button id="md-copy-patch" style="display:none">Copy patch</button>
     <button id="md-save-draft">Save draft</button>
     <button id="md-reset-draft">Reset</button>
     <button id="md-close">✕ Close</button>
   </div>
   <div id="md-validation"></div>
+  <div id="md-conflict"></div>
   <div id="md-body">
     <div class="md-content active" id="md-content"></div>
     <textarea id="md-editor" spellcheck="false"></textarea>
     <div id="md-form"></div>
+    <div id="md-diff"></div>
   </div>
 </div>
 
@@ -1927,6 +1954,113 @@ function loadDraft(path)          { try { return localStorage.getItem(draftStora
 function saveDraft(path, text)    { try { localStorage.setItem(draftStorageKey(path), text); return true; } catch (_) { return false; } }
 function clearDraft(path)         { try { localStorage.removeItem(draftStorageKey(path)); return true; } catch (_) { return false; } }
 
+function simpleHash(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+  return h.toString(16);
+}
+function draftMetaKey(path)                     { return `pipeline-viz:draft-meta:${path}`; }
+function saveDraftMeta(path, originalText)       { try { localStorage.setItem(draftMetaKey(path), simpleHash(originalText)); } catch (_) {} }
+function loadDraftBaseHash(path)                 { try { return localStorage.getItem(draftMetaKey(path)); } catch (_) { return null; } }
+function clearDraftMeta(path)                    { try { localStorage.removeItem(draftMetaKey(path)); } catch (_) {} }
+
+function computeLineDiff(oldText, newText) {
+  const a = oldText.split('\n'), b = newText.split('\n');
+  const m = a.length, n = b.length;
+  if (m * n > 250000) return [{ type: 'info', line: `(diff too large — ${m} vs ${n} lines)` }];
+  const dp = Array.from({ length: m + 1 }, () => new Uint32Array(n + 1));
+  for (let i = 1; i <= m; i++)
+    for (let j = 1; j <= n; j++)
+      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] + 1 : Math.max(dp[i-1][j], dp[i][j-1]);
+  const result = [];
+  let i = m, j = n;
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0 && a[i-1] === b[j-1])            { result.unshift({ type: 'eq',  line: a[i-1] }); i--; j--; }
+    else if (j > 0 && (i === 0 || dp[i][j-1] >= dp[i-1][j])) { result.unshift({ type: 'add', line: b[j-1] }); j--; }
+    else                                                  { result.unshift({ type: 'del', line: a[i-1] }); i--; }
+  }
+  return result;
+}
+
+function renderDiffBody() {
+  const el = document.getElementById('md-diff');
+  if (!el) return;
+  if (mdDraftText === mdOriginalText) {
+    el.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:12px 0;text-align:center">No changes — draft matches source.</div>';
+    return;
+  }
+  const diff = computeLineDiff(mdOriginalText, mdDraftText);
+  const CONTEXT = 3;
+  const shown = new Set();
+  diff.forEach((d, idx) => {
+    if (d.type !== 'eq') for (let k = Math.max(0, idx - CONTEXT); k <= Math.min(diff.length - 1, idx + CONTEXT); k++) shown.add(k);
+  });
+  if (shown.size === 0) diff.forEach((_, idx) => shown.add(idx));
+  const adds = diff.filter(d => d.type === 'add').length;
+  const dels = diff.filter(d => d.type === 'del').length;
+  let html = `<div class="diff-hdr">--- a/${esc(mdCurrentPath)}<br>+++ b/${esc(mdCurrentPath)} (draft) &nbsp;<span style="color:var(--green)">+${adds}</span> <span style="color:var(--red)">-${dels}</span></div>`;
+  let oldNo = 0, newNo = 0, prevShown = -2;
+  diff.forEach((d, idx) => {
+    if (d.type !== 'add') oldNo++;
+    if (d.type !== 'del') newNo++;
+    if (!shown.has(idx)) { prevShown = idx; return; }
+    if (idx > prevShown + 1 && prevShown >= 0) {
+      const skipped = idx - prevShown - 1;
+      if (skipped > 0) html += `<div class="diff-skip">⋯ ${skipped} unchanged line${skipped > 1 ? 's' : ''}</div>`;
+    }
+    prevShown = idx;
+    const cls = d.type === 'add' ? 'diff-add' : d.type === 'del' ? 'diff-del' : 'diff-eq';
+    const sig = d.type === 'add' ? '+' : d.type === 'del' ? '-' : d.type === 'info' ? '~' : ' ';
+    const ol  = d.type === 'add' ? '' : String(oldNo);
+    const nl  = d.type === 'del' ? '' : String(newNo);
+    html += `<div class="diff-line ${cls}"><span class="diff-sign">${sig}</span><span class="diff-linenum">${esc(ol)}</span><span class="diff-linenum">${esc(nl)}</span><span>${esc(d.line)}</span></div>`;
+  });
+  el.innerHTML = html;
+}
+
+function generateUnifiedPatch() {
+  if (mdDraftText === mdOriginalText) return '';
+  const diff = computeLineDiff(mdOriginalText, mdDraftText);
+  const CONTEXT = 3;
+  const shown = new Set();
+  diff.forEach((d, idx) => {
+    if (d.type !== 'eq') for (let k = Math.max(0, idx - CONTEXT); k <= Math.min(diff.length - 1, idx + CONTEXT); k++) shown.add(k);
+  });
+  const sorted = [...shown].sort((a, b) => a - b);
+  const hunks = [];
+  let hunk = null;
+  for (const idx of sorted) {
+    if (!hunk || idx > hunk.end + 1) { if (hunk) hunks.push(hunk); hunk = { start: idx, end: idx, items: [] }; }
+    hunk.end = idx; hunk.items.push({ idx, ...diff[idx] });
+  }
+  if (hunk) hunks.push(hunk);
+  let patch = `--- a/${mdCurrentPath}\n+++ b/${mdCurrentPath} (draft)\n`;
+  for (const h of hunks) {
+    let oldStart = 0, newStart = 0;
+    for (let k = 0; k < h.start; k++) { if (diff[k].type !== 'add') oldStart++; if (diff[k].type !== 'del') newStart++; }
+    let oldCount = 0, newCount = 0;
+    h.items.forEach(it => { if (it.type !== 'add') oldCount++; if (it.type !== 'del') newCount++; });
+    patch += `@@ -${oldStart + 1},${oldCount} +${newStart + 1},${newCount} @@\n`;
+    h.items.forEach(it => { patch += `${it.type === 'add' ? '+' : it.type === 'del' ? '-' : ' '}${it.line}\n`; });
+  }
+  return patch;
+}
+
+function showConflictBanner() {
+  const el = document.getElementById('md-conflict');
+  if (!el) return;
+  el.className = 'visible';
+  el.innerHTML = `<span>⚠ Source changed since draft was saved — your draft may conflict with the current version.</span>
+    <button id="md-conflict-keep">Keep draft</button>
+    <button id="md-conflict-use-current">Use current file</button>
+    <button id="md-conflict-dismiss">Dismiss ✕</button>`;
+}
+
+function hideConflictBanner() {
+  const el = document.getElementById('md-conflict');
+  if (el) { el.className = ''; el.innerHTML = ''; }
+}
+
 function detectArtefactType(path) {
   if (/\/stories\/[^/]+\.md$/.test(path))   return 'story';
   if (/\/benefit-metric\.md$/.test(path))    return 'benefit-metric';
@@ -2092,32 +2226,41 @@ function renderMdStatus() {
   if (!mdCurrentPath) { statusEl.textContent = ''; return; }
   const hasDraft = loadDraft(mdCurrentPath) !== null;
   const changed  = mdDraftText !== mdOriginalText;
-  if (hasDraft && changed) { statusEl.textContent = 'Draft changed'; statusEl.style.color = 'var(--amber)'; return; }
-  if (hasDraft)            { statusEl.textContent = 'Draft saved';   statusEl.style.color = 'var(--green)'; return; }
-  statusEl.textContent = changed ? 'Unsaved' : 'Read only source';
-  statusEl.style.color = changed ? 'var(--amber)' : 'var(--muted)';
+  if (hasDraft && changed) { statusEl.textContent = 'Draft changed'; statusEl.style.color = 'var(--amber)'; }
+  else if (hasDraft)       { statusEl.textContent = 'Draft saved';   statusEl.style.color = 'var(--green)'; }
+  else { statusEl.textContent = changed ? 'Unsaved' : 'Read only source'; statusEl.style.color = changed ? 'var(--amber)' : 'var(--muted)'; }
+  // show diff tab only when there are changes
+  const diffTab = document.getElementById('md-tab-diff');
+  if (diffTab) diffTab.style.display = (changed && mdCurrentPath) ? '' : 'none';
 }
 
 function renderMdBody() {
   const contentEl  = document.getElementById('md-content');
   const editorEl   = document.getElementById('md-editor');
   const formEl     = document.getElementById('md-form');
+  const diffEl     = document.getElementById('md-diff');
   const previewBtn = document.getElementById('md-tab-preview');
   const rawBtn     = document.getElementById('md-tab-raw');
   const formBtn    = document.getElementById('md-tab-form');
+  const diffBtn    = document.getElementById('md-tab-diff');
+  const copyBtn    = document.getElementById('md-copy-patch');
   if (!contentEl || !editorEl || !previewBtn || !rawBtn) return;
   previewBtn.classList.toggle('active', mdMode === 'preview');
   rawBtn.classList.toggle('active',     mdMode === 'raw');
-  if (formBtn) formBtn.classList.toggle('active', mdMode === 'form');
+  if (formBtn) formBtn.classList.toggle('active',  mdMode === 'form');
+  if (diffBtn) diffBtn.classList.toggle('active',  mdMode === 'diff');
   contentEl.classList.toggle('active',  mdMode === 'preview');
   editorEl.classList.toggle('active',   mdMode === 'raw');
   if (formEl) formEl.classList.toggle('active',  mdMode === 'form');
+  if (diffEl) diffEl.classList.toggle('active',  mdMode === 'diff');
+  if (copyBtn) copyBtn.style.display = mdMode === 'diff' ? '' : 'none';
   editorEl.value = mdDraftText;
   const html = typeof marked !== 'undefined'
     ? marked.parse(mdDraftText || '')
     : `<pre style="white-space:pre-wrap;font-size:12px;line-height:1.6">${esc(mdDraftText || '')}</pre>`;
   contentEl.innerHTML = html;
   if (mdMode === 'form') renderFormBody();
+  if (mdMode === 'diff') renderDiffBody();
   renderValidation();
   renderMdStatus();
 }
@@ -2138,7 +2281,12 @@ async function openMdViewer(path) {
     if (!resp.ok) throw new Error(`HTTP ${resp.status} — file not found`);
     const text = await resp.text();
     mdOriginalText = text;
-    mdDraftText = loadDraft(path) ?? text;
+    const existingDraft = loadDraft(path);
+    mdDraftText = existingDraft ?? text;
+    if (existingDraft !== null) {
+      const storedHash = loadDraftBaseHash(path);
+      if (storedHash && storedHash !== simpleHash(text)) showConflictBanner();
+    }
     renderMdBody();
   } catch (e) {
     mdOriginalText = `<!-- Could not load source: ${e.message} -->`;
@@ -2152,10 +2300,12 @@ async function openMdViewer(path) {
 function closeMdViewer() {
   document.getElementById('md-overlay').classList.remove('open');
   document.getElementById('md-pane').classList.remove('open');
+  hideConflictBanner();
   mdCurrentPath  = '';
   mdOriginalText = '';
   mdDraftText    = '';
   mdArtefactType = 'generic';
+  mdMode = 'preview';
 }
 
 function closeDrawer() {
@@ -2362,13 +2512,43 @@ function initFilters() {
       s.textContent = 'Save failed'; s.style.color = 'var(--red)';
       return;
     }
+    saveDraftMeta(mdCurrentPath, mdOriginalText);
     renderMdStatus();
   });
   document.getElementById('md-reset-draft').addEventListener('click', () => {
     if (!mdCurrentPath) return;
     clearDraft(mdCurrentPath);
+    clearDraftMeta(mdCurrentPath);
+    hideConflictBanner();
     mdDraftText = mdOriginalText;
+    if (mdMode === 'diff') mdMode = 'preview';
     renderMdBody();
+  });
+  document.getElementById('md-tab-diff').addEventListener('click', () => {
+    mdMode = 'diff';
+    renderMdBody();
+  });
+  document.getElementById('md-copy-patch').addEventListener('click', () => {
+    const patch = generateUnifiedPatch();
+    if (!patch) return;
+    const btn = document.getElementById('md-copy-patch');
+    navigator.clipboard.writeText(patch).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = orig; }, 1500);
+    }).catch(() => { prompt('Copy this patch:', patch); });
+  });
+  document.getElementById('md-conflict').addEventListener('click', e => {
+    if (e.target.id === 'md-conflict-dismiss')     { hideConflictBanner(); return; }
+    if (e.target.id === 'md-conflict-keep')        { hideConflictBanner(); return; }
+    if (e.target.id === 'md-conflict-use-current') {
+      clearDraft(mdCurrentPath);
+      clearDraftMeta(mdCurrentPath);
+      mdDraftText = mdOriginalText;
+      hideConflictBanner();
+      if (mdMode === 'diff') mdMode = 'preview';
+      renderMdBody();
+    }
   });
   document.getElementById('md-tab-form').addEventListener('click', () => {
     mdMode = 'form';
