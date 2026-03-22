@@ -55,11 +55,15 @@
         "type": "object",
         "required": ["slug", "name", "track", "stage", "health"],
         "properties": {
-          "slug":          { "type": "string" },
-          "name":          { "type": "string" },
-          "track":         { "type": "string", "enum": ["short", "standard", "programme-workstream", "library"] },
-          "programmeSlug": { "type": "string", "description": "set if track is programme-workstream" },
-          "team":          { "type": "string" },
+          "slug":              { "type": "string" },
+          "name":              { "type": "string" },
+          "track":             { "type": "string", "enum": ["short", "standard", "programme-workstream", "library"] },
+          "programmeSlug":     { "type": "string", "description": "set if track is programme-workstream" },
+          "team":              { "type": "string" },
+          "complianceProfile": { "type": "string", "enum": ["standard", "regulated"], "description": "Triggers regulated-feature policy in viz and compliance bundle in /release" },
+          "regulated":         { "type": "boolean", "description": "Fallback regulated flag — prefer complianceProfile" },
+          "coverageMapPath":   { "type": "string", "description": "Relative path to the coverage-map.html produced by /coverage-map" },
+          "coverageRisk":      { "type": "string", "enum": ["green", "amber", "red"], "description": "Overall coverage risk rating from /coverage-map or /trace" },
           "stage": {
             "type": "string",
             "description": "Current pipeline stage",
@@ -109,9 +113,25 @@
                       "prStatus":    { "type": "string", "enum": ["none", "draft", "open", "merged"] },
                       "prUrl":       { "type": "string" },
                       "dodStatus":   { "type": "string", "enum": ["not-started", "complete"] },
-                      "acVerified":  { "type": "integer", "description": "Number of ACs verified" },
-                      "acTotal":     { "type": "integer" },
-                      "releaseReady":{ "type": "boolean" }
+                      "acVerified":            { "type": "integer", "description": "Number of ACs verified" },
+                      "acTotal":               { "type": "integer" },
+                      "releaseReady":           { "type": "boolean", "description": "Set true by /definition-of-done when all ACs are covered" },
+                      "layoutGapsAtMerge":      { "type": "boolean", "description": "True if CSS-layout test gaps existed at merge time (written by /definition-of-done)" },
+                      "layoutGapsRiskAccepted": { "type": "boolean", "description": "True if the layout gap risk was explicitly accepted at merge (written by /definition-of-done)" },
+                      "tasks": {
+                        "type": "array",
+                        "description": "Implementation plan tasks for this story, written by /implementation-plan and updated by /tdd",
+                        "items": {
+                          "type": "object",
+                          "required": ["id", "name", "tddState"],
+                          "properties": {
+                            "id":       { "type": "string" },
+                            "name":     { "type": "string" },
+                            "tddState": { "type": "string", "enum": ["not-started", "committed", "green", "refactor", "done"], "description": "TDD phase: not-started → committed (red test written) → green (passing) → refactor → done" },
+                            "file":     { "type": "string", "description": "Relative path to the implementation plan task file" }
+                          }
+                        }
+                      }
                     }
                   }
                 }

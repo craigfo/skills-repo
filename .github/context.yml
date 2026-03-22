@@ -1,0 +1,84 @@
+# context.yml — Active pipeline context for this repository.
+# Profile: personal (skills library / tooling repo, non-regulated)
+#
+# Generated: 2026-03-22
+# To switch profile: cp .github/contexts/work.yml .github/context.yml
+
+meta:
+  name: "SDLC Skills Pipeline Library"
+  scope: personal                   # personal | team | programme
+  regulated: false                  # true enables compliance bundle prompts
+
+source_control:
+  platform: github                  # github | gitlab | bitbucket | azure-devops | other
+  base_branch: master               # this repo uses master
+  merge_request_term: "pull request"
+  pr_command: "gh pr create --draft"
+  artefact_root: ".github"
+
+agent:
+  instruction_file: "copilot-instructions.md"
+  # GitHub Copilot reads copilot-instructions.md automatically.
+
+architecture:
+  ea_registry_repo: "https://github.com/heymishy/ea-registry"
+  ea_registry_local_path: "C:/Users/Hamis/code/ea-registry-repo"
+  ea_registry_authoritative: true
+
+optimization:
+  token_policy:
+    per_turn_soft_budget: 12000
+    per_story_budget: 120000
+    per_feature_budget: 800000
+  routing:
+    default_model_class: "balanced"
+    escalation_model_class: "deep-reasoning"
+    escalation_triggers:
+      - "high-severity review findings"
+      - "root-cause debugging unresolved after one pass"
+      - "cross-system design ambiguity"
+
+mapping:
+  stage_aliases: {}
+  artefact_aliases: {}
+  governance:
+    gates: []
+
+scaling:
+  maturity_level: "team"
+  target_team_count: 1
+  state_strategy: "per-repo-json"
+  shared_skill_pack: false
+
+runtime:
+  language: javascript              # primary scripting language (viz + pre-commit scripts)
+  test_framework: none              # no automated test suite on skills/templates themselves
+  dom_environment: none
+  e2e_framework: none
+  package_manager: npm              # used for pre-commit hook dependencies
+  ci: github-actions
+
+roles:
+  tech_lead: "me"
+  qa: "me"
+  analyst: "me"
+  product: "me"
+
+delivery:
+  cycle_term: "iteration"
+  phase_gate: false
+  change_management:
+    process: none
+    tool: null
+
+tools:
+  project_management: github-issues
+  documentation: null
+  artifact_registry: null
+  monitoring: null
+  log_aggregation: null
+  alerting: null
+
+compliance:
+  frameworks: []
+  sensitive_data_categories: []
