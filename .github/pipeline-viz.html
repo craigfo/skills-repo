@@ -906,7 +906,10 @@ let mdVscodeBase   = '';        // workspace-root prefix stripped when building 
 let isDirty = false;
 let pipelineLayout = 'flat'; // 'flat' | 'loop-grouped'
 let governanceGateFilter = ''; // gate id for fail-focused filtering
-let governanceStrictPolicy = false; // when true, warn => fail for regulated features
+// Strict policy: warn → fail for regulated features.
+// Initialised from pipeline-state config.regulated once data loads.
+// User toggle persisted in localStorage so it survives page reloads.
+let governanceStrictPolicy = (localStorage.getItem('gov-strict-policy') === 'true');
 let skillMetadata = {}; // { gateId | metaId: { description: '...', loaded: true } }
 let columnUi = {
   globalWidth: 220,
@@ -956,6 +959,15 @@ function normalizeData(data) {
     });
   });
   (data.programmes || []).forEach(p => { p.slug = p.slug || p.id; });
+
+  // Apply config.regulated from pipeline-state as the default strict-policy state,
+  // but only when there is no explicit user preference already stored in localStorage.
+  // This bridges context.yml (meta.regulated) → pipeline-state (config.regulated) → viz.
+  if (localStorage.getItem('gov-strict-policy') === null) {
+    const cfgRegulated = data.config && data.config.regulated === true;
+    governanceStrictPolicy = cfgRegulated;
+  }
+
   return data;
 }
 
@@ -1602,26 +1614,39 @@ function gateStatus(feature, gateId) {
 
   if (gateId === 'verify-completion') {
     if (stories.length === 0) status = { state: 'na', label: 'N/A', artefact: artefactFor(gateId) };
-    else if (hasReachedStage(feature, 'branch-complete')) status = { state: 'pass', label: 'Verified', artefact: artefactFor(gateId) };
-    else if (hasReachedStage(feature, 'verify-completion')) status = { state: 'warn', label: 'Running', artefact: artefactFor(gateId) };
+    // Evidence field: story.verifyStatus written by /verify-completion skill.
+    // Fall back to stage proxy (with TODO) only when no verifyStatus fields are present.
+    else if (stories.every(s => s.verifyStatus === 'passed')) status = { state: 'pass', label: 'Verified', artefact: artefactFor(gateId) };
+    else if (stories.some(s => s.verifyStatus === 'running')) status = { state: 'warn', label: 'Running', artefact: artefactFor(gateId) };
+    else if (stories.some(s => s.verifyStatus)) status = { state: 'warn', label: 'In progress', artefact: artefactFor(gateId) };
+    // TODO: replace this fallback with verifyStatus evidence — set story.verifyStatus in /verify-completion skill
+    else if (hasReachedStage(feature, 'branch-complete')) status = { state: 'warn', label: 'Verified (no evidence)', artefact: artefactFor(gateId) };
     else status = { state: 'warn', label: 'Not started', artefact: artefactFor(gateId) };
   }
 
   if (gateId === 'definition-of-done') {
     if (stories.length === 0) status = { state: 'na', label: 'N/A', artefact: artefactFor(gateId) };
+    // Evidence field: story.dodStatus written by /definition-of-done skill.
     else if (stories.every(s => s.dodStatus === 'complete')) status = { state: 'pass', label: 'Complete', artefact: artefactFor(gateId) };
-    else if (hasReachedStage(feature, 'definition-of-done')) status = { state: 'warn', label: 'In progress', artefact: artefactFor(gateId) };
+    else if (stories.some(s => s.dodStatus === 'complete')) status = { state: 'warn', label: 'In progress', artefact: artefactFor(gateId) };
     else status = { state: 'warn', label: 'Not started', artefact: artefactFor(gateId) };
   }
 
   if (gateId === 'trace') {
-    if (hasReachedStage(feature, 'trace')) status = { state: 'pass', label: 'Traced', artefact: artefactFor(gateId) };
+    // Evidence field: feature.traceStatus written by /trace skill.
+    if (feature.traceStatus === 'passed') status = { state: 'pass', label: 'Traced', artefact: artefactFor(gateId) };
+    else if (feature.traceStatus === 'has-findings') status = { state: 'fail', label: 'Has findings', artefact: artefactFor(gateId) };
     else if (hasReachedStage(feature, 'definition-of-done')) status = { state: 'warn', label: 'Pending', artefact: artefactFor(gateId) };
     else status = { state: 'na', label: 'N/A', artefact: artefactFor(gateId) };
   }
 
   if (gateId === 'release') {
-    if (feature.stage === 'released') status = { state: 'pass', label: 'Released', artefact: artefactFor(gateId) };
+    // Evidence field: story.releaseReady (boolean) written by /definition-of-done skill.
+    // Stage is also checked because 'released' is explicitly set by the /release skill.
+    if (feature.stage === 'released' && stories.every(s => s.releaseReady === true))
+      status = { state: 'pass', label: 'Released', artefact: artefactFor(gateId) };
+    else if (feature.stage === 'released')
+      status = { state: 'warn', label: 'Released (no evidence)', artefact: artefactFor(gateId) };
     else if (feature.stage === 'release-pending') status = { state: 'warn', label: 'Pending', artefact: artefactFor(gateId) };
     else status = { state: 'na', label: 'N/A', artefact: artefactFor(gateId) };
   }
@@ -2456,6 +2481,7 @@ function handleBoardClick(e) {
     const toggleGovPolicy = e.target.closest('[data-action="toggle-gov-policy"]');
     if (toggleGovPolicy) {
       governanceStrictPolicy = !governanceStrictPolicy;
+      localStorage.setItem('gov-strict-policy', governanceStrictPolicy);
       render();
       return;
     }

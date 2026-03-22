@@ -22,31 +22,31 @@
 ## Hard Blocks
 <!-- Any FAIL here stops the story. Do not assign to coding agent. -->
 
-| Check | Status | Notes |
-|-------|--------|-------|
-| Story has a user story in As/Want/So format | ✅ / ❌ | |
-| All ACs are in Given/When/Then format | ✅ / ❌ | |
-| Every AC is independently testable | ✅ / ❌ | |
-| Out of scope is declared (not "N/A") | ✅ / ❌ | |
-| Benefit linkage is written and references a metric | ✅ / ❌ | |
-| Test plan exists and covers all ACs | ✅ / ❌ | |
-| No AC coverage gaps in test plan | ✅ / ❌ | |
-| No upstream story dependency is incomplete | ✅ / ❌ | |
-| Discovery artefact is approved | ✅ / ❌ | |
-| Benefit-metric artefact is active | ✅ / ❌ | |
+| # | Check | Status | Notes |
+|---|-------|--------|-------|
+| H1 | User story is in As / Want / So format with a named persona | ✅ / ❌ | |
+| H2 | At least 3 ACs in Given / When / Then format | ✅ / ❌ | |
+| H3 | Every AC has at least one test in the test plan | ✅ / ❌ | |
+| H4 | Out-of-scope section is populated — not blank or N/A | ✅ / ❌ | |
+| H5 | Benefit linkage field references a named metric | ✅ / ❌ | |
+| H6 | Complexity is rated | ✅ / ❌ | |
+| H7 | No unresolved HIGH findings from the review report | ✅ / ❌ | |
+| H8 | Test plan has no uncovered ACs (or gaps explicitly acknowledged in /decisions) | ✅ / ❌ | |
+| H9 | Architecture Constraints field populated; no Category E HIGH findings | ✅ / ❌ | |
+| H-E2E | If any AC is typed `CSS-layout-dependent` AND no E2E tooling configured AND no `RISK-ACCEPT` recorded — block sign-off | ✅ / ❌ | |
 
 ---
 
 ## Warnings
 <!-- WARN items allow the story to proceed, but risk must be acknowledged. -->
 
-| Check | Status | Risk if proceeding | Acknowledged by |
-|-------|--------|--------------------|-----------------|
-| NFRs are identified (or explicitly "None") | ✅ / ⚠️ | Missing NFRs may cause rework post-implementation | |
-| Complexity is rated | ✅ / ⚠️ | Unrated complexity makes agent session scoping difficult | |
-| Human oversight level is set on parent epic | ✅ / ⚠️ | Coding agent may proceed further than intended | |
-| Scope stability is declared | ✅ / ⚠️ | Unstable scope may invalidate test plan mid-implementation | |
-| Test plan has no unmitigated gaps | ✅ / ⚠️ | Gaps increase risk of defects reaching PR review | |
+| # | Check | Status | Risk if proceeding | Acknowledged by |
+|---|-------|--------|--------------------|-----------------|
+| W1 | NFRs are identified (or explicitly “None — confirmed”) | ✅ / ⚠️ | Missing NFRs may cause rework post-implementation | |
+| W2 | Scope stability is declared | ✅ / ⚠️ | Unstable scope may invalidate test plan mid-implementation | |
+| W3 | MEDIUM review findings acknowledged in /decisions | ✅ / ⚠️ | Unacknowledged medium findings increase review rework risk at PR | |
+| W4 | Verification script reviewed by a domain expert | ✅ / ⚠️ | Unreviewed script may miss edge cases; agent may verify against wrong criteria | |
+| W5 | No UNCERTAIN items in test plan gap table left unaddressed | ✅ / ⚠️ | Gaps increase risk of defects reaching PR review | |
 
 ---
 

@@ -1,0 +1,120 @@
+# governance-gates.yml — Canonical governance gate definitions
+#
+# SINGLE SOURCE OF TRUTH for all governance gates in this pipeline.
+# Both pipeline-viz.html (GOVERNANCE_GATES constant) and individual skill files
+# are derived from / must stay consistent with this file.
+#
+# Validation: .github/scripts/check-governance-sync.js runs on pre-commit and
+# verifies that GOVERNANCE_GATES in pipeline-viz.html matches this file.
+#
+# When adding or removing a gate:
+#   1. Update this file
+#   2. Update GOVERNANCE_GATES in pipeline-viz.html in the SAME commit
+#   3. Update the corresponding skill's SKILL.md to document the evidence fields
+#   4. Add any new evidence fields to pipeline-state.schema.json
+#
+# Field reference:
+#   id              — unique identifier, matches gate id in viz and pipeline-state
+#   label           — short display name used in the governance matrix
+#   skill           — slash-command that implements this gate
+#   skillPath       — relative path to the SKILL.md file
+#   criteria        — one-line pass criterion shown in the governance view tooltip
+#   artefactTemplate — path template for the gate's output artefact ({slug} is replaced)
+#   evidenceFields  — describes what pipeline-state fields the viz reads for pass/warn/fail
+
+gates:
+
+  - id: review
+    label: Review
+    skill: /review
+    skillPath: skills/review/SKILL.md
+    criteria: No HIGH findings before progression
+    artefactTemplate: "artefacts/{slug}/review/"
+    evidenceFields:
+      pass: "all stories: reviewStatus === 'passed'"
+      warn: "stories exist, no HIGH findings, not all passed"
+      fail: "any story: highFindings > 0"
+
+  - id: test-plan
+    label: Test Plan
+    skill: /test-plan
+    skillPath: skills/test-plan/SKILL.md
+    criteria: Failing tests and verification script prepared
+    artefactTemplate: "artefacts/{slug}/test-plans/"
+    evidenceFields:
+      pass: "all stories: testPlan.status === 'written' && testPlan.totalTests > 0"
+      warn: "some (not all) stories have a written test plan"
+      fail: "no stories have a test plan written"
+
+  - id: definition-of-ready
+    label: DoR
+    skill: /definition-of-ready
+    skillPath: skills/definition-of-ready/SKILL.md
+    criteria: All hard blocks pass and sign-off complete
+    artefactTemplate: "artefacts/{slug}/dor/"
+    evidenceFields:
+      pass: "all stories: dorStatus === 'signed-off'"
+      warn: "no stories blocked, some not yet signed-off"
+      fail: "any story: dorStatus === 'blocked'"
+
+  - id: verify-completion
+    label: Verify
+    skill: /verify-completion
+    skillPath: skills/verify-completion/SKILL.md
+    criteria: Fresh evidence run before completion claims
+    artefactTemplate: "artefacts/{slug}/verification-scripts/"
+    evidenceFields:
+      pass: "all stories: verifyStatus === 'passed'"
+      warn: "any story: verifyStatus === 'running', or verifyStatus not yet set"
+      fail: "N/A — verify-completion does not produce a direct fail state"
+    # NOTE: /verify-completion skill must write story.verifyStatus to be evidence-based.
+    # Until then, stage proxy fallback is used (marked TODO in viz code).
+
+  - id: definition-of-done
+    label: DoD
+    skill: /definition-of-done
+    skillPath: skills/definition-of-done/SKILL.md
+    criteria: Post-merge AC/test coverage validated
+    artefactTemplate: "artefacts/{slug}/dod/"
+    evidenceFields:
+      pass: "all stories: dodStatus === 'complete'"
+      warn: "some (not all) stories: dodStatus === 'complete'"
+      not-started: "no stories have dodStatus set"
+
+  - id: trace
+    label: Trace
+    skill: /trace
+    skillPath: skills/trace/SKILL.md
+    criteria: Traceability chain intact across artefacts
+    artefactTemplate: "artefacts/{slug}/trace/trace.md"
+    evidenceFields:
+      pass: "feature.traceStatus === 'passed'"
+      fail: "feature.traceStatus === 'has-findings'"
+      warn: "traceStatus not set but DoD stage reached (pending trace run)"
+
+  - id: release
+    label: Release
+    skill: /release
+    skillPath: skills/release/SKILL.md
+    criteria: Release bundle/checklist produced for deployment
+    artefactTemplate: "artefacts/{slug}/release/release-notes-technical.md"
+    evidenceFields:
+      pass: "feature.stage === 'released' AND all stories: releaseReady === true"
+      warn: "feature.stage === 'released' (no releaseReady evidence) OR stage === 'release-pending'"
+      na: "feature not yet at release stage"
+
+# Pipeline-authority skills referenced in the governance view for context.
+# These are NOT gate-checked — they do not produce pass/fail signals.
+metaSkills:
+
+  - id: workflow
+    label: Workflow
+    skill: /workflow
+    skillPath: skills/workflow/SKILL.md
+    description: "Pipeline navigator — defines what stage each feature is at and what skill runs next."
+
+  - id: org-mapping
+    label: Org Mapping
+    skill: /org-mapping
+    skillPath: skills/org-mapping/SKILL.md
+    description: "Maps pipeline steps to org-specific terminology, governance gates, and approval processes."
