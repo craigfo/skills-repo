@@ -25,27 +25,27 @@ triggers:
 None. Runs at any pipeline stage. If `decisions.md` does not exist for this feature,
 create it from `.github/templates/decision-log.md` before appending.
 
-**Two ADR scopes — understand which applies:**
+**Two ADR scopes - understand which applies:**
 - **Feature-level decisions** (most common): made during this feature's pipeline.
   Live in `.github/artefacts/[feature]/decisions.md`. Managed by this skill.
 - **Repo-level ADRs** (structural, cross-feature): architectural decisions that
   apply to all features. Live in `.github/architecture-guardrails.md` under the
   Active ADRs section. When a decision is significant enough to constrain future
-  features — a framework choice, a security pattern, a data handling rule — also
+  features - a framework choice, a security pattern, a data handling rule - also
   add it to `.github/architecture-guardrails.md` as a repo-level ADR.
 
 ---
 
-## Two tracks — ask first, always
+## Two tracks - ask first, always
 
 When invoked, the first question is always which track:
 
 > **Which type of record does this need?**
 >
-> 1. **Log entry** — quick, in-flight decision. Reversible or low-stakes.
+> 1. **Log entry** - quick, in-flight decision. Reversible or low-stakes.
 >    Rationale fits in 1–2 sentences. Takes ~2 minutes.
 >
-> 2. **ADR (Architecture Decision Record)** — structural decision. Hard to reverse.
+> 2. **ADR (Architecture Decision Record)** - structural decision. Hard to reverse.
 >    Affects multiple stories, epics, or the wider codebase. Future engineers need
 >    full context. Takes 5–10 minutes.
 >
@@ -58,41 +58,41 @@ When invoked, the first question is always which track:
 
 ## Track 1: Log entry
 
-### Step 1 — The decision
+### Step 1 - The decision
 
 > **What was decided?**
-> (One clear sentence — not "we discussed the approach" but "we chose X over Y")
+> (One clear sentence - not "we discussed the approach" but "we chose X over Y")
 >
 > Reply: state the decision
 
-### Step 2 — Category
+### Step 2 - Category
 
 > **What category?**
 >
-> 1. SCOPE — what is or isn't in MVP
-> 2. ARCH — structural or infrastructure choice
-> 3. DESIGN — implementation pattern or approach
-> 4. SLICE — story slicing or decomposition choice
-> 5. ASSUMPTION — something assumed true that affects the work
-> 6. RISK-ACCEPT — known risk acknowledged and accepted
+> 1. SCOPE - what is or isn't in MVP
+> 2. ARCH - structural or infrastructure choice
+> 3. DESIGN - implementation pattern or approach
+> 4. SLICE - story slicing or decomposition choice
+> 5. ASSUMPTION - something assumed true that affects the work
+> 6. RISK-ACCEPT - known risk acknowledged and accepted
 >
 > Reply: 1, 2, 3, 4, 5, or 6
 
-### Step 3 — Alternatives
+### Step 3 - Alternatives
 
 > **What other options were considered?**
-> (Even if briefly — "no alternatives considered" is itself a useful signal)
+> (Even if briefly - "no alternatives considered" is itself a useful signal)
 >
 > Reply: describe alternatives, or type "none considered"
 
-### Step 4 — Rationale
+### Step 4 - Rationale
 
 > **Why this option?**
-> (Forces, constraints, information that led here — not a restatement of the decision)
+> (Forces, constraints, information that led here - not a restatement of the decision)
 >
 > Reply: explain the rationale
 
-### Step 5 — Revisit trigger
+### Step 5 - Revisit trigger
 
 > **What would cause you to revisit this decision?**
 > (e.g. "If latency requirements tighten below 100ms", "If the vendor changes the API",
@@ -106,20 +106,20 @@ Append to the `## Log entries` section of `decisions.md`.
 Format: see `## Log entries` in `templates/decision-log.md`.
 
 > **Logged ✅**
-> [Decision summary — one line]
+> [Decision summary - one line]
 >
 > Continue working, or log another decision?
-> Reply: continue — or log another
+> Reply: continue - or log another
 
 ---
 
 ## Track 2: ADR
 
-ADRs are heavyweight. Every section requires human input — the skill structures
+ADRs are heavyweight. Every section requires human input - the skill structures
 and writes, but the substance must come from the human. The skill never generates
 ADR content from inference.
 
-### Step 1 — Title and number
+### Step 1 - Title and number
 
 Confirm the next ADR number from the existing log, then:
 
@@ -128,7 +128,7 @@ Confirm the next ADR number from the existing log, then:
 >
 > Reply: state the title
 
-### Step 2 — Context
+### Step 2 - Context
 
 > **What is the situation that required this decision?**
 > What were you trying to do, what constraint or question arose, and why couldn't
@@ -136,23 +136,23 @@ Confirm the next ADR number from the existing log, then:
 >
 > Reply: describe the context
 
-### Step 3 — Options considered
+### Step 3 - Options considered
 
 > **What were the options?**
 > List each option with its key pros and cons.
-> Minimum 2 options — if only one was ever considered, note that explicitly
+> Minimum 2 options - if only one was ever considered, note that explicitly
 > as it affects how the ADR should be read.
 >
 > Reply: list options with pros/cons
 
-### Step 4 — Decision and primary reason
+### Step 4 - Decision and primary reason
 
 > **What was decided, and what was the primary reason?**
-> (If multiple reasons, rank them — what tipped the balance?)
+> (If multiple reasons, rank them - what tipped the balance?)
 >
 > Reply: state the decision and primary reason
 
-### Step 5 — Consequences
+### Step 5 - Consequences
 
 > **What are the consequences of this decision?**
 >
@@ -163,7 +163,7 @@ Confirm the next ADR number from the existing log, then:
 >
 > Reply: describe the consequences
 
-### Step 6 — Revisit trigger
+### Step 6 - Revisit trigger
 
 > **What would cause this decision to be reconsidered?**
 > (Think: technology changes, scale changes, regulatory changes, team changes)
@@ -180,14 +180,14 @@ Format: see `## Architecture Decision Records` in `templates/decision-log.md`.
 >
 > This ADR should be referenced in any story or artefact it constrains.
 > Want to note any artefacts that should reference ADR-[N]?
-> Reply: yes — list them / no
+> Reply: yes - list them / no
 
 ---
 
 ## When other skills invoke this skill
 
 The following pipeline points should produce a log entry. When running these
-skills, the decision point is marked — invoke /decisions at that point:
+skills, the decision point is marked - invoke /decisions at that point:
 
 | Skill | Decision point | Category |
 |-------|---------------|----------|
@@ -196,7 +196,7 @@ skills, the decision point is marked — invoke /decisions at that point:
 | /benefit-metric | Meta-benefit flag set | ASSUMPTION |
 | /definition | Slicing strategy chosen | SLICE |
 | /definition | Scope note resolved (add/defer/replace) | SCOPE |
-| /definition | Scope accumulator flags drift — decision made | SCOPE |
+| /definition | Scope accumulator flags drift - decision made | SCOPE |
 | /review | MEDIUM finding acknowledged and proceeded | RISK-ACCEPT |
 | /review | LOW finding accepted and not resolved | RISK-ACCEPT |
 | /definition-of-ready | Warning acknowledged | RISK-ACCEPT |
@@ -242,18 +242,18 @@ Add to the log entry format:
 
 ## Quality checks before appending
 
-- Decision is specific — not "we discussed the approach"
-- Alternatives field is not blank — at minimum "None formally considered"
+- Decision is specific - not "we discussed the approach"
+- Alternatives field is not blank - at minimum "None formally considered"
 - Rationale explains reasoning, not just restates the decision
-- Made by names a person or role — not "the team" if a specific person decided
-- ADR has human-provided content in every section — not inferred by the agent
+- Made by names a person or role - not "the team" if a specific person decided
+- ADR has human-provided content in every section - not inferred by the agent
 
 ---
 
 ## What this skill does NOT do
 
-- Does not make decisions — records them
+- Does not make decisions - records them
 - Does not evaluate whether decisions were good
 - Does not replace story or epic artefacts
 - Does not create Jira tickets or Confluence pages
-- Does not generate ADR content from inference — substance must come from the human
+- Does not generate ADR content from inference - substance must come from the human

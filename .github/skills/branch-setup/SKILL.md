@@ -28,17 +28,17 @@ If not:
 
 ---
 
-## Step 1 — Read the DoR
+## Step 1 - Read the DoR
 
 Read the DoR artefact. Extract:
 
-- `[feature-slug]` — from the artefact path
-- `[story-slug]` — from the artefact path
+- `[feature-slug]` - from the artefact path
+- `[story-slug]` - from the artefact path
 - Branch name to create: `feature/[story-slug]`
 
 ---
 
-## Step 2 — Locate worktree directory
+## Step 2 - Locate worktree directory
 
 Check in priority order:
 
@@ -53,8 +53,8 @@ If neither exists, ask:
 
 > No worktree directory found. Where should worktrees be created?
 >
-> 1. `.worktrees/` — project-local, will be git-ignored
-> 2. `../worktrees/[project-name]/` — alongside the repo, no gitignore needed
+> 1. `.worktrees/` - project-local, will be git-ignored
+> 2. `../worktrees/[project-name]/` - alongside the repo, no gitignore needed
 >
 > Reply: 1 or 2
 
@@ -72,7 +72,7 @@ If NOT ignored:
 
 ---
 
-## Step 3 — Create worktree
+## Step 3 - Create worktree
 
 ```bash
 git worktree add [path]/[story-slug] -b feature/[story-slug]
@@ -81,12 +81,12 @@ cd [path]/[story-slug]
 
 ---
 
-## Step 4 — Install dependencies
+## Step 4 - Install dependencies
 
 Auto-detect project type and run setup:
 
 ```bash
-# Unix/macOS/Git Bash/WSL — adapt for PowerShell if running natively on Windows
+# Unix/macOS/Git Bash/WSL - adapt for PowerShell if running natively on Windows
 [ -f package.json ]      && npm install
 [ -f Cargo.toml ]        && cargo build
 [ -f requirements.txt ]  && pip install -r requirements.txt
@@ -96,7 +96,7 @@ Auto-detect project type and run setup:
 
 ---
 
-## Step 5 — Verify clean baseline
+## Step 5 - Verify clean baseline
 
 Run the project test suite:
 
@@ -106,7 +106,7 @@ npm test / cargo test / pytest / go test ./...
 
 **If tests fail:**
 
-> ❌ Baseline failing — [N] failures before any code is written.
+> ❌ Baseline failing - [N] failures before any code is written.
 >
 > [Show failures]
 >
@@ -148,7 +148,7 @@ Do not proceed past a failing baseline without explicit acknowledgement.
 
 ---
 
-## State update — mandatory final step
+## State update - mandatory final step
 
 > **Mandatory.** Do not close this skill or produce a closing summary without writing these fields. Confirm the write in your closing message: "Pipeline state updated ✅."
 
@@ -156,4 +156,4 @@ Update `.github/pipeline-state.json` in the **project repository** when the work
 
 - Set feature `stage: "branch-setup"`, `health: "green"`, `updatedAt: [now]`
 - Set each story in the feature to `stage: "branch-setup"`
-- If baseline tests fail: set `health: "red"`, `blocker: "Baseline tests failing — clean up before implementing"`
+- If baseline tests fail: set `health: "red"`, `blocker: "Baseline tests failing - clean up before implementing"`

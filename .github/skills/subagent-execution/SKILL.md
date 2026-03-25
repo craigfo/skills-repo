@@ -30,7 +30,7 @@ If not met:
 
 ## Core principle
 
-Fresh subagent per task + two-stage review (spec compliance â†’ code quality) = high quality, fast iteration.
+Fresh subagent per task + two-stage review (spec compliance → code quality) = high quality, fast iteration.
 
 **Why fresh subagents:**
 You delegate each task to an agent with precisely constructed context.

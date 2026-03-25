@@ -4,7 +4,7 @@ description: >
   Completes a development branch: runs final test verification, presents four
   structured options (merge locally, open draft PR, keep branch, discard),
   executes the chosen option, and cleans up the worktree. PRs are always opened
-  as drafts — never mark ready for review. Use when implementation is done and
+  as drafts - never mark ready for review. Use when implementation is done and
   /verify-completion has passed in this session.
 triggers:
   - "complete the branch"
@@ -28,7 +28,7 @@ If not:
 
 ---
 
-## Step 1 — Final test verification
+## Step 1 - Final test verification
 
 ```bash
 [test command]
@@ -48,7 +48,7 @@ Stop. Do not present options.
 
 ---
 
-## Step 2 — Determine base branch
+## Step 2 - Determine base branch
 
 Read `source_control.base_branch` from `.github/context.yml` if the file exists.
 If not present, detect from git:
@@ -61,7 +61,7 @@ Use the configured or detected base branch in all subsequent steps.
 
 ---
 
-## Step 3 — Present options
+## Step 3 - Present options
 
 ```
 Implementation complete. What would you like to do?
@@ -76,9 +76,9 @@ Reply: 1, 2, 3, or 4
 
 ---
 
-## Step 4 — Execute choice
+## Step 4 - Execute choice
 
-### Option 1 — Merge locally
+### Option 1 - Merge locally
 
 ```bash
 git checkout [base-branch]
@@ -97,7 +97,7 @@ Then: cleanup worktree (Step 5).
 
 ---
 
-### Option 2 — Push and open a draft PR (default)
+### Option 2 - Push and open a draft PR (default)
 
 ```bash
 git push -u origin feature/[story-slug]
@@ -152,7 +152,7 @@ Then: cleanup worktree (Step 5).
 
 ---
 
-### Option 3 — Keep as-is
+### Option 3 - Keep as-is
 
 > Branch `feature/[story-slug]` kept at [path].
 > Worktree preserved.
@@ -161,7 +161,7 @@ Do not cleanup worktree.
 
 ---
 
-### Option 4 — Discard
+### Option 4 - Discard
 
 **Confirm first:**
 
@@ -185,7 +185,7 @@ Then: cleanup worktree (Step 5).
 
 ---
 
-## Step 5 — Cleanup worktree
+## Step 5 - Cleanup worktree
 
 **For Options 1, 2, and 4 only:**
 
@@ -202,10 +202,10 @@ git worktree remove [worktree-path]
 
 | Option | Merge | Push | Draft PR | Keep worktree | Remove branch |
 |--------|-------|------|----------|---------------|---------------|
-| 1. Merge locally | ✓ | — | — | — | ✓ |
-| 2. Draft PR | — | ✓ | ✓ (draft) | — | — |
-| 3. Keep branch | — | — | — | ✓ | — |
-| 4. Discard | — | — | — | — | ✓ (force) |
+| 1. Merge locally | ✓ | - | - | - | ✓ |
+| 2. Draft PR | - | ✓ | ✓ (draft) | - | - |
+| 3. Keep branch | - | - | - | ✓ | - |
+| 4. Discard | - | - | - | - | ✓ (force) |
 
 ---
 
@@ -214,7 +214,7 @@ git worktree remove [worktree-path]
 **Never:**
 
 - Open a PR without /verify-completion passing in this session
-- Mark a PR as ready for review (always draft — merge is a human action)
+- Mark a PR as ready for review (always draft - merge is a human action)
 - Merge without verifying tests on the merged result
 - Delete work without explicit typed confirmation ("discard")
 - Force-push without explicit request
@@ -230,7 +230,7 @@ git worktree remove [worktree-path]
 
 ---
 
-## State update — mandatory final step
+## State update - mandatory final step
 
 > **Mandatory.** Do not close this skill or produce a closing summary without writing these fields. Confirm the write in your closing message: "Pipeline state updated ✅."
 
@@ -241,4 +241,4 @@ Update `.github/pipeline-state.json` in the **project repository** after the cho
 - **Merged locally:** set `stage: "branch-complete"`, `prStatus: "merged"`, `health: "green"`
 - **Branch kept / discarded:** set `stage: "verify-completion"` (no PR yet)
 
-**Human action note:** When a human merges the PR, update `prStatus: "merged"` in the state file, or run `/workflow` to reconcile — it will detect the merge from artefacts.
+**Human action note:** When a human merges the PR, update `prStatus: "merged"` in the state file, or run `/workflow` to reconcile - it will detect the merge from artefacts.

@@ -4,10 +4,10 @@ description: >
   Writes a failing test plan for a story that has passed /review. Produces TWO outputs:
   (1) a technical test plan for the coding agent and CI; (2) a plain-language AC
   verification script for human review before coding and smoke testing after merge.
-  Includes a test data strategy section â€” critical for payments and regulated systems.
+  Includes a test data strategy section — critical for payments and regulated systems.
   Use when someone says "write tests for", "create the test plan", "what tests do we
   need", or moves past a passed review. Requires a story artefact and passed review.
-  Tests are written to fail â€” TDD discipline enforced.
+  Tests are written to fail — TDD discipline enforced.
 triggers:
   - "write tests for"
   - "create the test plan"
@@ -30,8 +30,8 @@ Before asking anything, verify:
 
 If any condition is not met:
 
-> âŒ **Entry condition not met**
-> [Specific issue â€” e.g. "Review report not found. Run /review first."]
+> ❌ **Entry condition not met**
+> [Specific issue — e.g. "Review report not found. Run /review first."]
 >
 > Run /workflow to see the current pipeline state.
 
@@ -46,7 +46,7 @@ State what was found before asking anything:
 > **Review status:** PASS (run [N], [date])
 >
 > Ready to write the test plan for this story?
-> Reply: yes â€” or name a different story
+> Reply: yes — or name a different story
 
 ---
 
@@ -55,13 +55,13 @@ State what was found before asking anything:
 > **What environment and framework applies?**
 >
 > 1. Use what's configured for this repo (standard — no need to ask)
-> 2. Different stack for this story â€” I'll specify
+> 2. Different stack for this story — I'll specify
   1. Use what's configured for this repo (standard — no need to ask)
   2. Different stack for this story — I'll specify
 >
 > Reply: 1 or 2
 
-If 2 â€” ask:
+If 2 — ask:
 
 > **Specify the test framework and environment:**
 > (e.g. Jest + React Testing Library, pytest + FastAPI TestClient, JUnit + Mockito)
@@ -73,16 +73,16 @@ If 2 â€” ask:
 ## Step 3 â€” Test data strategy
 
 Ask this before writing any tests. Test data strategy shapes what tests are
-possible â€” and surfaces PCI/sensitivity constraints early.
+possible — and surfaces PCI/sensitivity constraints early.
 
 > **Where will test data come from for this story?**
 >
-> 1. Synthetic â€” generated in test setup, no real data involved
-> 2. Fixtures â€” static files committed to the test repo
-> 3. De-identified production data â€” scrubbed extract from real data
-> 4. Seeded database â€” test environment with known state
-> 5. Mocked external services â€” no real downstream calls
-> 6. Mixed â€” I'll describe which ACs need what
+> 1. Synthetic — generated in test setup, no real data involved
+> 2. Fixtures — static files committed to the test repo
+> 3. De-identified production data — scrubbed extract from real data
+> 4. Seeded database — test environment with known state
+> 5. Mocked external services — no real downstream calls
+> 6. Mixed — I'll describe which ACs need what
 >
 > Reply: 1, 2, 3, 4, 5, or 6
 
@@ -92,23 +92,23 @@ After answer, ask one follow-up if relevant:
 > **Is this data in PCI scope, or does it contain other sensitive fields?**
 > (e.g. PANs, CVVs, account numbers — or any sensitive identifiers relevant to your domain)
 >
-> 1. Yes â€” PCI or sensitivity constraints apply
-> 2. No â€” standard test data handling is fine
+> 1. Yes — PCI or sensitivity constraints apply
+> 2. No — standard test data handling is fine
 >
 > Reply: 1 or 2
 
 **If 1 is selected:**
 > **Who is responsible for providing the test data?**
-> 1. Self-contained â€” tests generate their own data in setup/teardown
+> 1. Self-contained — tests generate their own data in setup/teardown
 > 2. Platform team owns a shared test data set
-> 3. I need to create this â€” not yet available
+> 3. I need to create this — not yet available
 >
 > Reply: 1, 2, or 3
 
 Record the test data strategy in the plan. If test data is not yet available (3),
 flag it:
 
-> âš ï¸ **TEST DATA GAP:** Test data for [AC or test] is not yet available.
+> ⚠️ **TEST DATA GAP:** Test data for [AC or test] is not yet available.
 > This is a dependency before the coding agent can run the tests.
 > Add to /decisions as RISK-ACCEPT or resolve before running /definition-of-ready.
 
@@ -189,7 +189,7 @@ Display the AC list before writing tests. Confirm coverage expectations:
 > [+ any additional ACs]
 >
 > Any ACs you want to flag as potentially untestable before I start?
-> Reply: none â€” or flag specific ACs
+> Reply: none — or flag specific ACs
 
 If an untestable AC is flagged:
 
@@ -254,12 +254,12 @@ action, expected result, edge case flag.
 
 ### Integration tests
 
-Identify seams â€” where one component or layer hands off to another.
+Identify seams — where one component or layer hands off to another.
 Write integration tests for those handoffs specifically.
 
 ### NFR tests
 
-One test per NFR from the story. If NFRs says "None â€” confirmed", write no
+One test per NFR from the story. If NFRs says "None — confirmed", write no
 NFR tests and state this explicitly.
 
 ### Gap table
@@ -276,13 +276,13 @@ Save to `.github/artefacts/[feature]/verification-scripts/[story-slug]-verificat
 ### Translation rules
 
 **From technical:** `expect(getExportFilename('csv')).toBe('canvas-export-2026-03-10.csv')`
-**To human:** "Click Export CSV. A file should download. Check the filename â€” it should
+**To human:** "Click Export CSV. A file should download. Check the filename — it should
 be `canvas-export-` followed by today's date, ending in `.csv`."
 
-- Use "click", "type", "press" â€” not "navigate to" or "interact with"
+- Use "click", "type", "press" — not "navigate to" or "interact with"
 - Name UI elements exactly as they appear on screen
 - Quote expected messages verbatim
-- Describe file contents concretely â€” not "the file should be correct"
+- Describe file contents concretely — not "the file should be correct"
 - One scenario per AC, plus one for each acknowledged test gap
 - Each scenario completable in under 2 minutes
 - Reset instructions between scenarios if they share state
@@ -291,33 +291,33 @@ be `canvas-export-` followed by today's date, ending in `.csv`."
 
 Write it so it works equally well for all three without modification:
 
-1. **Pre-code sign-off** â€” domain expert confirms the described behaviour is correct
-   before the coding agent implements. Reviewing the *specification*, not the code.
-2. **Post-merge smoke test** â€” confirms shipped behaviour matches the script.
-   Reviewing the *implementation* against the specification.
+1. **Pre-code sign-off** — domain expert confirms the described behaviour is correct
+  before the coding agent implements. Reviewing the *specification*, not the code.
+2. **Post-merge smoke test** — confirms shipped behaviour matches the script.
+  Reviewing the *implementation* against the specification.
 3. **Delivery review** — structured walkthrough for stakeholders (sprint demo, iteration review, or equivalent).
 
 ---
 
 ## Completion output
 
-> **Test plan complete for [story title] âœ…**
+> **Test plan complete for [story title] ✅**
 >
 > Technical test plan: `.github/artefacts/[feature]/test-plans/[story-slug]-test-plan.md`
 > [n] unit | [n] integration | [n] NFR tests | [n] ACs covered
-> [If gaps:] âš ï¸ [n] gap(s) â€” represented as manual scenarios
+> [If gaps:] ⚠️ [n] gap(s) — represented as manual scenarios
 >
 > Verification script: `.github/artefacts/[feature]/verification-scripts/[story-slug]-verification.md`
 > [n] scenarios | [n] edge cases | [n] manual gap scenarios
 >
-> Test data: [Synthetic / ready / âš ï¸ gap â€” see plan]
+> Test data: [Synthetic / ready / ⚠️ gap — see plan]
 >
 > **Recommended next step:**
 > Share the verification script with a domain expert to confirm the described
-> behaviour is correct â€” this is the human gate before coding begins.
+> behaviour is correct — this is the human gate before coding begins.
 >
 > Ready to run /definition-of-ready for this story?
-> Reply: yes â€” or review the plan first
+> Reply: yes — or review the plan first
 
 ---
 
@@ -338,7 +338,7 @@ Write it so it works equally well for all three without modification:
 **Verification script:**
 - Every AC has a scenario
 - Every test gap has a manual scenario
-- Plain language throughout â€” no technical terms
+- Plain language throughout — no technical terms
 - Expected outcomes quote exact messages and describe exact contents
 - Reset instructions present if scenarios share state
 - Setup section clear enough for someone unfamiliar with the system
@@ -347,9 +347,9 @@ Write it so it works equally well for all three without modification:
 
 ## What this skill does NOT do
 
-- Does not implement tests â€” writes specifications for the coding agent
-- Does not run tests â€” implementation does not exist yet
-- Does not source test data â€” identifies what is needed and flags gaps
+- Does not implement tests — writes specifications for the coding agent
+- Does not run tests — implementation does not exist yet
+- Does not source test data — identifies what is needed and flags gaps
 - Does not replace a full QA test strategy
 - Does not configure E2E tooling — but detects when E2E tests are required and blocks /definition-of-ready if E2E tooling is absent and the gap cannot be accepted with a strong manual scenario
 

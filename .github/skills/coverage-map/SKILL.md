@@ -49,7 +49,7 @@ For each story with a test plan, parse:
 
 1. **AC coverage table** from the test plan `.md` file
    - Columns: AC, Description, Unit, Integration, E2E, Manual, Gap type, Risk
-   - If the table uses the old format (Unit tests / Integration tests / NFR tests / Manual), adapt it gracefully — treat any `—` value as uncovered for that column
+  - If the table uses the old format (Unit tests / Integration tests / NFR tests / Manual), adapt it gracefully — treat any `—` value as uncovered for that column
 2. **Gap table** from the test plan
    - Columns: Gap, AC, Gap type, Reason, Handling
 3. **Story title** from the story artefact
