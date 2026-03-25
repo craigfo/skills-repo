@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pipeline flow — diagram preview</title>
+<style>
+  body { background: #0f172a; color: #e2e8f0; font-family: system-ui, sans-serif; padding: 40px; margin: 0; }
+  h1 { font-size: 18px; color: #94a3b8; margin-bottom: 4px; }
+  p  { font-size: 13px; color: #64748b; margin: 0 0 32px; }
+  svg { display: block; }
+  .outer-label { font: 700 13px system-ui; fill: #64748b; letter-spacing: .04em; text-transform: uppercase; }
+  .inner-label { font: 700 12px system-ui; fill: #64748b; letter-spacing: .04em; text-transform: uppercase; }
+  .node-text   { font: 600 12px system-ui; fill: #fff; text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
+  .node-sub    { font: 400 10px system-ui; fill: #cbd5e1; text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
+  .edge-label  { font: 400 10px system-ui; fill: #94a3b8; text-anchor: middle; }
+</style>
+</head>
+<body>
+<h1>Simple pipeline flow — draft for README review</h1>
+<p>Inner + outer loop version · delete this file once approved</p>
+
+<svg width="860" height="860" viewBox="0 0 860 860" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#475569"/>
+    </marker>
+    <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#166534"/>
+    </marker>
+    <marker id="arr-amber" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#92400e"/>
+    </marker>
+    <marker id="arr-white" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#e2e8f0"/>
+    </marker>
+  </defs>
+
+  <!-- ── Outer loop ring ──────────────────────────────────────────── -->
+  <circle cx="430" cy="430" r="340" fill="none" stroke="#1e3a5f" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="430" y="76" text-anchor="middle" class="outer-label">◯ Outer loop — define · release · learn</text>
+
+  <!-- ── Inner loop ring ──────────────────────────────────────────── -->
+  <circle cx="430" cy="430" r="155" fill="none" stroke="#14532d" stroke-width="2" stroke-dasharray="5 3"/>
+  <text x="430" y="292" text-anchor="middle" class="inner-label">↺ inner loop (per story)</text>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       OUTER NODE POSITIONS  (clock positions on r=340)
+       12 o'clock = top = 430,90   going clockwise
+  ════════════════════════════════════════════════════════════════ -->
+
+  <!-- 12 o'clock — /discovery  (430, 90) -->
+  <!-- 2 o'clock  — /benefit-metric  (~590, 160) -->
+  <!-- 4 o'clock  — /definition  (~720, 330) -->
+  <!-- 5 o'clock  — GATE  (~720, 510) — entry to inner -->
+  <!-- 7 o'clock  — /definition-of-done  (~570, 680) — exit from inner -->
+  <!-- 9 o'clock  — /release  (~270, 680) -->
+  <!-- 11 o'clock — Measure/learn  (~140, 330) -->
+
+  <!-- Outer loop flow arrows (arc segments drawn as paths) -->
+  <!-- discovery → benefit-metric -->
+  <path d="M 480,108 A 340,340 0 0,1 583,164" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- benefit-metric → definition -->
+  <path d="M 617,192 A 340,340 0 0,1 703,322" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- definition → GATE -->
+  <path d="M 716,370 A 340,340 0 0,1 716,490" fill="none" stroke="#92400e" stroke-width="2" marker-end="url(#arr-amber)"/>
+  <!-- exit of inner → definition-of-done -->
+  <path d="M 538,588 A 340,340 0 0,1 583,666" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- definition-of-done → release -->
+  <path d="M 530,698 A 340,340 0 0,1 330,698" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- release → measure/learn -->
+  <path d="M 277,666 A 340,340 0 0,1 157,490" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- measure/learn → discovery -->
+  <path d="M 144,370 A 340,340 0 0,1 380,92" fill="none" stroke="#475569" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr)"/>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       OUTER NODES
+  ════════════════════════════════════════════════════════════════ -->
+
+  <!-- /discovery  12 o'clock -->
+  <rect x="352" y="78" width="156" height="44" rx="6" fill="#1e40af" stroke="#1e3a8a"/>
+  <text x="430" y="97" class="node-text">/discovery</text>
+  <text x="430" y="112" class="node-sub">Structure the problem</text>
+
+  <!-- /benefit-metric  ~2 o'clock -->
+  <rect x="524" y="148" width="156" height="44" rx="6" fill="#1e40af" stroke="#1e3a8a"/>
+  <text x="602" y="167" class="node-text">/benefit-metric</text>
+  <text x="602" y="182" class="node-sub">Define outcomes</text>
+
+  <!-- /definition  ~4 o'clock -->
+  <rect x="658" y="308" width="140" height="44" rx="6" fill="#1e40af" stroke="#1e3a8a"/>
+  <text x="728" y="327" class="node-text">/definition</text>
+  <text x="728" y="342" class="node-sub">Epics + stories</text>
+
+  <!-- Quality GATE  ~5 o'clock — entry point to inner loop -->
+  <rect x="658" y="488" width="140" height="52" rx="6" fill="#78350f" stroke="#92400e" stroke-width="2"/>
+  <text x="728" y="507" class="node-text">Quality gates</text>
+  <text x="728" y="521" class="node-sub">/review · /test-plan</text>
+  <text x="728" y="533" class="node-sub">/definition-of-ready</text>
+
+  <!-- /definition-of-done  ~7 o'clock -->
+  <rect x="492" y="672" width="160" height="44" rx="6" fill="#1e40af" stroke="#1e3a8a"/>
+  <text x="572" y="691" class="node-text">/definition-of-done</text>
+  <text x="572" y="706" class="node-sub">· /trace</text>
+
+  <!-- /release  ~9 o'clock -->
+  <rect x="210" y="672" width="120" height="44" rx="6" fill="#0f766e" stroke="#0d544c"/>
+  <text x="270" y="687" class="node-text">/release</text>
+  <text x="270" y="702" class="node-sub">Deploy</text>
+
+  <!-- Measure/learn  ~11 o'clock -->
+  <rect x="62" y="488" width="140" height="44" rx="6" fill="#1e293b" stroke="#475569"/>
+  <text x="132" y="504" class="node-text">📊 Measure</text>
+  <text x="132" y="519" class="node-sub">learn · next feature</text>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       ENTRY / EXIT connectors between outer and inner loop
+  ════════════════════════════════════════════════════════════════ -->
+
+  <!-- GATE → inner entry (I1)  -->
+  <line x1="658" y1="514" x2="572" y2="480" stroke="#92400e" stroke-width="2" marker-end="url(#arr-amber)"/>
+  <text x="622" y="492" class="edge-label">story ready</text>
+
+  <!-- inner exit (I3) → definition-of-done -->
+  <line x1="542" y1="560" x2="548" y2="672" stroke="#166534" stroke-width="2" marker-end="url(#arr-green)"/>
+  <text x="520" y="622" class="edge-label">PR merged</text>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       INNER LOOP NODES  (triangle: I1 top-right, I2 bottom, I3 top-left)
+  ════════════════════════════════════════════════════════════════ -->
+
+  <!-- I1 /branch-setup + /implementation-plan  top-right of inner -->
+  <rect x="468" y="340" width="152" height="50" rx="6" fill="#166534" stroke="#14532d" stroke-width="1.5"/>
+  <text x="544" y="358" class="node-text">/branch-setup</text>
+  <text x="544" y="372" class="node-sub">/implementation-plan</text>
+  <text x="544" y="384" class="node-sub">↓</text>
+
+  <!-- I2 /subagent-execution  bottom of inner -->
+  <rect x="352" y="448" width="156" height="50" rx="6" fill="#166534" stroke="#14532d" stroke-width="1.5"/>
+  <text x="430" y="466" class="node-text">/subagent-execution</text>
+  <text x="430" y="480" class="node-sub">or /tdd task-by-task</text>
+
+  <!-- I3 /verify-completion  top-left of inner -->
+  <rect x="240" y="340" width="152" height="50" rx="6" fill="#166534" stroke="#14532d" stroke-width="1.5"/>
+  <text x="316" y="358" class="node-text">/verify-completion</text>
+  <text x="316" y="372" class="node-sub">/branch-complete</text>
+  <text x="316" y="384" class="node-sub">Draft PR</text>
+
+  <!-- Inner loop arrows: I1→I2→I3 (clockwise inside) -->
+  <path d="M 544,390 C 540,430 490,448 508,473" fill="none" stroke="#166534" stroke-width="1.5" marker-end="url(#arr-green)"/>
+  <path d="M 352,473 C 330,448 316,420 316,390" fill="none" stroke="#166534" stroke-width="1.5" marker-end="url(#arr-green)"/>
+
+  <!-- /systematic-debugging support node -->
+  <rect x="352" y="540" width="156" height="44" rx="6" fill="#3b0764" stroke="#4c1d95"/>
+  <text x="430" y="559" class="node-text">🔧 /systematic-debugging</text>
+  <text x="430" y="573" class="node-sub">/implementation-review</text>
+
+  <!-- I2 ↔ support -->
+  <path d="M 430,498 L 430,540" fill="none" stroke="#6d28d9" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+  <path d="M 410,540 L 410,498" fill="none" stroke="#6d28d9" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+  <text x="450" y="523" class="edge-label">stuck</text>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       ENTRY POINT — idea at top
+  ════════════════════════════════════════════════════════════════ -->
+  <rect x="358" y="20" width="144" height="36" rx="18" fill="#1e293b" stroke="#475569"/>
+  <text x="430" y="42" class="node-text">💡 Idea or problem</text>
+  <line x1="430" y1="56" x2="430" y2="78" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+
+</svg>
+
+</body>
+</html>
+
+<div class="mermaid">
+flowchart TD
+    IDEA(["💡 Idea or problem"])
+
+    subgraph OUTER["◯  Outer loop — define"]
+        direction LR
+        D1["/discovery\nStructure the problem"]
+        D2["/benefit-metric\nDefine outcomes"]
+        D3["/definition\nEpics + stories"]
+        GATE["Quality gates\n/review · /test-plan\n/definition-of-ready"]
+        D1 --> D2 --> D3 --> GATE
+    end
+
+    subgraph INNER["↺  Inner loop — build · verify  (repeats per story)"]
+        direction LR
+        I1["/branch-setup\n/implementation-plan"]
+        I2["/subagent-execution\nor /tdd task-by-task"]
+        I3["/verify-completion\n/branch-complete\nDraft PR"]
+        SDBG["🔧 /systematic-debugging\n/implementation-review"]
+        I1 --> I2 --> I3
+        I2 -.->|"stuck"| SDBG
+        SDBG -.-> I2
+    end
+
+    DOD["/definition-of-done · /trace"]
+    REL["/release"]
+    LEARN(["📊 Measure · learn\n→ repeat outer loop for next feature"])
+
+    IDEA --> D1
+    GATE -->|"story ready"| I1
+    I3 -->|"PR merged"| DOD --> REL --> LEARN
+
+    classDef skill fill:#1e40af,stroke:#1e3a8a,color:#fff
+    classDef gate fill:#92400e,stroke:#78350f,color:#fff
+    classDef loop fill:#166534,stroke:#14532d,color:#fff
+    classDef idea fill:#1e293b,stroke:#475569,color:#94a3b8
+    classDef support fill:#4c1d95,stroke:#3b0764,color:#fff
+
+    class D1,D2,D3,DOD,REL skill
+    class GATE gate
+    class I1,I2,I3 loop
+    class IDEA,LEARN idea
+    class SDBG support
+</div>
+
+<script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+</body>
+</html>

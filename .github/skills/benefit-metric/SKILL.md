@@ -6,7 +6,7 @@ description: >
   discovery is approved and someone says "define the metrics", "what does success
   look like", "how will we measure this", or proceeds past discovery.
   Detects meta-benefit situations (pilot, tooling test, process experiment) and
-  separates them from product metrics. Does not write stories â€” that is /definition.
+  separates them from product metrics. Does not write stories — that is /definition.
 triggers:
   - "define the metrics"
   - "what does success look like"
@@ -23,7 +23,7 @@ triggers:
 Before asking anything, verify:
 
 1. Discovery artefact exists at `.github/artefacts/[feature]/discovery.md`
-2. Status field reads "Approved" â€” not "Draft"
+2. Status field reads "Approved" — not "Draft"
 3. Discovery contains problem statement, MVP scope, and directional success indicators
 
 Also check for reference materials at `.github/artefacts/[feature]/reference/`.
@@ -41,15 +41,15 @@ If found, note it before starting:
 
 If not met (entry condition):
 
-> âŒ **Entry condition not met**
-> [Specific issue â€” e.g. "Discovery status is still 'Draft'. A human needs to
+> ❌ **Entry condition not met**
+> [Specific issue — e.g. "Discovery status is still 'Draft'. A human needs to
 > approve it before metrics can be defined."]
 >
 > Run /workflow to see the current pipeline state.
 
 ---
 
-## Step 1 â€” Meta-benefit check
+## Step 1 Meta-benefit check
 
 Read the discovery artefact. Check for signals that this initiative is also
 testing a hypothesis about tooling, process, or team capability:
@@ -59,26 +59,26 @@ testing a hypothesis about tooling, process, or team capability:
 
 If detected:
 
-> **Meta-benefit detected â€” confirm before proceeding.**
+> **Meta-benefit detected  confirm before proceeding.**
 >
 > This initiative appears to be testing [tooling / process / capability] as well
 > as delivering user value. That means two types of metrics:
 >
-> - **Product metrics** â€” user outcomes (conversion, time saved, error rate)
-> - **Meta metrics** â€” what we learn about [the pilot / tool / approach]
+> - **Product metrics** — user outcomes (conversion, time saved, error rate)
+> - **Meta metrics** — what we learn about [the pilot / tool / approach]
 >
-> If meta-learning is the primary goal, product metrics may not be hit â€” and that
+> If meta-learning is the primary goal, product metrics may not be hit — and that
 > needs to be explicit before stories are written.
 >
 > Is this a meta-benefit situation?
-> 1. Yes â€” define both product and meta metrics separately
-> 2. No â€” standard product metrics only
+> 1. Yes — define both product and meta metrics separately
+> 2. No — standard product metrics only
 >
 > Reply: 1 or 2
 
 ---
 
-## Step 2 â€” Confirm the directional indicators to build from
+## Step 2 — Confirm the directional indicators to build from
 
 State what was found:
 
@@ -90,18 +90,18 @@ State what was found:
 > I'll turn each of these into a measurable metric with baseline, target, and
 > feedback loop. Any you want to add, remove, or reframe before I start?
 >
-> Reply: looks good â€” or adjust [indicator]
+> Reply: looks good — or adjust [indicator]
 
 ---
 
-## Step 3 â€” Work through each metric
+## Step 3 — Work through each metric
 
 For each directional indicator, ask:
 
-> **[Indicator] â€” let's define the metric.**
+> **[Indicator] — let's define the metric.**
 >
 > 1. What specifically are we measuring?
->    (Not a proxy â€” the actual thing. E.g. "time from application start to first
+>    (Not a proxy — the actual thing. E.g. "time from application start to first
 >    decision" not "speed")
 >
 > Reply: name the metric
@@ -111,19 +111,19 @@ Then:
 > 2. What is the baseline today?
 >    (If unknown: how will we establish it and by when?)
 >
-> Reply: state the baseline â€” or "unknown, will measure in first [n] weeks"
+> Reply: state the baseline — or "unknown, will measure in first [n] weeks"
 
 Then:
 
 > 3. What is the target?
->    (Specific and directional â€” "under 15 minutes" not "faster")
+>    (Specific and directional — "under 15 minutes" not "faster")
 >
 > Reply: state the target
 
 Then:
 
 > 4. What is the minimum validation signal?
->    (The threshold below which we stop or pivot â€” lower than the full target)
+>    (The threshold below which we stop or pivot — lower than the full target)
 >
 > Reply: state the minimum signal
 
@@ -155,7 +155,7 @@ Before finalising each metric, apply this test silently:
 - Could you measure this today without building anything?
   (If yes, it might be a baseline, not a metric.)
 - Could two people measure this and get the same answer?
-  (If no, it's too subjective â€” tighten the definition.)
+  (If no, it's too subjective — tighten the definition.)
 - Is the target specific enough that there's no debate about whether you hit it?
   (If no, tighten it.)
 
@@ -167,7 +167,7 @@ If a metric fails any check, raise it before finalising:
 > Suggested adjustment: [concrete alternative]
 >
 > Use my suggestion, or adjust yourself?
-> Reply: use suggestion â€” or [adjusted version]
+> Reply: use suggestion — or [adjusted version]
 
 ---
 
@@ -187,29 +187,29 @@ explained as unknown.
 > Baselines established: [n of n / n TBD]
 >
 > Before proceeding to /definition:
-> Confirm these metrics and targets are agreed with relevant stakeholders â€”
+> Confirm these metrics and targets are agreed with relevant stakeholders —
 > these are the contract the pipeline is accountable to. Stories must trace
 > to these metrics, and /definition-of-done checks against them.
 >
 > Ready to run /definition?
-> Reply: yes â€” or I need to confirm metrics first
+> Reply: yes — or I need to confirm metrics first
 
 ---
 
 ## Quality checks before outputting
 
 - Every metric has a baseline or an explicit plan to establish one
-- Every target is specific and directional â€” not "faster", "better", "more"
+- Every target is specific and directional — not "faster", "better", "more"
 - Minimum validation signal is lower than the full target
 - Feedback loop names who measures, when, and what happens if signal not met
 - Meta benefits and product benefits separated if both present
-- No metric is feature delivery ("metric: export button built") â€” outcomes not outputs
+- No metric is feature delivery ("metric: export button built") — outcomes not outputs
 
 ---
 
 ## What this skill does NOT do
 
-- Does not write stories or epics â€” that is /definition
+- Does not write stories or epics — that is /definition
 - Does not define acceptance criteria â€” those live on stories
 - Does not replace a full OKR or KPI framework
 - Does not update the discovery artefact

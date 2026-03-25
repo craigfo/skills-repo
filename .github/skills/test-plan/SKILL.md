@@ -56,6 +56,8 @@ State what was found before asking anything:
 >
 > 1. Use what's configured for this repo (standard — no need to ask)
 > 2. Different stack for this story â€” I'll specify
+  1. Use what's configured for this repo (standard — no need to ask)
+  2. Different stack for this story — I'll specify
 >
 > Reply: 1 or 2
 

@@ -34,10 +34,10 @@ Fresh subagent per task + two-stage review (spec compliance â†’ code qualit
 
 **Why fresh subagents:**
 You delegate each task to an agent with precisely constructed context.
-They inherit nothing from this session â€” you give them exactly what they need.
+They inherit nothing from this session — you give them exactly what they need.
 This prevents context pollution and keeps each task focused.
 
-The reviewer subagents also receive precisely constructed context â€” not your session history.
+The reviewer subagents also receive precisely constructed context — not your session history.
 This keeps reviewers objective.
 
 ---

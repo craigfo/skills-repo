@@ -186,6 +186,7 @@
       "slug": "customer-export-api-v2",
       "name": "Customer Export API v2",
       "track": "standard",
+      "complianceProfile": "regulated",
       "team": "Team Eta",
       "stage": "implementation-plan",
       "health": "green",
@@ -303,6 +304,7 @@
       "slug": "self-serve-access-requests",
       "name": "Self-Serve Access Requests",
       "track": "standard",
+      "complianceProfile": "regulated",
       "team": "Team Gamma",
       "stage": "verify-completion",
       "health": "green",
@@ -381,6 +383,42 @@
       "updatedAt": "2026-03-21T08:15:00Z",
       "blocker": "Open spike: unknown token handoff contract to downstream systems",
       "epics": []
+    },
+    {
+      "slug": "payments-kms-key-rotation",
+      "name": "Payments KMS Key Rotation Controls",
+      "track": "standard",
+      "complianceProfile": "regulated",
+      "team": "Team Lambda",
+      "stage": "definition-of-ready",
+      "health": "amber",
+      "updatedAt": "2026-03-21T07:40:00Z",
+      "blocker": "Security sign-off outstanding for key rotation runbook",
+      "epics": [
+        {
+          "slug": "kms-rotation-controls",
+          "name": "KMS Rotation Controls",
+          "status": "in-progress",
+          "stories": [
+            {
+              "slug": "automated-kms-rotation-job",
+              "name": "Automated KMS Rotation Job",
+              "stage": "definition-of-ready",
+              "health": "amber",
+              "reviewStatus": "passed",
+              "highFindings": 0,
+              "testPlan": { "status": "written", "totalTests": 7, "passing": 0 },
+              "dorStatus": "blocked",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 4,
+              "releaseReady": false,
+              "tasks": []
+            }
+          ]
+        }
+      ]
     },
     {
       "slug": "customer-preferences-ui",
