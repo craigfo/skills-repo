@@ -142,8 +142,12 @@ When reviewing artefacts, check them against the template — missing fields are
 
 All pipeline artefacts are saved to `artefacts/[feature-slug]/`:
 
+**Naming convention:** Feature folders follow the pattern `YYYY-MM-DD-[feature-slug]`
+where the date is the discovery start date. Example: `artefacts/2025-07-15-payments-fraud-detection/`.
+This keeps features in chronological order. The convention is established during `/discovery`.
+
 ```
-artefacts/[feature-slug]/
+artefacts/[YYYY-MM-DD-feature-slug]/
   reference/
     reference-index.md            ← index of all uploaded source documents
     [scoping-doc.pdf / .pptx / .docx ...]

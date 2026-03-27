@@ -60,8 +60,40 @@ Then ask:
 
 ## Route selection — ask before routing
 
-When a new request comes in, assess it before routing.
-Ask this before presenting any pipeline guidance:
+When a new request comes in, assess the complexity BEFORE presenting pipeline options:
+
+**Complexity pre-assessment:**
+
+> **Quick scope check before I route this:**
+>
+> 1. How many engineers will work on this? (1 / small team / multiple teams)
+> 2. Is the problem clearly understood, or are there genuine unknowns?
+> 3. Is this one coherent feature, or multiple features across multiple epics?
+>
+> Reply: answer briefly — or skip and I'll route based on what I can infer
+
+**Routing outcomes from complexity assessment:**
+
+| Signal | Route |
+|--------|-------|
+| 1 engineer, clear problem, single small story | **Micro-track:** /test-plan → /definition-of-ready → coding agent |
+| Clear problem, standard scope, 1-3 stories | **Standard pipeline:** full step sequence |
+| Multiple unknowns, large scope, or 4+ stories | **Complex track:** /spike for unknowns first, then /programme if multi-team |
+
+**Micro-track:**
+> Routing you to micro-track — single story, no discovery needed.
+> Path: describe the change → /test-plan → /definition-of-ready → coding agent
+> Reply: yes — or wait, I need to do proper discovery first
+
+**Complex track signals:**
+> This looks complex. Before routing, confirm:
+> - Are there genuine unknowns that need /spike before any stories are written?
+> - Is this multi-team work that needs /programme?
+> Reply: spike first / programme / no, standard pipeline is fine
+
+---
+
+**Standard route selector:** ask when complexity assessment doesn't determine a clear path.
 
 > **What type of work is this?**
 >
@@ -155,6 +187,7 @@ Notes:
 Step  Skill                  Entry condition                   Exit condition
 ────────────────────────────────────────────────────────────────────────────
 1     /discovery             Raw idea or problem exists        Artefact approved
+1a    /clarify               Discovery draft exists            Discovery sharpened + approved
 2     /benefit-metric        Discovery approved                Metrics defined + active
 3     /definition            Benefit-metric active             Epics + stories written
 4     /review                Stories exist                     No HIGH findings remain
@@ -170,6 +203,10 @@ Step  Skill                  Entry condition                   Exit condition
 8     /definition-of-done    PR merged                         AC coverage confirmed
 9     /trace                 On-demand or CI trigger           Chain health reported
 ```
+
+**Note:** `/clarify` is optional but recommended when a discovery artefact is vague,
+scope is unclear, or the team disagrees on MVP boundary. Safe to run multiple times.
+Runs within Step 1 — does not advance the pipeline stage on its own.
 
 **Support skills available throughout the inner loop:**
 `/tdd` — RED-GREEN-REFACTOR enforcement per task

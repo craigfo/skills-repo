@@ -120,6 +120,28 @@ For each story with a test plan, check the gap table for entries with gap type
 List any spikes with no outcome artefact — these represent known unknowns
 still unresolved.
 
+**NFR orphan check:**
+If `artefacts/[feature]/nfr-profile.md` exists:
+- Check each NFR in the profile has at least one story with a matching NFR reference
+- Check each story's NFR field references are resolvable in the profile
+- Check all compliance NFRs with named clauses have documented sign-off (either in
+  the DoR artefact or the NFR profile itself)
+
+For each orphaned NFR (in the profile but not in any story):
+→ Flag as MEDIUM finding: "NFR '[name]' is defined in nfr-profile.md but not
+  referenced in any story — it may not be tested or verified."
+
+For each NFR in a story not in the profile:
+→ Flag as LOW finding: "Story [slug] references NFR '[name]' not in nfr-profile.md —
+  consider adding it to the profile for traceability."
+
+For each compliance NFR without sign-off:
+→ Flag as HIGH finding if that NFR has a named regulatory clause.
+
+If `nfr-profile.md` does not exist and any story has NFRs defined:
+→ Flag as MEDIUM finding: "No nfr-profile.md found but story NFRs are present —
+  run /definition Step 7 to generate the profile."
+
 **Architecture compliance check:**
 If `.github/architecture-guardrails.md` exists:
 - Each story's Architecture Constraints field references applicable ADRs or
@@ -151,6 +173,53 @@ When triggered on PR open, post a condensed comment:
 > **Trace check**
 > Chain: ✅ Healthy / ⚠️ [n] warnings / ❌ [n] broken links
 > [If issues:] Full report: `artefacts/[feature]/trace/[date]-trace.md`
+
+### Setting up CI integration
+
+The trace validation script (`scripts/validate-trace.sh`) is CI-platform agnostic.
+Read `context.yml: runtime.ci` and set up accordingly:
+
+**GitHub Actions** (`ci: github-actions`):
+Copy `.github/workflows/trace-validation.yml` from the skills repo into your repo.
+The install script does this automatically when `ci: github-actions` is detected.
+
+**Jenkins / CloudBees** (`ci: jenkins`):
+Add a stage to your `Jenkinsfile`:
+```groovy
+stage('Trace Validation') {
+    when { changeRequest() }
+    steps {
+        sh 'bash scripts/validate-trace.sh --ci'
+        archiveArtifacts artifacts: 'trace-validation-report.json', allowEmptyArchive: true
+    }
+}
+```
+
+**GitLab CI** (`ci: gitlab-ci`):
+```yaml
+trace-validation:
+  stage: validate
+  script: bash scripts/validate-trace.sh --ci
+  artifacts:
+    paths: [trace-validation-report.json]
+    when: always
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+```
+
+**Azure Pipelines** (`ci: azure-pipelines`):
+```yaml
+- task: Bash@3
+  displayName: 'Trace validation'
+  condition: eq(variables['Build.Reason'], 'PullRequest')
+  inputs:
+    targetType: inline
+    script: bash scripts/validate-trace.sh --ci
+```
+
+**Local / no CI** (`ci: none`):
+Run manually: `bash scripts/validate-trace.sh` before opening any PR.
+Add to a pre-push git hook if you want it enforced locally.
 
 ---
 

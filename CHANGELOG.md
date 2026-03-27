@@ -4,6 +4,71 @@ All notable changes to this repository will be documented in this file.
 
 ## [Unreleased]
 
+---
+
+## [0.2.0] — 2026-03-28
+
+### Added — Feature additions batch (`a94faa6`, `4dec711`, `d104381`, `6f40c2f`)
+
+#### F1 — Standards injection before DoR
+- Created `.github/standards/index.yml` — maps standards files to domains (API, data, auth, payments, etc.)
+- Updated `/definition-of-ready/SKILL.md` with a **Standards injection** section: reads story domain tags, queries `index.yml`, and injects matching standards files into the coding agent instructions block
+- Updated `/bootstrap/SKILL.md` to scaffold the `standards/` directory and starter `index.yml` on init
+
+#### F2 — `/levelup` retrospective extraction skill
+- New skill: `.github/skills/levelup/SKILL.md` — reads the completed artefact chain post-merge and extracts reusable patterns, ADRs, and copilot-instructions updates. Entry condition: merged PR + completed `/trace` report
+- Added `[ ] /levelup run post-merge` checkbox to `.github/pull_request_template.md`
+
+#### F3 — Timestamped per-feature artefact structure
+- Enforced `artefacts/YYYY-MM-DD-{feature-slug}/` naming convention across `/bootstrap`, `/discovery`, and all downstream skills
+- Updated `/discovery/SKILL.md` to create the timestamped folder as its first output
+- Updated `copilot-instructions.md` artefact storage section to document the convention with a worked example
+
+#### F4 — Structured `/spike` output format
+- New template: `.github/templates/spike-output.md` — structured fields: uncertainty addressed, options evaluated, recommendation, constraints confirmed, discovery fields resolved, remaining unknowns
+- Updated `/spike/SKILL.md`: Step 0 reads the parent discovery artefact to identify the specific unknowns the spike is resolving; added explicit **Discovery handoff** step that maps spike findings back to open fields in `discovery.md`; spike output saved to `artefacts/[feature]/spikes/[spike-slug]-output.md`
+
+#### F5 — Distribution mechanism (install scripts)
+- New file: `config.yml` — install profile config defining default options, required placeholders, and included skill set
+- New script: `scripts/install.sh` — bash installer for Linux/macOS; copies all skills, templates, standards, and product context to a target repo; conditionally copies the GitHub Actions trace-validation workflow only when the target repo's `context.yml` declares `ci: github-actions`
+- New script: `scripts/install.ps1` — PowerShell equivalent for Windows; same conditional CI logic
+
+#### F6 — Persistent product context layer
+- New directory: `.github/product/` with four starter files: `mission.md`, `roadmap.md`, `tech-stack.md`, `constraints.md`
+- Updated `/discovery/SKILL.md` to read `product/` files at session start for scope validation and constraint pre-population
+- Updated `/benefit-metric/SKILL.md` to read `mission.md` and `roadmap.md` when evaluating Tier 1 metric candidates
+- Updated `/bootstrap/SKILL.md` to scaffold the `product/` directory with annotated starters and prompt for initial population
+
+#### F7 — Scale-adaptive complexity routing
+- Updated `/workflow/SKILL.md` with a **Complexity assessment** section: classifies work as micro, standard, or complex based on change surface area, systems touched, regulatory scope, and AC requirement. Routes micro → skip to DoR; standard → full pipeline; complex → full pipeline + mandatory ADR + EA registry check + auto-trace post-merge
+
+#### F8 — `/clarify` skill
+- New skill: `.github/skills/clarify/SKILL.md` — runs between `/discovery` and `/benefit-metric`; identifies scope boundary, integration assumption, constraint gap, and user journey questions; asks max 3–5 targeted questions; updates the discovery artefact with answers; blocks progress if blocking questions remain unresolved
+- Updated `/workflow/SKILL.md` to include `/clarify` as Step 1a after discovery approval (skippable on explicit override)
+
+#### F9 — Outer-loop CI traceability enforcement
+- New workflow: `.github/workflows/trace-validation.yml` — GitHub Actions CI check on PR open/update; validates artefact folder presence, story references, AC-to-test-plan coverage, benefit-metric Tier 1 presence, and DoR hard-blocks
+- New script: `scripts/validate-trace.sh` — standalone bash + Python3 trace validation script; runs same 5 checks as the CI workflow; supports `--ci` flag for machine-readable JSON report output and `--check [name]` for single-check runs
+- New config: `.github/trace-validation.yml` — per-check `hard_fail` toggles and PR label exemptions (e.g. `hotfix`, `chore`)
+- Updated `/trace/SKILL.md` CI usage section with platform-specific integration snippets for GitHub Actions, Jenkins/CloudBees, GitLab CI, Azure Pipelines, and local/no-CI runs
+
+#### F10 — NFRs as first-class tracked artefacts
+- New template: `.github/templates/nfr-profile.md` — structured sections for Performance, Security, Data residency & privacy, Availability & resilience, Compliance, and NFR acceptance criteria
+- Updated `/definition/SKILL.md` — Step 7 generates feature-level NFR profile; aggregates story-level NFRs; saves to `artefacts/[feature]/nfr-profile.md`
+- Updated `/definition-of-ready/SKILL.md` — added hard blocks H-NFR (profile exists or explicitly none), H-NFR2 (compliance clauses have sign-off), H-NFR3 (data classification not blank)
+- Updated `/benefit-metric/SKILL.md` — added **Tier 3: Compliance / risk reduction** metric class (regulatory adherence, audit trail completeness, security posture, data governance)
+- Updated `/definition-of-done/SKILL.md` — added NFR AC confirmation step
+- Updated `/trace/SKILL.md` — added NFR orphan check: flags NFRs in `nfr-profile.md` with no matching story reference, and vice versa; flags compliance NFRs without documented sign-off as HIGH findings
+
+### Fixed — Post-implementation validation (`a94faa6`)
+- **`scripts/validate-trace.sh` — JSON report generation**: replaced broken bash-array-to-Python interpolation (`${PASSES[*]:-[]}`) with env-var-passing pattern (`PASSES_STR`, `WARNINGS_STR`, `FAILURES_STR`) and a quoted heredoc (`<<'PYTHON'`), preventing shell expansion inside the Python block
+- **`scripts/validate-trace.sh` — schema shape mismatch**: `check_test_plan_coverage` and `check_unresolved_blockers` both iterated `features` as a dict with `.items()`; the actual schema has `features` as an array with stories nested at `epics[].stories[]`. Both checks rewritten to match the real schema
+- **`scripts/install.sh` / `scripts/install.ps1`**: the `.github/workflows/trace-validation.yml` file was never included in the install step; added conditional copy logic that only installs it when the target repo's `context.yml` declares `ci: github-actions`, with a warning for all other CI platforms pointing to the trace SKILL.md
+- **Encoding issues in skill files** (`d104381`, `6f40c2f`): removed bad character encoding in multiple SKILL.md files; fixed hyphen/dash encoding artefacts (`4dec711`)
+- **Artefacts directory location** (`a94faa6`): moved `artefacts/` out of `.github/` to repo root to align with convention; updated all skill references accordingly
+
+---
+
 ### Added
 - **Pipeline visualizer — in-viz markdown editor, Phase 1–4** (`pipeline-viz.html`): full read/edit/diff workflow for pipeline artefacts directly inside the visualizer, across four shipped phases:
   - **Phase 1** (`7e1d336`): Preview / Markdown tabs, `localStorage` draft save + reset, status chip, and a keyboard guard in the raw editor.

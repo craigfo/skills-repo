@@ -67,6 +67,8 @@ Check whether `.github/skills/` already exists:
     verify-completion/SKILL.md    ← evidence gate before claiming done
     systematic-debugging/SKILL.md ← 4-phase root cause debugging
     branch-complete/SKILL.md      ← branch completion + draft PR
+    clarify/SKILL.md              ← discovery sharpening — scope and question clarification
+    levelup/SKILL.md              ← post-merge learning extraction → standards + decisions
 
   templates/
     epic.md                       ← canonical epic format (annotated)
@@ -94,9 +96,18 @@ Check whether `.github/skills/` already exists:
     token-optimization.md         ← token budget and model-routing plan template
     org-mapping.md                ← org language/governance mapping template
     scale-pipeline.md             ← multi-team scale operating model template
+    spike-output.md               ← structured spike output + discovery handoff template
+    nfr-profile.md                ← feature-level NFR consolidation (perf, security, data, compliance)
 
   artefacts/
     .gitkeep                      ← placeholder so directory is committed
+
+**Artefact naming convention:**
+Feature artefact folders follow the pattern `YYYY-MM-DD-[feature-slug]/`
+where `YYYY-MM-DD` is the date the discovery run was started.
+Example: `artefacts/2025-07-15-payments-fraud-detection/`
+This keeps artefacts in chronological order and disambiguates parallel features.
+The pattern is established by /discovery in its first output step.
 
   contexts/
     personal.yml                  ← context profile: GitHub-native, personal / small team
@@ -107,9 +118,24 @@ Check whether `.github/skills/` already exists:
   pipeline-state.json             ← live pipeline state (updated by all skills)
   pipeline-state.schema.json      ← JSON schema for pipeline-state.json
   pipeline-viz.html               ← interactive pipeline visualiser (open in browser)
+
+standards/
+  index.yml                       ← maps domain tags to standards files for DoR injection
+  api/api-design.md               ← placeholder — fill in your REST API rules
+  auth/auth-patterns.md           ← placeholder — fill in your auth/authz patterns
+  data/data-standards.md          ← placeholder — fill in data modelling and residency rules
+  security/security-standards.md  ← placeholder — fill in your OWASP/security rules
+  payments/payments-standards.md  ← placeholder — PCI-DSS and payment processing rules
+  ui/ui-standards.md              ← placeholder — component and accessibility rules
+
+product/
+  mission.md                      ← what the product does and for whom (read by /discovery + /benefit-metric)
+  roadmap.md                      ← strategic priorities and horizon (read by /benefit-metric)
+  tech-stack.md                   ← current tech decisions and constraints (read by /definition)
+  constraints.md                  ← hard limits: budget, regulatory, team capability
 ```
 
-**Total: 32 skill files + 34 templates + 3 root files + 3 viz files + artefacts directory + 2 context profiles**
+**Total: 34 skill files + 36 templates + 3 root files + 3 viz files + artefacts directory + 2 context profiles + standards/ scaffold + product/ scaffold**
 
 ---
 

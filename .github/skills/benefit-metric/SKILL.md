@@ -51,6 +51,24 @@ If not met (entry condition):
 
 ## Step 1 Meta-benefit check
 
+**Before the meta-benefit check, read product context if available:**
+
+Check whether `.github/product/mission.md` and `.github/product/roadmap.md` exist.
+If they do, read them and extract:
+- The product's stated success outcomes (from `mission.md`) → use to validate Tier 1 alignment
+- The current strategic priorities (from `roadmap.md`) → confirm this feature aligns with Horizon 1 or 2
+
+Surface what was found:
+
+> **Product context read:**
+> Mission success outcomes: [extracted outcomes]
+> Roadmap alignment: [which horizon / priority this feature maps to]
+>
+> I'll use these to ensure the metrics we define are consistent with the product strategy.
+> If the feature doesn't align with any current priority, I'll flag that before proceeding.
+
+If product context files do not exist — skip and proceed.
+
 Read the discovery artefact. Check for signals that this initiative is also
 testing a hypothesis about tooling, process, or team capability:
 - "We want to learn if agents can do X"
@@ -132,6 +150,43 @@ Then:
 > 5. How will we measure it, who measures it, and how often?
 >
 > Reply: describe the measurement approach
+
+---
+
+## Step 3b — Tier 3: Compliance and risk-reduction metrics
+
+After product and meta metrics are defined, check whether the feature's NFR profile
+or discovery artefact includes compliance obligations or regulatory risk:
+
+> **Does this feature have compliance, regulatory, or risk-reduction obligations?**
+>
+> Signals that Tier 3 metrics apply:
+> - Discovery mentions a regulatory change, audit finding, or risk assessment
+> - NFR profile lists a named compliance framework (PCI-DSS, GDPR, SOC 2, etc.)
+> - The feature exists to reduce a named operational or security risk
+>
+> Reply: yes — or no, proceed to output
+
+**If yes — define Tier 3 metrics separately:**
+
+Tier 3 metrics are not user-outcome metrics. They track:
+- Compliance coverage (e.g. "% of payment flows with tokenised card data: 100%")
+- Risk reduction (e.g. "Number of unencrypted PII fields in database: 0")
+- Named obligation satisfaction (e.g. "Audit finding [ref] resolved by [date]")
+- Control effectiveness (e.g. "Failed login rate blocked at WAF: > 90%")
+
+For each Tier 3 metric:
+- State the obligation or risk being addressed (named clause or risk register ref)
+- Define the obligatory target (usually binary: met / not met)
+- Identify who validates it (named compliance or security owner)
+- Note whether human sign-off is required before DoR
+
+> **Tier 3 metric — [obligation]:**
+> Obligation source: [regulation / risk register ref]
+> Metric: [specific measure]
+> Target: [binary or threshold]
+> Validated by: [name or role]
+> Sign-off required at DoR: Yes / No
 
 ---
 

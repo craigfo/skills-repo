@@ -39,7 +39,90 @@
           "contributingStories": []
         }
       ],
-      "epics": []
+      "epics": [
+        {
+          "slug": "loop-model-definition",
+          "name": "Loop Model Definition",
+          "status": "in-progress",
+          "stories": [
+            {
+              "slug": "outer-loop-contract",
+              "name": "Outer Loop Contract",
+              "stage": "loop-design",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 3,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Tech Lead", "Delivery Manager"]
+            },
+            {
+              "slug": "inner-loop-slot-contract",
+              "name": "Inner Loop Slot Contract",
+              "stage": "loop-design",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 3,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Tech Lead"]
+            }
+          ]
+        },
+        {
+          "slug": "loop-model-adoption",
+          "name": "Loop Model Adoption",
+          "status": "not-started",
+          "stories": [
+            {
+              "slug": "pilot-team-onboarding",
+              "name": "Pilot Team Onboarding Guide",
+              "stage": "loop-design",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 2,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Delivery Manager", "Agile Coach"]
+            },
+            {
+              "slug": "swappable-inner-loop-doc",
+              "name": "Swappable Inner Loop Documentation",
+              "stage": "loop-design",
+              "health": "amber",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 2,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Tech Lead", "Agile Coach"]
+            }
+          ]
+        }
+      ]
     },
     {
       "slug": "skill-library-token-policy",
@@ -63,7 +146,73 @@
           "contributingStories": []
         }
       ],
-      "epics": []
+      "epics": [
+        {
+          "slug": "token-routing-policy",
+          "name": "Token Routing Policy",
+          "status": "in-progress",
+          "stories": [
+            {
+              "slug": "model-routing-rules",
+              "name": "Model Routing Rules",
+              "stage": "token-optimization",
+              "health": "amber",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 4,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Tech Lead", "Platform Engineer"]
+            },
+            {
+              "slug": "context-budget-limits",
+              "name": "Context Budget Limits",
+              "stage": "token-optimization",
+              "health": "amber",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 3,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Platform Engineer"]
+            }
+          ]
+        },
+        {
+          "slug": "artefact-compression-rules",
+          "name": "Artefact Compression Rules",
+          "status": "not-started",
+          "stories": [
+            {
+              "slug": "summary-boundary-definitions",
+              "name": "Summary Boundary Definitions",
+              "stage": "token-optimization",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 3,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Tech Lead"]
+            }
+          ]
+        }
+      ]
     },
     {
       "slug": "org-language-governance-map",
@@ -86,7 +235,73 @@
           "contributingStories": []
         }
       ],
-      "epics": []
+      "epics": [
+        {
+          "slug": "stage-alias-mapping",
+          "name": "Stage Alias Mapping",
+          "status": "in-progress",
+          "stories": [
+            {
+              "slug": "pipeline-to-org-stage-translation",
+              "name": "Pipeline-to-Org Stage Translation",
+              "stage": "org-mapping",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 3,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Delivery Manager", "Agile Coach"]
+            },
+            {
+              "slug": "artefact-name-aliases",
+              "name": "Artefact Name Aliases",
+              "stage": "org-mapping",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 2,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Delivery Manager"]
+            }
+          ]
+        },
+        {
+          "slug": "governance-gate-mapping",
+          "name": "Governance Gate Mapping",
+          "status": "not-started",
+          "stories": [
+            {
+              "slug": "approval-gate-translation",
+              "name": "Approval Gate Translation",
+              "stage": "org-mapping",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 2,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Governance Lead", "Delivery Manager"]
+            }
+          ]
+        }
+      ]
     },
     {
       "slug": "enterprise-scale-operating-model",
@@ -110,7 +325,90 @@
           "contributingStories": []
         }
       ],
-      "epics": []
+      "epics": [
+        {
+          "slug": "scale-repo-topology",
+          "name": "Repo Topology Design",
+          "status": "in-progress",
+          "stories": [
+            {
+              "slug": "mono-vs-poly-repo-decision",
+              "name": "Mono vs Poly Repo Decision",
+              "stage": "scale-pipeline",
+              "health": "amber",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 3,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Platform Architect"]
+            },
+            {
+              "slug": "cross-repo-state-aggregation",
+              "name": "Cross-Repo State Aggregation",
+              "stage": "scale-pipeline",
+              "health": "red",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 4,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Platform Architect", "Tech Lead"]
+            }
+          ]
+        },
+        {
+          "slug": "scale-governance-federation",
+          "name": "Governance Federation",
+          "status": "not-started",
+          "stories": [
+            {
+              "slug": "federated-review-policy",
+              "name": "Federated Review Policy",
+              "stage": "scale-pipeline",
+              "health": "amber",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 3,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Governance Lead", "Platform Architect"]
+            },
+            {
+              "slug": "team-autonomy-guardrails",
+              "name": "Team Autonomy Guardrails",
+              "stage": "scale-pipeline",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 2,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Delivery Manager", "Governance Lead"]
+            }
+          ]
+        }
+      ]
     },
     {
       "slug": "ws-portal-modernisation",
@@ -121,6 +419,7 @@
       "stage": "review",
       "health": "amber",
       "updatedAt": "2026-03-21T09:10:00Z",
+      "slicingStrategy": "vertical-slice",
       "epics": [
         {
           "slug": "portal-auth-refresh",
@@ -141,11 +440,269 @@
               "acVerified": 0,
               "acTotal": 5,
               "releaseReady": false,
-              "tasks": []
+              "tasks": [],
+              "personas": ["End User", "Security Admin"]
+            },
+            {
+              "slug": "sso-token-migration",
+              "name": "SSO Token Migration",
+              "stage": "definition",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 4,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["IT Admin", "End User"]
+            },
+            {
+              "slug": "session-timeout-policy",
+              "name": "Session Timeout Policy",
+              "stage": "definition",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 3,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Security Admin"]
+            }
+          ]
+        },
+        {
+          "slug": "portal-dashboard-redesign",
+          "name": "Dashboard Redesign",
+          "status": "not-started",
+          "stories": [
+            {
+              "slug": "activity-feed-widget",
+              "name": "Activity Feed Widget",
+              "stage": "benefit-metric",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 4,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["End User", "Manager"]
+            },
+            {
+              "slug": "quick-actions-panel",
+              "name": "Quick Actions Panel",
+              "stage": "benefit-metric",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 3,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["End User"]
+            },
+            {
+              "slug": "performance-budget-gauge",
+              "name": "Performance Budget Gauge",
+              "stage": "benefit-metric",
+              "health": "amber",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 3,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Manager", "Finance Analyst"]
+            }
+          ]
+        },
+        {
+          "slug": "portal-notification-centre",
+          "name": "Notification Centre",
+          "status": "not-started",
+          "stories": [
+            {
+              "slug": "notification-preferences-inline",
+              "name": "Notification Preferences Inline",
+              "stage": "discovery",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 0,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["End User"]
+            },
+            {
+              "slug": "notification-delivery-channel",
+              "name": "Notification Delivery Channel",
+              "stage": "discovery",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 0,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["End User", "IT Admin"]
             }
           ]
         }
-      ]
+      ],
+      "storyMapStrategies": {
+        "vertical-slice": {
+          "epics": [
+            {
+              "slug": "portal-auth-refresh",
+              "title": "Auth Refresh",
+              "stories": [
+                { "slug": "portal-mfa-journey", "title": "MFA Journey", "path": "artefacts/ws-portal-modernisation/stories/portal-mfa-journey.md", "personas": ["End User", "Security Admin"] },
+                { "slug": "sso-token-migration", "title": "SSO Token Migration", "personas": ["IT Admin", "End User"] },
+                { "slug": "session-timeout-policy", "title": "Session Timeout Policy", "personas": ["Security Admin"] }
+              ]
+            },
+            {
+              "slug": "portal-dashboard-redesign",
+              "title": "Dashboard Redesign",
+              "stories": [
+                { "slug": "activity-feed-widget", "title": "Activity Feed Widget", "personas": ["End User", "Manager"] },
+                { "slug": "quick-actions-panel", "title": "Quick Actions Panel", "personas": ["End User"] },
+                { "slug": "performance-budget-gauge", "title": "Performance Budget Gauge", "personas": ["Manager", "Finance Analyst"] }
+              ]
+            },
+            {
+              "slug": "portal-notification-centre",
+              "title": "Notification Centre",
+              "stories": [
+                { "slug": "notification-preferences-inline", "title": "Notification Preferences Inline", "personas": ["End User"] },
+                { "slug": "notification-delivery-channel", "title": "Notification Delivery Channel", "personas": ["End User", "IT Admin"] }
+              ]
+            }
+          ]
+        },
+        "walking-skeleton": {
+          "isStub": true,
+          "epics": [
+            {
+              "slug": "skeleton-thin-pass",
+              "title": "Thin Integration Pass",
+              "stories": [
+                { "slug": "auth-skeleton", "title": "Auth skeleton (SSO handshake only)", "personas": ["End User", "IT Admin"] },
+                { "slug": "dashboard-skeleton", "title": "Dashboard skeleton (one empty widget)", "personas": ["End User"] },
+                { "slug": "notification-skeleton", "title": "Notification skeleton (single email trigger)", "personas": ["End User"] }
+              ]
+            },
+            {
+              "slug": "skeleton-hardening",
+              "title": "Skeleton Hardening",
+              "stories": [
+                { "slug": "portal-mfa-journey", "title": "MFA hardening on skeleton", "personas": ["Security Admin"] },
+                { "slug": "activity-feed-widget", "title": "All dashboard widgets on skeleton", "personas": ["End User", "Manager"] },
+                { "slug": "notification-delivery-channel", "title": "All notification channels on skeleton", "personas": ["IT Admin"] },
+                { "slug": "session-timeout-policy", "title": "Session timeout across skeleton", "personas": ["Security Admin"] }
+              ]
+            }
+          ]
+        },
+        "user-journey": {
+          "isStub": true,
+          "epics": [
+            {
+              "slug": "journey-login",
+              "title": "User logs in",
+              "stories": [
+                { "slug": "portal-mfa-journey", "title": "MFA Journey", "path": "artefacts/ws-portal-modernisation/stories/portal-mfa-journey.md", "personas": ["End User", "Security Admin"] },
+                { "slug": "sso-token-migration", "title": "SSO Token Migration", "personas": ["IT Admin", "End User"] }
+              ]
+            },
+            {
+              "slug": "journey-dashboard",
+              "title": "User views their dashboard",
+              "stories": [
+                { "slug": "activity-feed-widget", "title": "Activity Feed Widget", "personas": ["End User", "Manager"] },
+                { "slug": "quick-actions-panel", "title": "Quick Actions Panel", "personas": ["End User"] },
+                { "slug": "performance-budget-gauge", "title": "Performance Budget Gauge", "personas": ["Manager", "Finance Analyst"] }
+              ]
+            },
+            {
+              "slug": "journey-notifications",
+              "title": "User manages notifications",
+              "stories": [
+                { "slug": "notification-preferences-inline", "title": "Notification Preferences Inline", "personas": ["End User"] },
+                { "slug": "notification-delivery-channel", "title": "Notification Delivery Channel", "personas": ["End User", "IT Admin"] }
+              ]
+            },
+            {
+              "slug": "journey-exit",
+              "title": "Session ends safely",
+              "stories": [
+                { "slug": "session-timeout-policy", "title": "Session Timeout Policy", "personas": ["Security Admin"] }
+              ]
+            }
+          ]
+        },
+        "risk-first": {
+          "isStub": true,
+          "epics": [
+            {
+              "slug": "risk-high-auth",
+              "title": "High Risk — Authentication",
+              "stories": [
+                { "slug": "portal-mfa-journey", "title": "MFA Journey", "path": "artefacts/ws-portal-modernisation/stories/portal-mfa-journey.md", "personas": ["End User", "Security Admin"] },
+                { "slug": "sso-token-migration", "title": "SSO Token Migration", "personas": ["IT Admin", "End User"] },
+                { "slug": "session-timeout-policy", "title": "Session Timeout Policy", "personas": ["Security Admin"] }
+              ]
+            },
+            {
+              "slug": "risk-medium-notifications",
+              "title": "Medium Risk — Compliance Notifications",
+              "stories": [
+                { "slug": "notification-delivery-channel", "title": "Notification Delivery Channel", "personas": ["End User", "IT Admin"] },
+                { "slug": "notification-preferences-inline", "title": "Notification Preferences Inline", "personas": ["End User"] }
+              ]
+            },
+            {
+              "slug": "risk-low-dashboard",
+              "title": "Low Risk — Dashboard UX",
+              "stories": [
+                { "slug": "activity-feed-widget", "title": "Activity Feed Widget", "personas": ["End User", "Manager"] },
+                { "slug": "quick-actions-panel", "title": "Quick Actions Panel", "personas": ["End User"] },
+                { "slug": "performance-budget-gauge", "title": "Performance Budget Gauge", "personas": ["Manager", "Finance Analyst"] }
+              ]
+            }
+          ]
+        }
+      }
     },
     {
       "slug": "billing-ledger-reconciliation",
@@ -230,6 +787,7 @@
       "stage": "subagent-execution",
       "health": "green",
       "updatedAt": "2026-03-21T10:05:00Z",
+      "slicingStrategy": "risk-first",
       "epics": [
         {
           "slug": "idempotency-controls",
@@ -255,11 +813,170 @@
                 { "id": "task-1", "name": "Add failing retry collision tests", "tddState": "committed", "file": "artefacts/ws-payments-hardening/plans/payment-retry-idempotency-plan.md" },
                 { "id": "task-2", "name": "Implement idempotency key repository", "tddState": "green", "file": "artefacts/ws-payments-hardening/plans/payment-retry-idempotency-plan.md" },
                 { "id": "task-3", "name": "Refactor duplicate detection service", "tddState": "refactor", "file": "artefacts/ws-payments-hardening/plans/payment-retry-idempotency-plan.md" }
+              ],
+              "personas": ["Payments Engineer", "QA Engineer"]
+            },
+            {
+              "slug": "duplicate-payment-guard",
+              "name": "Duplicate Payment Guard",
+              "stage": "test-plan",
+              "health": "green",
+              "reviewStatus": "passed",
+              "highFindings": 0,
+              "testPlan": { "status": "written", "totalTests": 8, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 4,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Payments Engineer"]
+            }
+          ]
+        },
+        {
+          "slug": "settlement-reconciliation",
+          "name": "Settlement Reconciliation",
+          "status": "not-started",
+          "stories": [
+            {
+              "slug": "daily-settlement-job",
+              "name": "Daily Settlement Job",
+              "stage": "definition",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 5,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Payments Engineer", "Finance Analyst"]
+            },
+            {
+              "slug": "settlement-discrepancy-alert",
+              "name": "Settlement Discrepancy Alert",
+              "stage": "definition",
+              "health": "amber",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 3,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Finance Analyst", "Ops Engineer"]
+            }
+          ]
+        },
+        {
+          "slug": "fraud-detection-hooks",
+          "name": "Fraud Detection Hooks",
+          "status": "not-started",
+          "stories": [
+            {
+              "slug": "payment-risk-scoring",
+              "name": "Payment Risk Scoring",
+              "stage": "benefit-metric",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 0,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Fraud Analyst", "Payments Engineer"]
+            },
+            {
+              "slug": "suspicious-pattern-block",
+              "name": "Suspicious Pattern Block",
+              "stage": "benefit-metric",
+              "health": "green",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 0,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Fraud Analyst"]
+            }
+          ]
+        }
+      ],
+      "storyMapStrategies": {
+        "risk-first": {
+          "epics": [
+            {
+              "slug": "idempotency-controls",
+              "title": "High Risk — Idempotency",
+              "stories": [
+                { "slug": "payment-retry-idempotency", "title": "Payment Retry Idempotency", "path": "artefacts/ws-payments-hardening/stories/payment-retry-idempotency.md", "personas": ["Payments Engineer", "QA Engineer"] },
+                { "slug": "duplicate-payment-guard", "title": "Duplicate Payment Guard", "personas": ["Payments Engineer"] }
+              ]
+            },
+            {
+              "slug": "settlement-reconciliation",
+              "title": "Medium Risk — Settlement",
+              "stories": [
+                { "slug": "daily-settlement-job", "title": "Daily Settlement Job", "personas": ["Payments Engineer", "Finance Analyst"] },
+                { "slug": "settlement-discrepancy-alert", "title": "Settlement Discrepancy Alert", "personas": ["Finance Analyst", "Ops Engineer"] }
+              ]
+            },
+            {
+              "slug": "fraud-detection-hooks",
+              "title": "Lower Risk — Fraud Hooks",
+              "stories": [
+                { "slug": "payment-risk-scoring", "title": "Payment Risk Scoring", "personas": ["Fraud Analyst", "Payments Engineer"] },
+                { "slug": "suspicious-pattern-block", "title": "Suspicious Pattern Block", "personas": ["Fraud Analyst"] }
+              ]
+            }
+          ]
+        },
+        "vertical-slice": {
+          "isStub": true,
+          "epics": [
+            {
+              "slug": "idempotency-controls",
+              "title": "Idempotency Controls",
+              "stories": [
+                { "slug": "payment-retry-idempotency", "title": "Payment Retry Idempotency", "path": "artefacts/ws-payments-hardening/stories/payment-retry-idempotency.md", "personas": ["Payments Engineer", "QA Engineer"] },
+                { "slug": "duplicate-payment-guard", "title": "Duplicate Payment Guard", "personas": ["Payments Engineer"] }
+              ]
+            },
+            {
+              "slug": "settlement-reconciliation",
+              "title": "Settlement Reconciliation",
+              "stories": [
+                { "slug": "daily-settlement-job", "title": "Daily Settlement Job", "personas": ["Payments Engineer", "Finance Analyst"] },
+                { "slug": "settlement-discrepancy-alert", "title": "Settlement Discrepancy Alert", "personas": ["Finance Analyst", "Ops Engineer"] }
+              ]
+            },
+            {
+              "slug": "fraud-detection-hooks",
+              "title": "Fraud Detection Hooks",
+              "stories": [
+                { "slug": "payment-risk-scoring", "title": "Payment Risk Scoring", "personas": ["Fraud Analyst", "Payments Engineer"] },
+                { "slug": "suspicious-pattern-block", "title": "Suspicious Pattern Block", "personas": ["Fraud Analyst"] }
               ]
             }
           ]
         }
-      ]
+      }
     },
     {
       "slug": "fraud-rules-optimizer",
@@ -382,7 +1099,73 @@
       "health": "red",
       "updatedAt": "2026-03-21T08:15:00Z",
       "blocker": "Open spike: unknown token handoff contract to downstream systems",
-      "epics": []
+      "epics": [
+        {
+          "slug": "legacy-auth-spike",
+          "name": "Spike Investigation",
+          "status": "in-progress",
+          "stories": [
+            {
+              "slug": "token-handoff-contract-spike",
+              "name": "Token Handoff Contract Spike",
+              "stage": "spike",
+              "health": "red",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 0,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Tech Lead", "Security Architect"]
+            }
+          ]
+        },
+        {
+          "slug": "proxy-replacement-core",
+          "name": "Proxy Replacement Core",
+          "status": "not-started",
+          "stories": [
+            {
+              "slug": "new-auth-gateway-setup",
+              "name": "New Auth Gateway Setup",
+              "stage": "spike",
+              "health": "amber",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 0,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Platform Engineer", "Security Architect"]
+            },
+            {
+              "slug": "downstream-consumer-migration",
+              "name": "Downstream Consumer Migration",
+              "stage": "spike",
+              "health": "amber",
+              "reviewStatus": "not-started",
+              "highFindings": 0,
+              "testPlan": { "status": "not-started", "totalTests": 0, "passing": 0 },
+              "dorStatus": "not-started",
+              "prStatus": "none",
+              "dodStatus": "not-started",
+              "acVerified": 0,
+              "acTotal": 0,
+              "releaseReady": false,
+              "tasks": [],
+              "personas": ["Platform Engineer", "Consumer Team Lead"]
+            }
+          ]
+        }
+      ]
     },
     {
       "slug": "payments-kms-key-rotation",

@@ -25,10 +25,38 @@ No prerequisites. First step in the pipeline.
 
 ---
 
-## Step 0 - Check for reference materials
+## Step 0 - Check for product context and reference materials
 
-Before asking any questions, check whether a reference folder exists for this
-feature at `artefacts/[feature-slug]/reference/`.
+Before asking any questions, check two things:
+
+**1. Product context:**
+
+Check whether `.github/product/` exists and contains:
+- `mission.md` — what the product does and for whom
+- `constraints.md` — hard limits (regulatory, technical, budget)
+- `tech-stack.md` — current technology decisions
+
+If found, read them and extract:
+- Target users (from `mission.md`) → pre-populate the "Who it affects" section
+- Hard constraints (from `constraints.md`) → pre-populate the Constraints section
+- Technical limits (from `tech-stack.md`) → surface as known constraints
+
+Surface what was found:
+
+> **Product context read:**
+> Target users: [extracted personas]
+> Known constraints: [list from constraints.md]
+>
+> I'll use these to frame the discovery questions and pre-populate sections.
+> You can override anything I extract.
+
+If product context files do not exist — skip and proceed. Discovery will surface
+these fields through conversation.
+
+**2. Reference materials:**
+
+Check whether a reference folder exists for this feature at
+`artefacts/[feature-slug]/reference/`.
 
 If the folder exists and contains files, list them:
 
@@ -170,7 +198,22 @@ Ask:
 ## Output artefact
 
 Conforms to `.github/templates/discovery.md`.
-Save to `artefacts/[feature-slug]/discovery.md`.
+
+**Before saving, establish the timestamped feature slug:**
+
+> **What shall we call this feature? I'll use this as the folder name.**
+>
+> Convention: `YYYY-MM-DD-[short-descriptive-slug]`
+> Today's date: `[current date]`
+>
+> Example: `2025-07-15-payments-fraud-detection`
+>
+> Reply: confirm the slug — or give me a different name
+
+All subsequent artefacts for this feature will live in:
+`artefacts/[YYYY-MM-DD-feature-slug]/`
+
+Save to `artefacts/[YYYY-MM-DD-feature-slug]/discovery.md`.
 
 ---
 

@@ -72,6 +72,9 @@ All must pass. No exceptions. Run each check and record PASS or FAIL.
 | H8 | Test plan has no uncovered ACs (or gaps explicitly acknowledged) | Test plan |
 | H9 | Architecture Constraints field populated; no Category E HIGH findings | Story + Architecture guardrails |
 | H-E2E | If any AC in the test plan is typed `CSS-layout-dependent` AND no E2E tooling is configured AND no `RISK-ACCEPT` is recorded in /decisions for this gap - block sign-off | Test plan + Decisions |
+| H-NFR | NFR profile exists at `artefacts/[feature]/nfr-profile.md` — or story has explicit `NFRs: None — reviewed [date]` field | NFR profile / Story |
+| H-NFR2 | Any compliance NFR with a named regulatory clause has documented human sign-off | NFR profile |
+| H-NFR3 | Data classification field in NFR profile is not blank | NFR profile |
 
 **If any hard block fails - stop immediately:**
 
@@ -132,6 +135,36 @@ Surface as:
 > Reply: [name and role]
 >
 > Record their sign-off in the DoR artefact (name + date) before assigning.
+
+---
+
+## Standards injection
+
+After warnings are acknowledged, check whether the story carries domain tags that
+trigger coding standards:
+
+1. Read the story's `domain` field (e.g. `domain: [api, auth]`)
+2. Open `.github/standards/index.yml`
+3. For each tag that matches a key in `standards:`, read the listed standards files
+4. Include the full text of matching standards files in the Coding Agent Instructions block
+   under a `## Applicable standards` section
+
+If `.github/standards/index.yml` does not exist — skip silently. Standards injection
+is optional enhancement, not a hard requirement.
+
+If the story has no `domain` field — skip silently.
+
+Surface what was found:
+
+> **Standards injection:**
+> Domain tags: [api, auth]
+> Matched standards files: [list of files found]
+>
+> [If files found:]
+> These will be appended to the coding agent instructions block.
+>
+> [If no files found for a tag:]
+> Tag `[tag]` was not found in index.yml — no standards injected for that domain.
 
 ---
 

@@ -259,6 +259,39 @@ approved scope note).
 
 ---
 
+## Step 7 — NFR profile generation
+
+After scope accumulator, generate the feature-level NFR profile.
+
+Read from:
+1. `artefacts/[feature]/discovery.md` — Constraints section
+2. `.github/product/constraints.md` — hard product constraints (if exists)
+3. Each story's NFR section — aggregate all story-level NFRs
+
+Consolidate into a feature-level NFR profile:
+
+> **NFR profile — [feature]:**
+>
+> Performance targets identified: [list or "None defined"]
+> Security requirements: [list or "None defined"]
+> Data classification: [Public / Internal / Confidential / Restricted]
+> Data residency: [requirement or "Not applicable"]
+> Availability SLA: [target or "Not defined"]
+> Compliance frameworks: [list or "None"]
+>
+> Any NFRs with named regulatory clauses require human sign-off before DoR.
+>
+> Confirm this profile, or add/correct anything?
+> Reply: confirm — or update [field] to [value]
+
+Save to `artefacts/[feature]/nfr-profile.md` conforming to
+`.github/templates/nfr-profile.md`.
+
+If no NFRs are identified, state this explicitly in the profile:
+`Status: Active — No NFRs identified at definition. Reviewed at [date].`
+
+---
+
 ## Quality checks before completing
 
 - Every epic records its slicing strategy — written explicitly, not implied
@@ -268,6 +301,7 @@ approved scope note).
 - Benefit coverage matrix complete — no orphaned metric, no unlinked story
 - Scope accumulator run — ratio reviewed and any drift acknowledged
 - All scope notes recorded in /decisions
+- NFR profile generated and saved to `artefacts/[feature]/nfr-profile.md`
 
 ---
 
@@ -279,6 +313,7 @@ approved scope note).
 > Stories: [n] at `artefacts/[feature]/stories/`
 > Slicing strategy: [chosen strategy]
 > Scope check: ✅ Clean / ⚠️ [n] additions approved / ⚠️ Review needed
+> NFR profile: ✅ Saved / ⚠️ No NFRs identified — reviewed
 >
 > Ready to run /review on the stories?
 > Reply: yes — or review a specific story first

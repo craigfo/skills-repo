@@ -571,6 +571,43 @@
   /* ── OUTCOMES VIEW ────────────────────────────────────────────── */
   #outcomes-board { display:none; padding:12px 16px; }
   #outcomes-board.active { display:block; }
+  #story-map-board { display:none; padding:12px 16px; }
+  #story-map-board.active { display:block; }
+  .story-map-toolbar { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+  .story-map-toolbar .label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; }
+  .story-map-strategy-select { min-width:170px; }
+  .story-map-cmp-toggle { font-size:11px; }
+  .story-map-surface { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:10px; }
+  .story-map-scroll { overflow-x:auto; padding-bottom:4px; }
+  .story-map-grid { display:grid; gap:10px; align-items:start; min-width:max-content; }
+  .story-map-grid.single { grid-auto-flow:column; grid-auto-columns:minmax(250px,280px); }
+  .story-map-epic { border:1px solid var(--border); border-radius:8px; background:var(--surface2); min-height:120px; }
+  .story-map-epic-head { padding:8px; border-bottom:1px solid var(--border); }
+  .story-map-epic-title { font-size:12px; font-weight:700; color:var(--text); }
+  .story-map-epic-meta { font-size:10px; color:var(--muted); margin-top:3px; }
+  .story-map-story-list { display:flex; flex-direction:column; gap:6px; padding:8px; }
+  .story-map-story { border:1px solid var(--border); border-radius:6px; background:var(--bg); padding:6px 7px; cursor:pointer; }
+  .story-map-story:hover { border-color:var(--blue); }
+  .story-map-story.stub { border-style:dashed; }
+  .story-map-story-title { font-size:11px; color:var(--text); line-height:1.35; }
+  .story-map-story-slug { font-size:10px; color:var(--muted); margin-top:3px; font-family:monospace; }
+  .story-map-personas { display:flex; gap:4px; flex-wrap:wrap; margin-top:6px; }
+  .story-map-persona { font-size:10px; border:1px solid var(--border); border-radius:999px; padding:1px 6px; color:var(--muted); }
+  .story-map-persona:hover { color:var(--text); border-color:var(--blue); background:rgba(59,130,246,.1); }
+  .story-map-compare-wrap { display:grid; gap:12px; grid-template-columns:1fr 1fr; }
+  .story-map-compare-col { min-width:0; }
+  .story-map-compare-title { font-size:11px; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:.04em; }
+  #story-stub-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:320; }
+  #story-stub-overlay.open { display:block; }
+  #story-stub-modal { display:none; position:fixed; z-index:321; top:8vh; left:50%; transform:translateX(-50%); width:min(760px,90vw); max-height:84vh; overflow:auto; background:var(--surface); border:1px solid var(--border); border-radius:8px; }
+  #story-stub-modal.open { display:block; }
+  #story-stub-head { display:flex; align-items:center; gap:8px; padding:10px 14px; border-bottom:1px solid var(--border); }
+  #story-stub-title { flex:1; font-size:13px; font-weight:700; }
+  #story-stub-close { background:none; border:1px solid var(--border); color:var(--muted); border-radius:4px; padding:2px 10px; cursor:pointer; font-size:12px; }
+  #story-stub-close:hover { color:var(--text); }
+  #story-stub-body { padding:12px 14px; font-size:12px; line-height:1.5; }
+  .story-stub-row { margin-bottom:8px; }
+  .story-stub-label { color:var(--muted); font-size:10px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:2px; }
   #library-board {
     display: none; gap: var(--gap); padding: var(--gap) 16px;
     overflow-x: auto; align-items: flex-start; min-height: calc(100vh - 120px);
@@ -744,6 +781,7 @@
   <button class="btn" id="toggle-loop-group-btn" title="Toggle grouped loop layout (g)">Loop grouped</button>
   <button class="btn" id="governance-btn" title="Governance and compliance view (v)">🛡 Governance</button>
   <button class="btn" id="outcomes-btn" title="Outcomes view (o)">📊 Outcomes</button>
+  <button class="btn" id="story-map-btn" title="Story map view (m)">🗺 Story Map</button>
   <button class="btn" id="library-btn" title="Library evolution view (l)">🧱 Library</button>
 
   <div class="filter-group">
@@ -783,8 +821,18 @@
 
 <!-- ───────────── OUTCOMES VIEW ───────────── -->
 <div id="outcomes-board"></div>
+<div id="story-map-board"></div>
 <div id="library-board"></div>
 <div id="governance-board"></div>
+
+<div id="story-stub-overlay"></div>
+<div id="story-stub-modal">
+  <div id="story-stub-head">
+    <div id="story-stub-title"></div>
+    <button id="story-stub-close">✕ Close</button>
+  </div>
+  <div id="story-stub-body"></div>
+</div>
 
 <!-- ───────────── STORY DRAWER ───────────── -->
 <div id="drawer-overlay"></div>
@@ -831,7 +879,7 @@
   <div id="draft-list-body"></div>
 </div>
 
-<div id="kbd-hint">e = expand all &nbsp;·&nbsp; c = collapse all &nbsp;·&nbsp; g = loop grouped &nbsp;·&nbsp; v = governance &nbsp;·&nbsp; o = outcomes &nbsp;·&nbsp; l = library &nbsp;·&nbsp; [ / ] = narrower / wider &nbsp;·&nbsp; 0 = reset widths &nbsp;·&nbsp; Esc = close &nbsp;·&nbsp; in viewer: d = diff &middot; s = save draft &nbsp;·&nbsp; in Outcomes: ✏️ to edit a metric</div>
+<div id="kbd-hint">e = expand all &nbsp;·&nbsp; c = collapse all &nbsp;·&nbsp; g = loop grouped &nbsp;·&nbsp; v = governance &nbsp;·&nbsp; o = outcomes &nbsp;·&nbsp; l = library &nbsp;·&nbsp; m = story map &nbsp;·&nbsp; [ / ] = narrower / wider &nbsp;·&nbsp; 0 = reset widths &nbsp;·&nbsp; Esc = close &nbsp;·&nbsp; in viewer: d = diff &middot; s = save draft &nbsp;·&nbsp; in Outcomes: ✏️ to edit a metric</div>
 
 <script>
 // ─────────────────────────────────────────────────────────────────────────────
@@ -895,8 +943,13 @@ let openStories      = new Set();   // story slugs with expanded detail
 let openTaskLists    = new Set();   // story keys with task list expanded inline
 let openDoneSections = new Set();   // stage ids with 'completed' section expanded
 let drawerStory  = null;
-let viewMode = 'stage'; // 'stage' | 'governance' | 'outcomes' | 'library'
+let viewMode = 'stage'; // 'stage' | 'governance' | 'outcomes' | 'story-map' | 'library'
 let editingMetric = null; // { featureSlug, metricId }
+let storyMapState = {
+  strategy: 'vertical-slice',
+  compare: false,
+  compareStrategy: 'walking-skeleton',
+};
 let mdCurrentPath  = '';
 let mdOriginalText = '';
 let mdDraftText    = '';
@@ -1154,6 +1207,7 @@ function render() {
   const governance = document.getElementById('governance-board');
   const outcomes = document.getElementById('outcomes-board');
   const library = document.getElementById('library-board');
+  const storyMap = document.getElementById('story-map-board');
   const loopStructure = document.getElementById('loop-structure');
   const actionQueue = document.getElementById('action-queue');
 
@@ -1165,6 +1219,8 @@ function render() {
     outcomes.innerHTML = '';
     library.classList.remove('active');
     library.innerHTML = '';
+    storyMap.classList.remove('active');
+    storyMap.innerHTML = '';
     governance.classList.add('active');
     renderGovernance(features);
   } else if (viewMode === 'outcomes') {
@@ -1174,6 +1230,8 @@ function render() {
     governance.classList.remove('active');
     governance.innerHTML = '';
     library.classList.remove('active');
+    storyMap.classList.remove('active');
+    storyMap.innerHTML = '';
     outcomes.classList.add('active');
     renderOutcomes(features);
   } else if (viewMode === 'library') {
@@ -1184,8 +1242,22 @@ function render() {
     governance.innerHTML = '';
     outcomes.classList.remove('active');
     outcomes.innerHTML = '';
+    storyMap.classList.remove('active');
+    storyMap.innerHTML = '';
     library.classList.add('active');
     renderLibrary(features);
+  } else if (viewMode === 'story-map') {
+    board.style.display = 'none';
+    actionQueue.classList.remove('active');
+    loopStructure.classList.remove('active');
+    governance.classList.remove('active');
+    governance.innerHTML = '';
+    outcomes.classList.remove('active');
+    outcomes.innerHTML = '';
+    library.classList.remove('active');
+    library.innerHTML = '';
+    storyMap.classList.add('active');
+    renderStoryMap(features);
   } else {
     board.style.display = '';
     actionQueue.classList.add('active');
@@ -1196,6 +1268,8 @@ function render() {
     outcomes.innerHTML = '';
     library.classList.remove('active');
     library.innerHTML = '';
+    storyMap.classList.remove('active');
+    storyMap.innerHTML = '';
     renderActionQueue(features);
     renderLoopStructure(features);
     renderBoard(features);
@@ -1405,6 +1479,134 @@ function renderLibrary(features) {
         ${col.items.length > 0 ? col.items.map(f => featureCardHTML(f)).join('') : '<div style="color:var(--border);font-size:11px;padding:4px 0">—</div>'}
       </div>
     </div>`).join('');
+}
+
+// ─── Story Map ────────────────────────────────────────────────────────────────
+
+function storyStrategiesFromFeature(feature) {
+  const variants = feature.storyMapStrategies || feature.strategyVariants || {};
+  const map = {};
+  ['vertical-slice', 'walking-skeleton', 'user-journey', 'risk-first'].forEach(k => {
+    if (variants[k]) map[k] = variants[k];
+  });
+  if (!Object.keys(map).length) {
+    map[feature.slicingStrategy || storyMapState.strategy] = {
+      epics: feature.epics || [],
+      isStub: true,
+    };
+  }
+  return map;
+}
+
+function pickStoryMapData(feature, strategy) {
+  const byStrategy = storyStrategiesFromFeature(feature);
+  if (byStrategy[strategy]) return byStrategy[strategy];
+  const first = Object.keys(byStrategy)[0];
+  return byStrategy[first] || { epics: [], isStub: true };
+}
+
+function storyMapStoryPath(featureSlug, storySlug) {
+  return 'artefacts/' + featureSlug + '/stories/' + storySlug + '.md';
+}
+
+function storyMapEpicsHTML(feature, strategy) {
+  const data = pickStoryMapData(feature, strategy);
+  const epics = data.epics || [];
+  if (!epics.length) {
+    return '<div class="empty-state"><h2>No epics yet</h2><p>No stories available for this strategy.</p></div>';
+  }
+  const epicCols = epics.map(function(epic) {
+    const stories = epic.stories || [];
+    const storiesHTML = stories.map(function(story) {
+      const isStub = data.isStub || !story.path;
+      const personas = story.personas || [];
+      const slug = story.slug || story.id || '';
+      const title = story.title || story.name || slug || 'Untitled story';
+      const path = story.path || storyMapStoryPath(feature.slug, slug);
+      return '<div class="story-map-story' + (isStub ? ' stub' : '') + '"'
+        + ' data-action="story-map-open"'
+        + ' data-feature="' + esc(feature.slug) + '"'
+        + ' data-story="' + esc(slug) + '"'
+        + ' data-stub="' + (isStub ? '1' : '0') + '"'
+        + ' data-path="' + esc(path) + '"'
+        + ' data-title="' + esc(title) + '"'
+        + ' data-personas="' + esc(personas.join(', ')) + '">'
+        + '<div class="story-map-story-title">' + esc(title) + '</div>'
+        + '<div class="story-map-story-slug">' + esc(slug) + '</div>'
+        + (personas.length ? '<div class="story-map-personas">' + personas.map(function(p) { return '<span class="story-map-persona">' + esc(p) + '</span>'; }).join('') + '</div>' : '')
+        + '</div>';
+    }).join('');
+    return '<div class="story-map-epic">'
+      + '<div class="story-map-epic-head">'
+      + '<div class="story-map-epic-title">' + esc(epic.title || epic.name || epic.slug || 'Untitled epic') + '</div>'
+      + '<div class="story-map-epic-meta">' + stories.length + ' ' + (stories.length === 1 ? 'story' : 'stories') + '</div>'
+      + '</div>'
+      + '<div class="story-map-story-list">' + storiesHTML + '</div>'
+      + '</div>';
+  }).join('');
+  return '<div class="story-map-surface"><div class="story-map-scroll"><div class="story-map-grid">' + epicCols + '</div></div></div>';
+}
+
+function renderStoryMap(features) {
+  const board = document.getElementById('story-map-board');
+  if (!features.length) {
+    board.innerHTML = '<div class="empty-state"><h2>No features</h2><p>Load <code>pipeline-state.json</code> to see story maps.</p></div>';
+    return;
+  }
+  const feature = features[0];
+  const strategies = storyStrategiesFromFeature(feature);
+  const keys = Object.keys(strategies);
+  if (!keys.includes(storyMapState.strategy)) storyMapState.strategy = keys[0] || 'vertical-slice';
+  if (!keys.includes(storyMapState.compareStrategy)) {
+    storyMapState.compareStrategy = keys.find(function(k) { return k !== storyMapState.strategy; }) || storyMapState.strategy;
+  }
+
+  const ALL_STRATEGIES = ['vertical-slice', 'walking-skeleton', 'user-journey', 'risk-first'];
+  const availableKeys = ALL_STRATEGIES.filter(function(k) { return keys.includes(k); })
+    .concat(keys.filter(function(k) { return !ALL_STRATEGIES.includes(k); }));
+  const strategyOptions = availableKeys.map(function(k) {
+    return '<option value="' + esc(k) + '"' + (k === storyMapState.strategy ? ' selected' : '') + '>' + esc(k) + '</option>';
+  }).join('');
+  const compareOptions = availableKeys.map(function(k) {
+    return '<option value="' + esc(k) + '"' + (k === storyMapState.compareStrategy ? ' selected' : '') + '>' + esc(k) + '</option>';
+  }).join('');
+
+  const compareToggleHTML = storyMapState.compare
+    ? '<span class="label">Compare with</span><select id="story-map-compare-strategy" class="story-map-strategy-select">' + compareOptions + '</select>'
+    : '';
+
+  const toolbarHTML = '<div class="story-map-toolbar">'
+    + '<span class="label">Feature</span>'
+    + '<span class="tag">' + esc(feature.slug || feature.id || 'unknown') + '</span>'
+    + '<span class="label">Strategy</span>'
+    + '<select id="story-map-strategy" class="story-map-strategy-select">' + strategyOptions + '</select>'
+    + '<label class="story-map-cmp-toggle"><input type="checkbox" id="story-map-compare"' + (storyMapState.compare ? ' checked' : '') + '> Compare side-by-side</label>'
+    + compareToggleHTML
+    + '</div>';
+
+  const contentHTML = storyMapState.compare
+    ? '<div class="story-map-compare-wrap">'
+      + '<div class="story-map-compare-col"><div class="story-map-compare-title">Primary: ' + esc(storyMapState.strategy) + '</div>' + storyMapEpicsHTML(feature, storyMapState.strategy) + '</div>'
+      + '<div class="story-map-compare-col"><div class="story-map-compare-title">Compare: ' + esc(storyMapState.compareStrategy) + '</div>' + storyMapEpicsHTML(feature, storyMapState.compareStrategy) + '</div>'
+      + '</div>'
+    : storyMapEpicsHTML(feature, storyMapState.strategy);
+
+  board.innerHTML = toolbarHTML + contentHTML;
+}
+
+function openStubStoryModal(title, slug, personas, path) {
+  document.getElementById('story-stub-title').textContent = title;
+  document.getElementById('story-stub-body').innerHTML = '<div class="story-stub-row"><div class="story-stub-label">Slug</div><div>' + esc(slug || '') + '</div></div>'
+    + '<div class="story-stub-row"><div class="story-stub-label">Personas</div><div>' + esc(personas || 'None') + '</div></div>'
+    + '<div class="story-stub-row"><div class="story-stub-label">Planned path</div><div>' + esc(path || '') + '</div></div>'
+    + '<div class="story-stub-row"><div class="story-stub-label">Status</div><div>Stub preview — story file not written yet. Run <code>/definition</code> to generate story artefacts.</div></div>';
+  document.getElementById('story-stub-overlay').classList.add('open');
+  document.getElementById('story-stub-modal').classList.add('open');
+}
+
+function closeStubStoryModal() {
+  document.getElementById('story-stub-overlay').classList.remove('open');
+  document.getElementById('story-stub-modal').classList.remove('open');
 }
 
 function renderGovernance(features) {
@@ -2611,6 +2813,37 @@ function initFilters() {
   document.getElementById('library-btn').addEventListener('click', () => {
     setViewMode(viewMode === 'library' ? 'stage' : 'library');
   });
+  document.getElementById('story-map-btn').addEventListener('click', () => {
+    setViewMode(viewMode === 'story-map' ? 'stage' : 'story-map');
+  });
+  document.addEventListener('change', e => {
+    if (e.target.id === 'story-map-strategy') {
+      storyMapState.strategy = e.target.value;
+      render();
+    }
+    if (e.target.id === 'story-map-compare') {
+      storyMapState.compare = !!e.target.checked;
+      render();
+    }
+    if (e.target.id === 'story-map-compare-strategy') {
+      storyMapState.compareStrategy = e.target.value;
+      render();
+    }
+  });
+  document.addEventListener('click', e => {
+    const storyBtn = e.target.closest('[data-action="story-map-open"]');
+    if (storyBtn) {
+      if (storyBtn.dataset.stub === '1') {
+        openStubStoryModal(storyBtn.dataset.title || '', storyBtn.dataset.story || '', storyBtn.dataset.personas || '', storyBtn.dataset.path || '');
+      } else {
+        openMdViewer(storyBtn.dataset.path || '');
+      }
+      return;
+    }
+    if (e.target.id === 'story-stub-overlay' || e.target.id === 'story-stub-close') {
+      closeStubStoryModal();
+    }
+  });
   document.getElementById('column-width-slider').addEventListener('input', e => {
     const width = clampColWidth(Number(e.target.value) || columnUi.globalWidth);
     columnUi.globalWidth = width;
@@ -2833,6 +3066,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'v') { document.getElementById('governance-btn').click(); return; }
   if (e.key === 'o') { document.getElementById('outcomes-btn').click(); return; }
   if (e.key === 'l') { document.getElementById('library-btn').click(); return; }
+  if (e.key === 'm') { document.getElementById('story-map-btn').click(); return; }
   if (e.key === '[') {
     columnUi.globalWidth = clampColWidth(columnUi.globalWidth - COL_STEP);
     updateColumnWidthUi();
@@ -3160,6 +3394,7 @@ function setViewMode(mode) {
   document.getElementById('governance-btn').classList.toggle('active', viewMode === 'governance');
   document.getElementById('outcomes-btn').classList.toggle('active', viewMode === 'outcomes');
   document.getElementById('library-btn').classList.toggle('active', viewMode === 'library');
+  document.getElementById('story-map-btn').classList.toggle('active', viewMode === 'story-map');
   render();
 }
 

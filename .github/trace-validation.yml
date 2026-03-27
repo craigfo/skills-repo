@@ -1,0 +1,61 @@
+# Trace Validation Configuration
+#
+# Controls which traceability checks are enforced and which are warnings.
+# Read by .github/workflows/trace-validation.yml and scripts/validate-trace.sh
+#
+# hard_fail: true  → PR is blocked if this check fails
+# hard_fail: false → Warning only; PR proceeds but failure is visible in CI log
+
+checks:
+
+  # Every feature should have a discovery artefact
+  discovery_exists:
+    label: Discovery artefact exists
+    hard_fail: true
+
+  # Discovery must reach Approved status before metrics are defined
+  discovery_approved:
+    label: Discovery status is Approved
+    hard_fail: true
+
+  # Benefit-metric artefact should exist before stories are written
+  benefit_metric_exists:
+    label: Benefit-metric artefact exists
+    hard_fail: false
+
+  # Every story in the pipeline-state.json should have a test plan
+  test_plan_coverage:
+    label: All stories have a test plan
+    hard_fail: true
+
+  # Every story with a test plan should have a DoR artefact
+  dor_coverage:
+    label: All test-planned stories have a DoR artefact
+    hard_fail: false
+
+  # A merged PR story should have a DoD artefact
+  dod_coverage:
+    label: Merged stories have a DoD artefact
+    hard_fail: false
+
+  # No story should be in a 'blocked' health state without a recorded blocker
+  unresolved_blockers:
+    label: No unresolved blockers
+    hard_fail: true
+
+  # All stories referenced in pipeline-state.json should have artefact files on disk
+  orphaned_state_entries:
+    label: No orphaned pipeline-state entries
+    hard_fail: false
+
+  # pipeline-state.json should be valid against pipeline-state.schema.json
+  schema_valid:
+    label: pipeline-state.json is schema-valid
+    hard_fail: true
+
+# Labels that exempt a PR from trace validation entirely
+# (e.g. chore PRs that don't touch feature artefacts)
+exemption_labels:
+  - skip-trace
+  - chore
+  - docs-only

@@ -112,14 +112,30 @@ If any tests were not implemented:
 
 ## Step 5 - NFR check
 
-For each NFR from the story, confirm it was addressed.
+Check the feature-level NFR profile at `artefacts/[feature]/nfr-profile.md` (if it exists).
+If it does not exist, fall back to individual story NFR fields.
+
+For each NFR in the profile (or story), confirm it was addressed.
+
+**NFR categories to check:**
+- Performance targets — evidence of measurement
+- Security requirements — code review confirmation or automated scan results
+- Data residency — deployment configuration reviewed
+- Availability — no SLA degradation from this change
+- Compliance — named clause obligations met; sign-off documented if required
 
 If any NFR has no evidence:
 
 > ⚠️ **NFR not evidenced: [NFR description]**
 > What evidence exists that this was addressed?
 >
-> Reply: describe evidence - or "not addressed, I'll log it"
+> Reply: describe evidence — or "not addressed, I'll log it"
+
+Update the NFR profile's status if all NFRs in the profile are verified:
+- Set `Status: Active → Verified at [date]` in `nfr-profile.md`
+
+If no NFR profile exists and no story-level NFRs:
+> ✅ **NFR check: No NFRs defined** — confirmed not applicable at [date]
 
 ---
 

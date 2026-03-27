@@ -58,6 +58,25 @@ If nothing material is unknown at close, state: "Nothing material unknown at tim
 
 ---
 
+## Discovery fields resolved
+
+> Map findings back to the parent discovery artefact.
+> Tick each field the spike result changes, clarifies, or validates.
+
+| Discovery field | Changed? | Updated value / clarification |
+|-----------------|----------|-------------------------------|
+| Problem statement | Yes / No | |
+| MVP scope | Yes / No | |
+| Assumptions | Yes / No | |
+| Known risks | Yes / No | |
+| Technical constraints | Yes / No | |
+
+**Discovery re-run needed?**
+- [ ] No — findings clarify details within the existing framing
+- [ ] Yes — spike changes the problem framing significantly → re-run /discovery before proceeding
+
+---
+
 ## Decision log reference
 
 [Link to /decisions entry recording this spike's outcome]

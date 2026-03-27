@@ -21,6 +21,31 @@ triggers:
 
 # Spike Skill
 
+## Step 0 — Read the parent discovery artefact
+
+Before accepting the spike question, read the parent feature's discovery artefact:
+
+```
+artefacts/[feature-slug]/discovery.md
+```
+
+If it does not exist yet — note this and continue. The spike is exploratory.
+
+If it does exist, extract and state:
+- **Problem statement** (one sentence)
+- **Assumptions** that this spike is testing
+- **Known risks** that this spike may resolve or confirm
+- **Open questions** the discovery author flagged
+
+> "I've read the discovery for [feature]. The following uncertainties are already
+> flagged and relevant to this spike: [list]. I'll map findings back to these fields
+> when producing the output."
+
+This ensures the spike question is grounded in the discovery framing, not invented
+in isolation.
+
+---
+
 ## Step 1 — Establish the spike question
 
 Ask this first. Do not proceed until answered.
@@ -161,6 +186,9 @@ the outcome artefact with DEFER and an honest accounting of what remains unknown
 Conforms to `.github/templates/spike-outcome.md`.
 Save to `artefacts/[feature]/spikes/[spike-slug]-outcome.md`.
 
+After the discovery handoff step (below), also save the structured output to
+`artefacts/[feature]/spikes/[spike-slug]-output.md` using `.github/templates/spike-output.md`.
+
 ---
 
 ## After the outcome is produced
@@ -198,6 +226,43 @@ Always present the outcome as a choice, not a statement:
 
 > **Log this in /decisions?**
 > Category: [ARCH / DESIGN / RISK-ACCEPT / SCOPE — pre-suggested by outcome type]
+
+---
+
+## Discovery handoff
+
+After the outcome is produced, map findings back to the parent discovery artefact.
+
+> **Discovery handoff — review before saving spike-output:**
+>
+> Parent discovery: `artefacts/[feature-slug]/discovery.md`
+>
+> For each discovery field below, state whether the spike changes it:
+>
+> | Field | Changed? | New value / clarification |
+> |-------|----------|---------------------------|
+> | Problem statement | | |
+> | MVP scope | | |
+> | Assumptions | | |
+> | Known risks | | |
+> | Technical constraints | | |
+>
+> Reply: confirm the table — or correct any row
+
+Save the completed output to `artefacts/[feature]/spikes/[spike-slug]-output.md`
+using `.github/templates/spike-output.md`.
+
+**If any discovery field changed:**
+
+> **This spike changes the problem framing — re-run /discovery?**
+>
+> The following fields in the discovery artefact need updating:
+> - [list changed fields]
+>
+> 1. Yes — re-open /discovery now, using spike findings as new inputs
+> 2. No — continue with current discovery, log the delta in /decisions only
+>
+> Reply: 1 or 2
 > References: [spike outcome artefact path]
 >
 > Reply: yes to log — or skip if you'll do it separately

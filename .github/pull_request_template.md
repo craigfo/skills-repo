@@ -136,6 +136,10 @@
 
 ---
 
+## Post-merge
+
+- [ ] /levelup run after merge — patterns and standards extracted from this delivery
+
 <!--
   Agent-opened PRs: do not mark as ready for review.
   The author (who assigned the story) must review before requesting team review.
