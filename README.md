@@ -30,47 +30,51 @@ cd my-project
 
 ### 2. Install the pipeline
 
-Clone the skills repo to a temp location and run the installer against your new repo:
-
-**PowerShell (Windows):**
+**PowerShell (Windows) — one command:**
 ```powershell
-git clone https://github.com/heymishy/skills-repo.git "$env:TEMP\skills-repo"
+# Personal project (syncs from heymishy/skills-repo):
+irm https://raw.githubusercontent.com/heymishy/skills-repo/master/scripts/bootstrap-new-repo.ps1 | iex
 
-# Personal / GitHub — pull updates directly from heymishy/skills-repo:
-& "$env:TEMP\skills-repo\scripts\install.ps1" `
-    -Target "C:\path\to\my-project" `
-    -Profile personal `
-    -UpstreamStrategy remote
+# With options — save first, then run:
+$s = irm https://raw.githubusercontent.com/heymishy/skills-repo/master/scripts/bootstrap-new-repo.ps1
+& ([scriptblock]::Create($s)) -Profile personal -UpstreamStrategy remote
 
-# Enterprise / Bitbucket — point at your org's fork of this repo:
-& "$env:TEMP\skills-repo\scripts\install.ps1" `
-    -Target "C:\path\to\my-project" `
-    -Profile work `
+# Enterprise with org fork:
+& ([scriptblock]::Create($s)) -Profile work `
     -UpstreamStrategy fork `
     -UpstreamUrl "https://bitbucket.org/your-org/sdlc-skills.git"
-
-Remove-Item -Recurse -Force "$env:TEMP\skills-repo"
 ```
 
-**Bash (macOS / Linux / WSL):**
+**Bash (macOS / Linux / WSL) — one command:**
 ```bash
-git clone https://github.com/heymishy/skills-repo.git /tmp/skills-repo
-
-# Personal / GitHub:
-bash /tmp/skills-repo/scripts/install.sh \
-  --target /path/to/my-project \
-  --profile personal \
+# Personal project:
+bash <(curl -fsSL https://raw.githubusercontent.com/heymishy/skills-repo/master/scripts/bootstrap-new-repo.sh) \
   --upstream-strategy remote
 
-# Enterprise / fork:
-bash /tmp/skills-repo/scripts/install.sh \
-  --target /path/to/my-project \
+# Enterprise with org fork:
+bash <(curl -fsSL https://raw.githubusercontent.com/heymishy/skills-repo/master/scripts/bootstrap-new-repo.sh) \
   --profile work \
   --upstream-strategy fork \
   --upstream-url "https://bitbucket.org/your-org/sdlc-skills.git"
+```
 
+<details>
+<summary>Manual steps (if you can't run remote scripts)</summary>
+
+```powershell
+# PowerShell
+git clone https://github.com/heymishy/skills-repo.git "$env:TEMP\skills-repo"
+& "$env:TEMP\skills-repo\scripts\install.ps1" -Target "C:\path\to\my-project" -Profile personal -UpstreamStrategy remote
+Remove-Item -Recurse -Force "$env:TEMP\skills-repo"
+```
+
+```bash
+# Bash
+git clone https://github.com/heymishy/skills-repo.git /tmp/skills-repo
+bash /tmp/skills-repo/scripts/install.sh --target /path/to/my-project --profile personal --upstream-strategy remote
 rm -rf /tmp/skills-repo
 ```
+</details>
 
 The installer copies all skills, templates, `context.yml`, `pipeline-state.json`, and `pipeline-viz.html` into `.github/` of your repo. With `--upstream-strategy remote` or `fork` it also wires a `skills-upstream` git remote so you can pull future skill updates.
 
