@@ -229,12 +229,12 @@ if (-not $DryRun) {
     Write-Host "  Product context - Copilot uses this to frame all decisions:"
     Write-Host "  what problem does this repo solve, for whom, and why."
     Write-Host "  Example: 'A prioritisation canvas tool for workshop facilitators."
-    Write-Host "           Teams plot ideas on a 2x2 grid and export results.'"
-    $productCtx    = Read-Host "  > Your product context (one or two sentences)"
+    Write-Host "           Teams plot ideas on a 2x2 grid and export results.'"    Write-Host "  (You can update this any time in .github/copilot-instructions.md)"    $productCtx    = Read-Host "  > Your product context (one or two sentences)"
     Write-Host ""
     Write-Host "  Coding standards - Copilot uses this to match your stack when"
     Write-Host "  generating code: language, framework, test tool, lint rules."
     Write-Host "  Example: 'TypeScript, React, Vitest, ESLint Airbnb'"
+    Write-Host "  (You can update this any time in .github/copilot-instructions.md)"
     $codingStandards = Read-Host "  > Your language + framework + test tool"
 
     $instrFile = Join-Path $Target '.github/copilot-instructions.md'

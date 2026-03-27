@@ -229,11 +229,13 @@ if [[ "$DRY_RUN" == false ]]; then
   echo "  what problem does this repo solve, for whom, and why."
   echo "  Example: 'A prioritisation canvas for workshop facilitators."
   echo "           Teams plot ideas on a 2x2 grid and export results.'"
+  echo "  (You can update this any time in .github/copilot-instructions.md)"
   read -r -p "  > Your product context (one or two sentences): " PRODUCT_CONTEXT
   echo ""
   echo "  Coding standards - Copilot uses this to match your stack when"
   echo "  generating code: language, framework, test tool, lint rules."
   echo "  Example: TypeScript, React, Vitest, ESLint Airbnb"
+  echo "  (You can update this any time in .github/copilot-instructions.md)"
   read -r -p "  > Your language + framework + test tool: " CODING_STANDARDS
 
   # Substitute into copilot-instructions.md

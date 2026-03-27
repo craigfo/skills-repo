@@ -22,6 +22,31 @@ Active pipeline context: `.github/context.yml`
 
 ---
 
+## Skills pipeline maintenance
+
+Upstream skills sync configuration is stored in `.github/context.yml` under
+`skills_upstream:`. When asked to check for or pull upstream skill updates,
+read that block first — it contains the git remote name, repo URL, sync paths,
+and strategy.
+
+To sync skills from upstream:
+```bash
+git fetch <skills_upstream.remote>
+git diff HEAD <skills_upstream.remote>/master -- .github/skills/
+git checkout <skills_upstream.remote>/master -- .github/skills/ .github/templates/ scripts/
+git diff --staged
+git commit -m "chore: sync skills from skills-upstream [date]"
+```
+
+If `skills_upstream.remote` is `null` or `strategy` is `none`, no remote has
+been configured. The user can add one with:
+```bash
+git remote add skills-upstream https://github.com/heymishy/skills-repo.git
+```
+Then update `skills_upstream.remote` and `skills_upstream.strategy` in `context.yml`.
+
+---
+
 ## Product context
 
 <!-- FILL IN: One paragraph describing what this repo builds, for whom, and why.
