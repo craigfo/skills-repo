@@ -32,8 +32,8 @@
 
 .PARAMETER UpstreamStrategy
     How to stay in sync with future skills-repo updates:
-      none   - One-time install only. Re-run with -Overwrite to update (default).
-      remote - Add heymishy/skills-repo as a 'skills-upstream' git remote.
+      remote - Add heymishy/skills-repo as a 'skills-upstream' git remote (default).
+      none   - One-time install only. Re-run with -Overwrite to update.
       fork   - Add a private fork as 'skills-upstream'. Requires -UpstreamUrl.
 
 .PARAMETER UpstreamUrl
@@ -48,7 +48,7 @@ param(
     [switch] $Overwrite,
     [switch] $DryRun,
     [ValidateSet('none','remote','fork')]
-    [string] $UpstreamStrategy = 'none',
+    [string] $UpstreamStrategy = 'remote',
     [string] $UpstreamUrl = ''
 )
 

@@ -16,9 +16,9 @@
 #   --profile <name>            Context profile to activate: personal | work (default: personal)
 #   --overwrite                 Overwrite existing files (default: skip existing)
 #   --dry-run                   Show what would be copied without writing anything
-#   --upstream-strategy <mode>  none | remote | fork (default: none)
+#   --upstream-strategy <mode>  remote | none | fork (default: remote)
+#                                 remote — add heymishy/skills-repo as skills-upstream remote (default)
 #                                 none   — one-time install, no remote added
-#                                 remote — add heymishy/skills-repo as skills-upstream remote
 #                                 fork   — add a private fork (requires --upstream-url)
 #   --upstream-url <url>        Fork URL when using --upstream-strategy fork
 # =============================================================================
@@ -35,7 +35,7 @@ TARGET_DIR="$(pwd)"
 PROFILE="personal"
 OVERWRITE=false
 DRY_RUN=false
-UPSTREAM_STRATEGY="none"
+UPSTREAM_STRATEGY="remote"
 UPSTREAM_URL=""
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SOURCE_ROOT="$(dirname "$SCRIPT_DIR")"  # parent of scripts/ = repo root
