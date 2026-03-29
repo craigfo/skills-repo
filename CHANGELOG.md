@@ -6,6 +6,41 @@ All notable changes to this repository will be documented in this file.
 
 ---
 
+## [0.4.0] — 2026-03-29
+
+### Added
+
+#### Sync helper scripts
+- New `scripts/sync-from-upstream.ps1` and `scripts/sync-from-upstream.sh` — single-command skill sync for any repo with `skills-upstream` configured. Fetches upstream, shows a diff summary of what will change, applies changes to shared paths (skills, templates, viz, scripts, workflows), and commits with a dated message. Skips `artefacts/`, `contexts/`, `context.yml`, `pipeline-state.json`, and `config.yml`. Supports `--DryRun` / `--dry-run` flag to preview without applying.
+
+### Fixed
+
+#### Skills review findings (11 total — `203142e`)
+- **C1** `subagent-execution/SKILL.md`: fixed mojibake encoding for em dashes, arrows, ✅, and ❌ using Node.js split/join (PowerShell `Set-Content` was silently truncating the file)
+- **H1** `ideate/SKILL.md`: removed 5 duplicate unquoted lens menu lines
+- **H2** `branch-setup/SKILL.md`: added PowerShell `Test-Path` equivalents to Steps 2 and 4
+- **H3** `branch-complete/SKILL.md`: added PowerShell here-string variant for `gh pr create`
+- **H4** `bootstrap/SKILL.md`: added 9 missing templates to the creation list; updated total count 36 → 45
+- **M1** `definition-of-ready/SKILL.md`: updated YAML description from `H1-H8` to `H1–H9, H-E2E, H-NFR through H-NFR3`
+- **M2** `contexts/personal.yml` + `contexts/work.yml`: added `skills_upstream:` block to both context profiles
+- **M3** `copilot-instructions.md`: added `## Product context files` section documenting the four `.github/product/` files and which skills read them
+- **M4 + L2** `copilot-instructions.md`: added `spike-output.md` and `nfr-profile.md` rows to the template table
+- **L1** `pipeline-state.json`: updated stale timestamp to `2026-03-29T00:00:00Z`
+
+#### Pipeline visualiser (`e21cd25`, `3193c5e`, `08bb96a`)
+- **Artefact link paths**: fixed 27 `\`artefacts/\`` template literals to `\`../artefacts/\`` — links were resolving to `.github/artefacts/` instead of the repo-root `artefacts/` folder
+- **Undefined story labels**: story name in Docs links and story rows now falls back to `story.title` then `story.slug` when `story.name` is absent, preventing "undefined" labels when agents write `title` instead of `name`
+- **Review docs — combined file support**: review stage Docs links now always include an "All stories review" link (`all-stories-review-1.md`) in addition to per-story links, supporting the pattern where `/review` saves a single combined review file
+
+#### Install scripts (`5dc3b19`)
+- Changed default `UpstreamStrategy` from `none` to `remote` in both `install.ps1` and `install.sh` — new installs now automatically wire the `skills-upstream` remote without requiring an explicit flag
+
+#### `/definition` state update (`b502cd0`)
+- `slicingStrategy` is now written to the feature in `pipeline-state.json` so the viz strategy dropdown works
+- Clarified that stories must be nested inside each epic's `stories[]` array; replaced the ambiguous two-bullet instruction with an explicit JSON example showing the correct nested structure
+
+---
+
 ## [0.3.0] — 2026-03-28
 
 ### Added
