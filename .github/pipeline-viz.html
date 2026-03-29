@@ -916,13 +916,13 @@ const INNER_LOOP_STAGES = new Set(INNER_LOOP_STAGE_ORDER);
 const PIPELINE_STAGE_ORDER = ['ideation', 'discovery', 'benefit-metric', 'definition', 'spike', 'review', 'test-plan', 'definition-of-ready', 'branch-setup', 'implementation-plan', 'subagent-execution', 'implementation-review', 'verify-completion', 'branch-complete', 'definition-of-done', 'trace', 'release-pending', 'released'];
 
 const GOVERNANCE_GATES = [
-  { id: 'review',              label: 'Review',    skill: '/review',              skillPath: 'skills/review/SKILL.md',              criteria: 'No HIGH findings before progression',                      artefact: f => `artefacts/${f.slug}/review/` },
-  { id: 'test-plan',           label: 'Test Plan', skill: '/test-plan',           skillPath: 'skills/test-plan/SKILL.md',           criteria: 'Failing tests and verification script prepared',            artefact: f => `artefacts/${f.slug}/test-plans/` },
-  { id: 'definition-of-ready', label: 'DoR',       skill: '/definition-of-ready', skillPath: 'skills/definition-of-ready/SKILL.md', criteria: 'All hard blocks pass and sign-off complete',                artefact: f => `artefacts/${f.slug}/dor/` },
-  { id: 'verify-completion',   label: 'Verify',    skill: '/verify-completion',   skillPath: 'skills/verify-completion/SKILL.md',   criteria: 'Fresh evidence run before completion claims',               artefact: f => `artefacts/${f.slug}/verification-scripts/` },
-  { id: 'definition-of-done',  label: 'DoD',       skill: '/definition-of-done',  skillPath: 'skills/definition-of-done/SKILL.md',  criteria: 'Post-merge AC/test coverage validated',                     artefact: f => `artefacts/${f.slug}/dod/` },
-  { id: 'trace',               label: 'Trace',     skill: '/trace',               skillPath: 'skills/trace/SKILL.md',               criteria: 'Traceability chain intact across artefacts',                artefact: f => `artefacts/${f.slug}/trace/trace.md` },
-  { id: 'release',             label: 'Release',   skill: '/release',             skillPath: 'skills/release/SKILL.md',             criteria: 'Release bundle/checklist produced for deployment',          artefact: f => `artefacts/${f.slug}/release/release-notes-technical.md` },
+  { id: 'review',              label: 'Review',    skill: '/review',              skillPath: 'skills/review/SKILL.md',              criteria: 'No HIGH findings before progression',                      artefact: f => `../artefacts/${f.slug}/review/` },
+  { id: 'test-plan',           label: 'Test Plan', skill: '/test-plan',           skillPath: 'skills/test-plan/SKILL.md',           criteria: 'Failing tests and verification script prepared',            artefact: f => `../artefacts/${f.slug}/test-plans/` },
+  { id: 'definition-of-ready', label: 'DoR',       skill: '/definition-of-ready', skillPath: 'skills/definition-of-ready/SKILL.md', criteria: 'All hard blocks pass and sign-off complete',                artefact: f => `../artefacts/${f.slug}/dor/` },
+  { id: 'verify-completion',   label: 'Verify',    skill: '/verify-completion',   skillPath: 'skills/verify-completion/SKILL.md',   criteria: 'Fresh evidence run before completion claims',               artefact: f => `../artefacts/${f.slug}/verification-scripts/` },
+  { id: 'definition-of-done',  label: 'DoD',       skill: '/definition-of-done',  skillPath: 'skills/definition-of-done/SKILL.md',  criteria: 'Post-merge AC/test coverage validated',                     artefact: f => `../artefacts/${f.slug}/dod/` },
+  { id: 'trace',               label: 'Trace',     skill: '/trace',               skillPath: 'skills/trace/SKILL.md',               criteria: 'Traceability chain intact across artefacts',                artefact: f => `../artefacts/${f.slug}/trace/trace.md` },
+  { id: 'release',             label: 'Release',   skill: '/release',             skillPath: 'skills/release/SKILL.md',             criteria: 'Release bundle/checklist produced for deployment',          artefact: f => `../artefacts/${f.slug}/release/release-notes-technical.md` },
 ];
 
 // Pipeline-authority skills referenced in the governance view but not gate-checked directly.
@@ -1417,8 +1417,8 @@ function loopScoreBadgeHTML(f) {
 
 function outcomesFeatureHTML(f) {
   const metrics       = f.metrics || [];
-  const discoveryPath = `artefacts/${f.slug}/discovery.md`;
-  const bmPath        = `artefacts/${f.slug}/benefit-metric.md`;
+  const discoveryPath = `../artefacts/${f.slug}/discovery.md`;
+  const bmPath        = `../artefacts/${f.slug}/benefit-metric.md`;
   return `
   <div class="outcome-feature">
     <div class="outcome-feature-header">
@@ -2044,29 +2044,29 @@ function featureCardHTML(f) {
 // COMPLETED-STAGE TRAIL
 // ─────────────────────────────────────────────────────────────────────────────
 const STAGE_ARTEFACTS = {
-  'loop-design':          f => [{ label: '🧭 Loop design', path: `artefacts/${f.slug}/loop-design.md` }],
-  'token-optimization':   f => [{ label: '💸 Token optimization', path: `artefacts/${f.slug}/token-optimization.md` }],
-  'org-mapping':          f => [{ label: '🗺 Org mapping', path: `artefacts/${f.slug}/org-mapping.md` }],
-  'scale-pipeline':       f => [{ label: '📈 Scale pipeline', path: `artefacts/${f.slug}/scale-pipeline.md` }],
-  'discovery':           f => [{ label: '📄 Discovery',     path: `artefacts/${f.slug}/discovery.md` }],
-  'benefit-metric':      f => [{ label: '📊 Benefit metric', path: `artefacts/${f.slug}/benefit-metric.md` }],
+  'loop-design':          f => [{ label: '🧭 Loop design', path: `../artefacts/${f.slug}/loop-design.md` }],
+  'token-optimization':   f => [{ label: '💸 Token optimization', path: `../artefacts/${f.slug}/token-optimization.md` }],
+  'org-mapping':          f => [{ label: '🗺 Org mapping', path: `../artefacts/${f.slug}/org-mapping.md` }],
+  'scale-pipeline':       f => [{ label: '📈 Scale pipeline', path: `../artefacts/${f.slug}/scale-pipeline.md` }],
+  'discovery':           f => [{ label: '📄 Discovery',     path: `../artefacts/${f.slug}/discovery.md` }],
+  'benefit-metric':      f => [{ label: '📊 Benefit metric', path: `../artefacts/${f.slug}/benefit-metric.md` }],
   'definition':          f => [
-    { label: '📋 Decisions', path: `artefacts/${f.slug}/decisions.md` },
-    ...(f.epics||[]).map(e => ({ label: `📦 Epic: ${e.name}`, path: `artefacts/${f.slug}/epics/${e.slug}.md` })),
+    { label: '📋 Decisions', path: `../artefacts/${f.slug}/decisions.md` },
+    ...(f.epics||[]).map(e => ({ label: `📦 Epic: ${e.name}`, path: `../artefacts/${f.slug}/epics/${e.slug}.md` })),
   ],
   'review':              f => (f.epics||[]).flatMap(e => (e.stories||[]).map(s =>
-    ({ label: `🔍 ${s.name}`, path: `artefacts/${f.slug}/review/${s.slug}-review-1.md` }))),
+    ({ label: `🔍 ${s.name}`, path: `../artefacts/${f.slug}/review/${s.slug}-review-1.md` }))),
   'test-plan':           f => (f.epics||[]).flatMap(e => (e.stories||[]).map(s =>
-    ({ label: `🧪 ${s.name}`, path: `artefacts/${f.slug}/test-plans/${s.slug}-test-plan.md` }))),
+    ({ label: `🧪 ${s.name}`, path: `../artefacts/${f.slug}/test-plans/${s.slug}-test-plan.md` }))),
   'definition-of-ready': f => (f.epics||[]).flatMap(e => (e.stories||[]).map(s =>
-    ({ label: `✅ ${s.name}`, path: `artefacts/${f.slug}/dor/${s.slug}-dor.md` }))),
+    ({ label: `✅ ${s.name}`, path: `../artefacts/${f.slug}/dor/${s.slug}-dor.md` }))),
   'implementation-plan': f => (f.epics||[]).flatMap(e => (e.stories||[]).map(s =>
-    ({ label: `🗒 ${s.name}`, path: `artefacts/${f.slug}/plans/${s.slug}-plan.md` }))),
+    ({ label: `🗒 ${s.name}`, path: `../artefacts/${f.slug}/plans/${s.slug}-plan.md` }))),
   'verify-completion':   f => (f.epics||[]).flatMap(e => (e.stories||[]).map(s =>
-    ({ label: `✔ ${s.name}`, path: `artefacts/${f.slug}/verification-scripts/${s.slug}-verification.md` }))),
+    ({ label: `✔ ${s.name}`, path: `../artefacts/${f.slug}/verification-scripts/${s.slug}-verification.md` }))),
   'definition-of-done':  f => (f.epics||[]).flatMap(e => (e.stories||[]).map(s =>
-    ({ label: `🏁 ${s.name}`, path: `artefacts/${f.slug}/dod/${s.slug}-dod.md` }))),
-  'trace':               f => [{ label: '🔗 Trace report', path: `artefacts/${f.slug}/trace/trace.md` }],
+    ({ label: `🏁 ${s.name}`, path: `../artefacts/${f.slug}/dod/${s.slug}-dod.md` }))),
+  'trace':               f => [{ label: '🔗 Trace report', path: `../artefacts/${f.slug}/trace/trace.md` }],
 };
 
 function featureCardDoneHTML(f, stageId) {
@@ -2157,9 +2157,9 @@ function openDrawer(featureSlug, epicSlug, storySlug) {
     ? Math.round((story.testPlan.passing / story.testPlan.totalTests) * 100) : null;
 
   const featureSlugPath = featureSlug;
-  const storyPath = `artefacts/${featureSlugPath}/stories/${storySlug}.md`;
-  const testPath  = `artefacts/${featureSlugPath}/test-plans/${storySlug}-test-plan.md`;
-  const dorPath   = `artefacts/${featureSlugPath}/dor/${storySlug}-dor.md`;
+  const storyPath = `../artefacts/${featureSlugPath}/stories/${storySlug}.md`;
+  const testPath  = `../artefacts/${featureSlugPath}/test-plans/${storySlug}-test-plan.md`;
+  const dorPath   = `../artefacts/${featureSlugPath}/dor/${storySlug}-dor.md`;
 
   document.getElementById('drawer-content').innerHTML = `
     <h2>${esc(story.name)}</h2>
