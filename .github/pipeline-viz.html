@@ -2102,7 +2102,7 @@ function epicRowHTML(featureSlug, epic) {
     <div class="epic-row-header" data-action="toggle-epic" data-key="${key}">
       <span class="epic-toggle ${isOpen ? 'open' : ''}">▶</span>
       <span class="epic-status-dot status-${epic.status}"></span>
-      <span class="epic-name">${esc(epic.name)}</span>
+      <span class="epic-name">${esc(epic.name || epic.slug)}</span>
       <span style="font-size:10px;color:var(--muted)">${stories.length}</span>
     </div>
     <div class="story-list ${isOpen ? 'open' : ''}">
@@ -2165,11 +2165,16 @@ function openDrawer(featureSlug, epicSlug, storySlug) {
   const testPath  = `../artefacts/${featureSlugPath}/test-plans/${storySlug}-test-plan.md`;
   const dorPath   = `../artefacts/${featureSlugPath}/dor/${storySlug}-dor.md`;
 
-  document.getElementById('drawer-content').innerHTML = `
-    <h2>${esc(story.name)}</h2>
-    <div class="drawer-stage">Stage: <strong>${stageLabel(story.stage)}</strong> &nbsp;·&nbsp; Health: <strong style="color:${healthColour(story.health)}">${healthEmoji(story.health)} ${story.health}</strong></div>
+  const storyStage  = story.stage  || feature.stage;
+  const storyHealth = story.health || 'green';
+  const nextSkill   = storyNextSkill(story);
 
-    ${story.health === 'red' && story.blocker ? `<div class="drawer-blocker">🚫 ${esc(story.blocker)}</div>` : ''}
+  document.getElementById('drawer-content').innerHTML = `
+    <h2>${esc(story.name || story.title || story.slug)}</h2>
+    <div class="drawer-stage">Stage: <strong>${stageLabel(storyStage)}</strong> &nbsp;·&nbsp; Health: <strong style="color:${healthColour(storyHealth)}">${healthEmoji(storyHealth)} ${storyHealth}</strong></div>
+    ${nextSkill ? `<div style="font-size:11px;color:var(--muted);margin-top:4px">▶ Next: <span style="color:var(--teal);font-family:monospace">${esc(nextSkill)}</span></div>` : '<div style="font-size:11px;color:var(--green);margin-top:4px">✓ Complete</div>'}
+
+    ${storyHealth === 'red' && story.blocker ? `<div class="drawer-blocker">🚫 ${esc(story.blocker)}</div>` : ''}
 
     <div class="drawer-section">
       <h3>Progress</h3>
@@ -2203,8 +2208,10 @@ function openDrawer(featureSlug, epicSlug, storySlug) {
       <h3>Artefacts</h3>
       <div style="display:flex;flex-direction:column;gap:4px">
         <a class="drawer-link" href="${storyPath}">📄 Story artefact</a>
+        ${story.reviewStatus ? `<a class="drawer-link" href="../artefacts/${featureSlugPath}/review/${storySlug}-review-1.md">🔍 Review</a>` : ''}
         <a class="drawer-link" href="${testPath}">🧪 Test plan</a>
         <a class="drawer-link" href="${dorPath}">✅ Definition of Ready</a>
+        ${['implementation-plan','coding','verify-completion','definition-of-done'].includes(storyStage) ? `<a class="drawer-link" href="../artefacts/${featureSlugPath}/plans/${storySlug}-plan.md">🗒 Implementation plan</a>` : ''}
         ${story.prUrl ? `<a class="drawer-link" href="${story.prUrl}" target="_blank">🔗 Pull request</a>` : ''}
       </div>
     </div>
@@ -2212,9 +2219,11 @@ function openDrawer(featureSlug, epicSlug, storySlug) {
     <div class="drawer-section">
       <h3>Context</h3>
       <div class="drawer-row"><span class="label">Feature</span><span>${esc(feature.name)}</span></div>
-      <div class="drawer-row"><span class="label">Epic</span><span>${esc(epic.name)}</span></div>
+      <div class="drawer-row"><span class="label">Epic</span><span>${esc(epic.name || epic.slug)}</span></div>
       <div class="drawer-row"><span class="label">Track</span><span>${trackLabel(feature.track)}</span></div>
       ${feature.team ? `<div class="drawer-row"><span class="label">Team</span><span>${esc(feature.team)}</span></div>` : ''}
+      ${story.complexity ? `<div class="drawer-row"><span class="label">Complexity</span><span>${esc(String(story.complexity))}</span></div>` : ''}
+      ${story.dorOversight ? `<div class="drawer-row"><span class="label">Oversight</span><span>${esc(story.dorOversight)}</span></div>` : ''}
     </div>
   `;
 
@@ -3251,6 +3260,7 @@ function boardStageId(id) {
 }
 
 function stageLabel(id) {
+  if (!id) return '—';
   const s = STAGES.find(x => x.id === id);
   if (s) return s.label;
   if (id === 'loop-design') return 'Meta: Loop Design';
@@ -3258,6 +3268,18 @@ function stageLabel(id) {
   if (id === 'org-mapping') return 'Meta: Org Mapping';
   if (id === 'scale-pipeline') return 'Meta: Scale Pipeline';
   return id;
+}
+
+function storyNextSkill(s) {
+  if (s.dodStatus === 'complete')                      return null;
+  if (s.prStatus === 'merged')                         return '/definition-of-done';
+  if (s.prStatus === 'open' || s.prStatus === 'draft') return '/verify-completion';
+  if (s.dorStatus === 'signed-off')                    return '/branch-setup → /implementation-plan';
+  if (s.dorStatus === 'blocked')                       return 'Fix DoR blockers → re-run /definition-of-ready';
+  if (s.reviewStatus === 'passed' && s.testPlan)       return '/definition-of-ready';
+  if (s.reviewStatus === 'passed')                     return '/test-plan';
+  if (s.reviewStatus === 'has-findings')               return s.highFindings > 0 ? 'Fix HIGH findings → re-run /review' : 'Acknowledge MEDs → run /test-plan';
+  return '/review';
 }
 
 function metaStageBadge(stageId) {
