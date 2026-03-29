@@ -116,11 +116,6 @@ After applying the table, present:
 > - **C** — Market and competitive scan *(structured research questions → competitive positioning)*
 > - **D** — Product strategy framing *(Cagan — 10-question opportunity assessment → PROCEED / REDESIGN / DEFER)*
 > - **E** — Jobs-to-be-Done *(Christensen / Moesta — what progress is the customer hiring for, and why do they switch?)*
-  - **A** - Opportunity mapping *(Torres - unmet needs, pain points, desires -> opportunity tree)*
-  - **B** - Assumption inventory *(Torres - surface and prioritise every baked-in assumption)*
-  - **C** - Market and competitive scan *(structured research questions -> competitive positioning)*
-  - **D** - Product strategy framing *(Cagan - 10-question opportunity assessment -> PROCEED / REDESIGN / DEFER)*
-  - **E** - Jobs-to-be-Done *(Christensen / Moesta - what progress is the customer hiring for, and why do they switch?)*
 >
 > Reply: A, B, C, D, E — any combination (e.g. `A B E`) — or **all**
 

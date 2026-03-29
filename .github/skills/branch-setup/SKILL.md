@@ -43,8 +43,15 @@ Read the DoR artefact. Extract:
 Check in priority order:
 
 ```bash
+# bash / Git Bash / WSL
 ls -d .worktrees 2>/dev/null
 ls -d worktrees 2>/dev/null
+```
+
+```powershell
+# PowerShell (Windows native)
+Test-Path .worktrees
+Test-Path worktrees
 ```
 
 If found: use it. If both exist, `.worktrees/` wins.
@@ -86,12 +93,21 @@ cd [path]/[story-slug]
 Auto-detect project type and run setup:
 
 ```bash
-# Unix/macOS/Git Bash/WSL - adapt for PowerShell if running natively on Windows
+# bash / Git Bash / WSL
 [ -f package.json ]      && npm install
 [ -f Cargo.toml ]        && cargo build
 [ -f requirements.txt ]  && pip install -r requirements.txt
 [ -f pyproject.toml ]    && poetry install
 [ -f go.mod ]            && go mod download
+```
+
+```powershell
+# PowerShell (Windows native)
+if (Test-Path package.json)      { npm install }
+if (Test-Path Cargo.toml)        { cargo build }
+if (Test-Path requirements.txt)  { pip install -r requirements.txt }
+if (Test-Path pyproject.toml)    { poetry install }
+if (Test-Path go.mod)            { go mod download }
 ```
 
 ---

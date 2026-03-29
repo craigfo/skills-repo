@@ -2,7 +2,7 @@
 name: definition-of-ready
 description: >
   Final gate check before a story is handed to the coding agent. Runs hard blocks
-  (H1-H8) and warnings (W1-W5), determines oversight level, and produces a coding
+  (H1–H9, H-E2E, H-NFR through H-NFR3) and warnings (W1-W5), determines oversight level, and produces a coding
   agent instructions block when all hard blocks pass. Blocks are unambiguous - all
   must pass, no exceptions. Warnings require explicit acknowledgement. Use when
   test plan and review are complete and someone says "is this story ready",

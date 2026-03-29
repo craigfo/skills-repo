@@ -109,6 +109,7 @@ Open a draft pull request / merge request using the command configured in
 **If using GitHub (default):**
 
 ```bash
+# bash / Git Bash / WSL
 gh pr create \
   --title "[story title]" \
   --draft \
@@ -129,6 +130,30 @@ gh pr create \
 [Any ambiguities encountered during implementation - if none, write "None"]
 EOF
 )"
+```
+
+```powershell
+# PowerShell (Windows native) — write body to temp file, then pass it
+$body = @'
+## Story
+[Path: artefacts/[feature]/stories/[story-slug].md]
+
+## ACs satisfied
+[List each AC from the story with ✅]
+
+## Test plan
+[Path: artefacts/[feature]/test-plans/[story-slug]-test-plan.md]
+
+## DoR
+[Path: artefacts/[feature]/dor/[story-slug]-dor.md]
+
+## Notes
+[Any ambiguities encountered during implementation - if none, write "None"]
+'@
+$tmp = New-TemporaryFile
+Set-Content $tmp $body -Encoding UTF8
+gh pr create --title "[story title]" --draft --body-file $tmp
+Remove-Item $tmp
 ```
 
 **If using a different platform**, adapt accordingly:

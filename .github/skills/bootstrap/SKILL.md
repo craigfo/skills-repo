@@ -97,7 +97,16 @@ Check whether `.github/skills/` already exists:
     org-mapping.md                ← org language/governance mapping template
     scale-pipeline.md             ← multi-team scale operating model template
     spike-output.md               ← structured spike output + discovery handoff template
+    spike-outcome.md              ← structured spike outcome + PROCEED / REDESIGN / DEFER template
     nfr-profile.md                ← feature-level NFR consolidation (perf, security, data, compliance)
+    ideation.md                   ← ideation session output template (opportunity map, assumptions, JTBD)
+    implementation-plan.md        ← bite-sized task plan with TDD steps, file paths, commit messages
+    implementation-review.md      ← spec-compliance + code-quality review report template
+    verify-completion.md          ← evidence gate report: AC satisfaction confirmation
+    coverage-map.md               ← visual test coverage map across all stories
+    metric-review.md              ← metric re-baselining report at phase gates
+    programme.md                  ← programme-level artefact: workstreams, dependencies, phase gates
+    compliance-bundle.md          ← regulated-release compliance bundle template
 
   artefacts/
     .gitkeep                      ← placeholder so directory is committed
@@ -135,7 +144,7 @@ product/
   constraints.md                  ← hard limits: budget, regulatory, team capability
 ```
 
-**Total: 34 skill files + 36 templates + 3 root files + 3 viz files + artefacts directory + 2 context profiles + standards/ scaffold + product/ scaffold**
+**Total: 34 skill files + 45 templates + 3 root files + 3 viz files + artefacts directory + 2 context profiles + standards/ scaffold + product/ scaffold**
 
 ---
 

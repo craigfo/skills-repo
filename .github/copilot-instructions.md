@@ -147,12 +147,14 @@ Skills reference these templates — do not embed format definitions in skill fi
 | Coverage map | `.github/templates/coverage-map.md` |
 | Ideation | `.github/templates/ideation.md` |
 | Spike outcome | `.github/templates/spike-outcome.md` |
+| Spike output | `.github/templates/spike-output.md` |
 | Metric review | `.github/templates/metric-review.md` |
 | Programme | `.github/templates/programme.md` |
 | Implementation plan | `.github/templates/implementation-plan.md` |
 | Implementation review | `.github/templates/implementation-review.md` |
 | Compliance bundle | `.github/templates/compliance-bundle.md` |
 | Verify completion | `.github/templates/verify-completion.md` |
+| NFR profile | `.github/templates/nfr-profile.md` |
 | Loop design | `.github/templates/loop-design.md` |
 | Token optimization | `.github/templates/token-optimization.md` |
 | Org mapping | `.github/templates/org-mapping.md` |
@@ -276,6 +278,24 @@ Before closing a session:
 -->
 
 [FILL IN BEFORE COMMITTING]
+
+---
+
+## Product context files
+
+The `.github/product/` directory holds standing context that skills read automatically.
+Bootstrap creates placeholder versions of all four files — fill them in before running the pipeline.
+
+| File | Read by | Purpose |
+|------|---------|---------|
+| `.github/product/mission.md` | `/discovery`, `/benefit-metric`, `/clarify` | What the product does and for whom. Frames problem scoping and metric relevance. |
+| `.github/product/roadmap.md` | `/benefit-metric` | Strategic priorities and horizon. Used to assess whether a proposed metric aligns with the current direction. |
+| `.github/product/tech-stack.md` | `/definition` | Current technology decisions and constraints. Informs story architecture choices and NFR defaults. |
+| `.github/product/constraints.md` | `/discovery`, `/definition` | Hard limits: budget, regulatory, team capability. Surfaced during scope discussions and story ACs. |
+
+**Format:** each file is free-form markdown. A single paragraph plus bullet list is sufficient.
+Skills read the files as-is — no special syntax required.
+Update these files when the product context changes (new regulatory requirement, stack migration, etc.).
 
 ---
 

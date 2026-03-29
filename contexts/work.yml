@@ -54,6 +54,15 @@ mapping:
   governance:
     gates: []
 
+skills_upstream:
+  remote: null                      # set to remote name after: git remote add skills-upstream https://github.com/heymishy/skills-repo.git
+  repo_url: "https://github.com/heymishy/skills-repo.git"
+  sync_paths:
+    - .github/skills/
+    - .github/templates/
+    - scripts/
+  strategy: none                    # none | merge | overwrite — set when remote is configured
+
 scaling:
   maturity_level: "programme"
   target_team_count: 10
