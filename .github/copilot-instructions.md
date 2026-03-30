@@ -78,6 +78,7 @@ Step  Skill                  Entry condition                     Exit condition
 4     /review                Stories exist                        No HIGH findings
 5     /test-plan             Review passed (per story)            Tests written (failing)
 6     /definition-of-ready   Tests exist, review passed           Sign-off complete
+6.5   /decisions             DoR complete (if warnings ack'd)     RISK-ACCEPTs logged
 7     Inner coding loop      DoR sign-off                         Draft PR opened
         7a /branch-setup     DoR Proceed: Yes                     Isolated worktree + clean baseline
         7b /implementation-plan  Worktree ready                   Task plan saved
