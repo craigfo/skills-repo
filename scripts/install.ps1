@@ -207,6 +207,11 @@ foreach ($f in @('mission.md','roadmap.md','tech-stack.md','constraints.md')) {
 
 Copy-SkillFile 'config.yml' (Join-Path $Target 'config.yml')
 
+# sync scripts
+foreach ($f in @('sync-from-upstream.ps1','sync-from-upstream.sh')) {
+    Copy-SkillFile "scripts/$f" (Join-Path $Target "scripts/$f")
+}
+
 # GitHub Actions CI integration - only if target repo uses github-actions
 $ContextYml = Join-Path $Target '.github/context.yml'
 if ((Test-Path $ContextYml) -and (Select-String -Path $ContextYml -Pattern '\bci:\s+github-actions\b' -Quiet)) {

@@ -206,6 +206,10 @@ copy_file ".github/product/constraints.md" "$TARGET_DIR/.github/product/constrai
 
 copy_file "config.yml" "$TARGET_DIR/config.yml"
 
+# sync scripts
+copy_file "scripts/sync-from-upstream.ps1" "$TARGET_DIR/scripts/sync-from-upstream.ps1"
+copy_file "scripts/sync-from-upstream.sh"  "$TARGET_DIR/scripts/sync-from-upstream.sh"
+
 # GitHub Actions CI integration — only if target repo uses github-actions
 CONTEXT_YML="$TARGET_DIR/.github/context.yml"
 if [[ -f "$CONTEXT_YML" ]] && grep -qE '^\s+ci:\s+github-actions' "$CONTEXT_YML" 2>/dev/null; then
