@@ -6,6 +6,21 @@ All notable changes to this repository will be documented in this file.
 
 ---
 
+## [0.5.2] — 2026-03-31
+
+### Changed
+
+#### /clarify is now supply-push, not demand-pull
+
+Previously `/clarify` was only invoked when the user explicitly asked for it — it had no mechanism to be recommended proactively.
+
+- **`/discovery` approval gate** now offers `/clarify` as the default first option before sign-off, rather than immediately asking for approval. Option 2 skips it with quality checks listed inline.
+- **`/workflow`** now checks discovery artefacts for thinness signals (empty assumptions, fewer than 2 out-of-scope items, vague MVP scope words, `Draft` status) and actively routes to `/clarify` when any signal fires. "Skip with acknowledged risk" routes to `/decisions` for a RISK-ACCEPT log entry. The note saying `/clarify` is "optional" is removed.
+- **`/clarify` completion** now checks whether any assumptions were added or materially changed during the session. If yes, prompts to invoke `/decisions` (category: ASSUMPTION) before proceeding to `/benefit-metric`.
+- **`/decisions` invocation table** updated: new row for `/clarify` → assumption added or materially changed → ASSUMPTION.
+
+---
+
 ## [0.5.1] — 2026-03-31
 
 ### Changed
