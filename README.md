@@ -90,15 +90,21 @@ rm -rf /tmp/skills-repo
 ```
 </details>
 
-The installer copies all skills, templates, `context.yml`, `pipeline-state.json`, and `pipeline-viz.html` into `.github/` of your repo. With `--upstream-strategy remote` or `fork` it also wires a `skills-upstream` git remote so you can pull future skill updates.
+The installer copies all skills, templates, `context.yml`, `pipeline-state.json`, `pipeline-viz.html`, and standards domain files (`.github/standards/`) into `.github/` of your repo. It also copies `scripts/sync-from-upstream.ps1` and `sync-from-upstream.sh` for future updates. With `--upstream-strategy remote` or `fork` it also wires a `skills-upstream` git remote.
 
 > **Enterprise fork note:** The org fork (`your-org/sdlc-skills`) is created once by your platform team. All project repos point at it. The platform team controls when upstream changes from `heymishy/skills-repo` are merged in before distributing to teams.
 
-### 3. Fill in the two required placeholders
+### 3. Review the four setup questions
 
-Open `.github/copilot-instructions.md` and fill in:
+The installer prompts you for these during setup and writes them to the right files. If you skipped any or want to change them later:
+
+**In `.github/copilot-instructions.md`:**
 - **Product context** — one paragraph: what you're building, for whom, why
 - **Coding standards** — language, framework, test tool, lint rules, etc.
+
+**In `.github/context.yml`:**
+- **Agent runtime** (`agent.instruction_file`) — `copilot-instructions.md` for GitHub Copilot, `AGENTS.md` for Claude Code, `.cursorrules` for Cursor
+- **EA registry** (`architecture.ea_registry_repo`, `architecture.ea_registry_authoritative`) — set if your org has a shared application/interface registry
 
 ### 4. Choose your context profile
 
@@ -122,6 +128,22 @@ git push -u origin master
 ### Pulling future skills updates
 
 The upstream remote and repo URL are stored in `.github/context.yml → skills_upstream:`. You can ask Copilot to check for updates — it reads that block automatically.
+
+**Quick method — use the sync script (installed with the pipeline):**
+
+```powershell
+# Windows
+.\scripts\sync-from-upstream.ps1           # preview and apply
+.\scripts\sync-from-upstream.ps1 --DryRun  # preview only
+```
+
+```bash
+# macOS / Linux / WSL
+./scripts/sync-from-upstream.sh            # preview and apply
+./scripts/sync-from-upstream.sh --dry-run  # preview only
+```
+
+**Manual method:**
 
 ```bash
 git fetch skills-upstream
@@ -482,7 +504,7 @@ When in doubt about which track, run `/workflow` — it will route you.
 | `/definition` | Breaks discovery into epics and stories | After benefit-metric is active |
 | `/review` | Quality gate — finds gaps before test-writing | After stories exist |
 | `/test-plan` | Writes failing tests + AC verification script; detects browser-layout-dependent ACs that require E2E or manual verification | After review passes |
-| `/definition-of-ready` | Pre-coding gate — H1–H9 + H-E2E hard blocks; produces coding agent instructions | After test plan exists |
+| `/definition-of-ready` | Pre-coding gate — H1–H9, H-E2E, H-NFR through H-NFR3 hard blocks; injects matching domain standards files (`.github/standards/`) into the coding agent instructions block | After test plan exists |
 | `/branch-setup` | Creates isolated worktree, verifies clean baseline | After DoR sign-off |
 | `/implementation-plan` | Writes bite-sized task plan from DoR + test plan | After branch ready |
 | `/tdd` | RED-GREEN-REFACTOR enforcement per task | During any implementation task |
@@ -618,6 +640,7 @@ Skills that enforce it: `/review` (Category E), `/definition` (Step 1.5), `/defi
 **Views:**
 - **Stage view** — feature cards arranged by pipeline stage, with health colour, test progress bar, task progress bar, and loop score badge
 - **Outcomes view** — per-feature benefit panels showing each metric, signal status (🟢 on-track / 🟡 at-risk / 🔴 off-track), evidence, and contributing stories
+- **Governance view** (`v`) — 7-gate compliance matrix across all features; click a failing gate to filter; CSV export; strict policy mode escalates `warn` to `fail` for `complianceProfile: "regulated"` features; gate criteria loaded live from each skill's YAML frontmatter
 
 **Features:**
 - Keyboard shortcut `o` toggles the Outcomes view
@@ -625,6 +648,8 @@ Skills that enforce it: `/review` (Category E), `/definition` (Step 1.5), `/defi
 - ⬇ Download button exports the updated `pipeline-state.json` (turns green when unsaved edits exist)
 - Test progress bar reads `testPlan.passing` from `pipeline-state.json` — `/tdd` and `/subagent-execution` update this field after every task commit so the bar advances in real time during implementation
 - Auto-polls `pipeline-state.json` every 10 seconds **only while a pipeline is actively running** (a feature at `branch-setup`, `implementation-plan`, `subagent-execution`, or `verify-completion`) — the timer stops itself when no active features remain, so there is zero overhead at rest
+- **Markdown editor** (Edit tab on any artefact link) — format bar with B / I / S / H2 / H3 / lists / code / link / rule buttons; Ctrl+B / Ctrl+I shortcuts; **⇥ Reflow** button joins hard-wrapped paragraph lines back into single lines; draft autosave to `localStorage`; **📦 VS Code** opens the file on disk; **✨ Suggest** copies a ready-to-paste Copilot diff prompt to clipboard
+- Action state chips on feature cards (`human` / `processing` / `blocked` / `done`) with stale processing detection and an **Action Queue** panel listing what needs attention (oldest first, click to focus)
 
 **Running it:**
 Open with VS Code Live Server or any local HTTP server. Works on GitHub Pages. Falls back to a file-drop zone when opened directly from `file://` (fetching local files is blocked by browsers).
@@ -758,7 +783,7 @@ curl -fsSL https://raw.githubusercontent.com/heymishy/skills-repo/master/scripts
 irm https://raw.githubusercontent.com/heymishy/skills-repo/master/scripts/install.ps1 | iex
 ```
 
-The script copies all skills, templates, standards scaffolding, product context starters, and `config.yml` to the target repo. If `context.yml` declares `ci: github-actions` it also installs the trace-validation workflow. It then prompts for two required placeholders (product context and coding standards).
+The script copies all skills, templates, standards scaffolding, product context starters, and `config.yml` to the target repo. If `context.yml` declares `ci: github-actions` it also installs the trace-validation workflow. It then prompts for four setup questions: product context, coding standards (written to `copilot-instructions.md`), agent runtime, and EA registry config (written to `context.yml`).
 
 ### Option B — Bootstrap skill
 
