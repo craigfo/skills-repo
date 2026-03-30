@@ -6,6 +6,37 @@ All notable changes to this repository will be documented in this file.
 
 ---
 
+## [0.5.0] — 2026-03-30
+
+### Added
+
+#### Markdown formatting toolbar in pipeline visualiser
+- New format bar in the viz markdown editor (Edit tab): **B**, **I**, **S**, **H2**, **H3**, **• List**, **1. List**, **[ ] Check**, `` `code` ``, ` ```block``` `, **🔗 Link**, **— Rule**
+- Ctrl+B / Ctrl+I keyboard shortcuts wired to bold/italic
+- **⇥ Reflow** button joins hard-wrapped paragraph lines back into single lines while leaving headings, lists, fenced code blocks, and tables untouched
+
+#### Standards domain placeholder files
+- Created `.github/standards/api/api-design.md`, `auth/auth-patterns.md`, `data/data-standards.md`, `security/security-standards.md`, `payments/payments-standards.md`, `ui/ui-standards.md` — each is a commented placeholder with examples ready to fill in; injected by `/definition-of-ready` when a story's domain tag matches
+
+#### Install scripts: 4-question setup prompts
+- Both `install.ps1` and `install.sh` now ask 4 questions during install instead of 2:
+  1. Product context → written to `copilot-instructions.md`
+  2. Coding standards → written to `copilot-instructions.md`
+  3. Agent runtime (Copilot / Claude Code / Cursor / other) → writes `agent.instruction_file` in `context.yml`
+  4. EA registry (none / default / custom URL) → writes `ea_registry_repo` + `ea_registry_authoritative` in `context.yml`
+- Standards domain files (`api`, `auth`, `data`, `security`, `payments`, `ui`) are now copied to the target repo during install
+- Sync scripts (`sync-from-upstream.ps1`, `sync-from-upstream.sh`) are now copied to the target repo during install — previously missing from bootstrapped repos
+
+### Fixed
+
+#### Artefact writing standard — no hard-wrapped prose
+- Added **Artefact writing standards** section to `copilot-instructions.md`: paragraphs must be written as single unbroken lines; no mid-sentence `\n`. Fixes LLM-generated files rendering with broken line breaks in VS Code.
+
+#### Draft viewer flow
+- Draft viewer explanation clarified: drafts save to `localStorage` only; **📦 VS Code** opens the file on disk; **✨ Suggest** copies a Copilot diff prompt to clipboard
+
+---
+
 ## [0.4.0] — 2026-03-29
 
 ### Added
