@@ -6,6 +6,16 @@ All notable changes to this repository will be documented in this file.
 
 ---
 
+## [0.5.5] — 2026-03-31
+
+### Fixed
+
+#### sync-from-upstream: consumer scripts/ and tests/ no longer overwritten on sync
+
+The sync script previously included `scripts/` and `tests/` in both the diff-check and `git checkout` paths. This meant a sync from upstream would silently overwrite any local customisations a consumer repo had made to their own sync scripts or test fixtures. Both paths have been removed from the sync scope — skills, templates, viz, workflows, and governance files continue to sync as before; local `scripts/` and `tests/` are left untouched.
+
+---
+
 ## [0.5.4] — 2026-03-31
 
 ### Fixed
