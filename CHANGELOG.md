@@ -16,6 +16,10 @@ In loop-grouped view, the inner loop lane was entirely hidden until at least one
 
 Fix: when one or more features have all stories signed off at DoR but haven't yet run `/branch-setup`, the inner loop lane renders in preview mode — dashed border, reduced opacity, "upcoming" label in the header, and meta text shows "N stages · awaiting entry" instead of "0 active". All inner loop stage columns are shown as empty placeholders so users can see the full sequence before entering it.
 
+#### Pipeline viz: actionable warning when inner loop feature has no story data
+
+When a feature is at an inner loop stage (branch-setup through branch-complete) but its epics contain no stories, the feature card now shows an amber warning with the exact JSON structure needed to fix the pipeline-state.json, rather than silently showing empty epic rows with "No stories". The warning prompts `/workflow` to reconcile or manual story entry.
+
 ---
 
 ## [0.5.2] — 2026-03-31
