@@ -6,6 +6,22 @@ All notable changes to this repository will be documented in this file.
 
 ---
 
+## [0.5.7] — 2026-03-31
+
+### Fixed
+
+#### /implementation-plan, /subagent-execution, /tdd: task state writes enforced earlier and `file` field made consistent
+
+Three related gaps caused the visualiser to show 0 tasks throughout story execution even when implementation was complete:
+
+1. `/implementation-plan` Step 5 (Save and hand off) did not explicitly call out the `pipeline-state.json` write as part of that step — it was only mentioned in the "mandatory final step" section at the end, making it easy to defer. Step 5 now references the write directly and includes it in the completion output.
+
+2. `/subagent-execution` initialised the `tasks` array only in the "mandatory final step" section, meaning it was treated as a post-execution housekeeping item rather than a pre-loop requirement. Task initialisation is now in Step 1 (before the first subagent is dispatched) and Step 2d (after each task commits) has an explicit state update instruction.
+
+3. `/tdd` and `/subagent-execution` were missing the `file` field on each task entry. Without it the visualiser cannot render clickable task links. Both now include `"file": "artefacts/[feature-slug]/plans/[story-slug]-plan.md"` in the task schema. `/tdd` also gained a guard: if starting TDD directly without a prior /implementation-plan run, it creates the tasks array at that point.
+
+---
+
 ## [0.5.6] — 2026-03-31
 
 ### Fixed
