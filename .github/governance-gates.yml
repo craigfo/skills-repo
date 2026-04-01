@@ -24,6 +24,39 @@
 
 gates:
 
+  - id: discovery
+    label: Discovery
+    skill: /discovery
+    skillPath: skills/discovery/SKILL.md
+    criteria: Discovery artefact approved before progression
+    artefactTemplate: "artefacts/{slug}/discovery.md"
+    evidenceFields:
+      pass: "feature.discoveryStatus === 'approved' OR hasReachedStage('benefit-metric')"
+      warn: "feature.stage === 'discovery' (in progress)"
+      na: "feature.stage === 'ideation' (not yet started)"
+
+  - id: benefit-metric
+    label: Benefit Metric
+    skill: /benefit-metric
+    skillPath: skills/benefit-metric/SKILL.md
+    criteria: Measurable outcomes defined with targets and baselines
+    artefactTemplate: "artefacts/{slug}/benefit-metric.md"
+    evidenceFields:
+      pass: "feature.metrics array has entries AND hasReachedStage('definition')"
+      warn: "metrics defined but not past definition, OR stage assumed without evidence"
+      na: "feature has not reached benefit-metric stage"
+
+  - id: definition
+    label: Definition
+    skill: /definition
+    skillPath: skills/definition/SKILL.md
+    criteria: Epics and stories decomposed from discovery
+    artefactTemplate: "artefacts/{slug}/epics/"
+    evidenceFields:
+      pass: "stories exist AND hasReachedStage('review')"
+      warn: "stories exist but review not started, OR at definition stage with no stories"
+      na: "feature has not reached definition stage"
+
   - id: review
     label: Review
     skill: /review
@@ -34,6 +67,18 @@ gates:
       pass: "all stories: reviewStatus === 'passed'"
       warn: "stories exist, no HIGH findings, not all passed"
       fail: "any story: highFindings > 0"
+
+  - id: architecture
+    label: Architecture
+    skill: /review
+    skillPath: skills/review/SKILL.md
+    criteria: Architecture guardrails compliance verified (Category E)
+    artefactTemplate: "artefacts/{slug}/review/"
+    evidenceFields:
+      pass: "feature.architectureStatus === 'compliant' OR all stories reviewStatus === 'passed' (Category E included)"
+      fail: "feature.architectureStatus === 'has-findings'"
+      warn: "review in progress or pending"
+      na: "feature has not reached review stage"
 
   - id: test-plan
     label: Test Plan
@@ -56,6 +101,17 @@ gates:
       pass: "all stories: dorStatus === 'signed-off'"
       warn: "no stories blocked, some not yet signed-off"
       fail: "any story: dorStatus === 'blocked'"
+
+  - id: decisions
+    label: Decisions
+    skill: /decisions
+    skillPath: skills/decisions/SKILL.md
+    criteria: Risk acceptances and scope decisions logged
+    artefactTemplate: "artefacts/{slug}/decisions.md"
+    evidenceFields:
+      pass: "feature.decisionsLogged === true OR decisionsLogged > 0"
+      warn: "past DoR but no decisionsLogged evidence"
+      na: "feature has not reached definition-of-ready stage"
 
   - id: verify-completion
     label: Verify
