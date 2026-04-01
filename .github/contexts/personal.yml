@@ -110,4 +110,5 @@ skills_upstream:
     - .github/skills/
     - .github/templates/
     - scripts/
+    - skill-pipeline-instructions.md
   strategy: none            # change to manual once the remote is added

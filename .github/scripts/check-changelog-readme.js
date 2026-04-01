@@ -2,13 +2,13 @@
 /**
  * check-changelog-readme.js
  *
- * Enforces that CHANGELOG.md (and optionally README.md) are kept in sync
- * whenever substantive pipeline files are changed.
+ * Enforces that CHANGELOG.md (and optionally skill-pipeline-instructions.md)
+ * are kept in sync whenever substantive pipeline files are changed.
  *
  * HARD BLOCK  — staged changes to skills, templates, copilot-instructions.md,
  *               or scripts/ without a staged change to CHANGELOG.md.
  *
- * ADVISORY    — same trigger, but README.md also not staged (non-blocking).
+ * ADVISORY    — same trigger, but skill-pipeline-instructions.md also not staged (non-blocking).
  *
  * Run:  node .github/scripts/check-changelog-readme.js
  * Used: .git/hooks/pre-commit
@@ -53,7 +53,7 @@ if (substantiveChanges.length === 0) {
 }
 
 const changelogStaged = staged.includes('CHANGELOG.md');
-const readmeStaged    = staged.includes('README.md');
+const readmeStaged    = staged.includes('skill-pipeline-instructions.md');
 
 let failed = false;
 
@@ -67,7 +67,7 @@ if (!changelogStaged) {
 
 if (!readmeStaged) {
   // Non-blocking advisory only.
-  console.warn('[changelog-readme] ⚠  README.md not staged — consider whether the diagram or pipeline text needs updating.');
+  console.warn('[changelog-readme] ⚠  skill-pipeline-instructions.md not staged — consider whether the diagram or pipeline text needs updating.');
 }
 
 process.exit(failed ? 1 : 0);

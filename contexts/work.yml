@@ -61,6 +61,7 @@ skills_upstream:
     - .github/skills/
     - .github/templates/
     - scripts/
+    - skill-pipeline-instructions.md
   strategy: none                    # none | merge | overwrite — set when remote is configured
 
 scaling:

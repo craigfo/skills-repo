@@ -22,7 +22,7 @@ PATHS=(
   ".github/workflows/"
   "scripts/"
   "tests/"
-  "README.md"
+  "skill-pipeline-instructions.md"
   "CHANGELOG.md"
 )
 
