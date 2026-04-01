@@ -1056,7 +1056,7 @@ let mdVscodeBase   = '';        // workspace-root prefix stripped when building 
 let isDirty = false;
 let pipelineLayout = 'loop-grouped'; // 'flat' | 'loop-grouped'
 let governanceGateFilter = ''; // gate id for fail-focused filtering
-let governanceScope = 'feature'; // 'feature' | 'epic' — governance matrix granularity
+let governanceScope = 'feature'; // 'feature' | 'epic' | 'programme' — governance matrix granularity
 // Strict policy: warn → fail for regulated features.
 // Initialised from pipeline-state config.regulated once data loads.
 // User toggle persisted in localStorage so it survives page reloads.
@@ -1771,8 +1771,38 @@ function renderGovernance(features) {
   // Build rows at the chosen governance scope.
   // 'feature' scope: one row per feature (default).
   // 'epic' scope: one row per epic, with a synthetic feature wrapper scoped to that epic's stories.
+  // 'programme' scope: one row per programme, aggregating all workstream features.
   let rowSubjects;
-  if (governanceScope === 'epic') {
+  if (governanceScope === 'programme') {
+    const programmes = (allData && allData.programmes) || [];
+    if (programmes.length > 0) {
+      rowSubjects = programmes.map(function(p) {
+        // Collect all features that belong to this programme
+        const workstreamSlugs = p.workstreams || [];
+        const memberFeatures = workstreamSlugs.length > 0
+          ? features.filter(function(f) { return workstreamSlugs.indexOf(f.slug) !== -1; })
+          : features.filter(function(f) { return f.programme === p.slug; });
+        // Aggregate all epics from member features into a synthetic feature-like object
+        const allEpics = memberFeatures.flatMap(function(f) { return f.epics || []; });
+        return {
+          _isProgrammeRow: true,
+          slug: p.slug,
+          name: p.name || p.slug,
+          stage: p.phase || 'in-progress',
+          track: 'programme-workstream',
+          team: memberFeatures.map(function(f) { return f.team || ''; }).filter(Boolean).filter(function(v, i, a) { return a.indexOf(v) === i; }).join(', '),
+          regulated: memberFeatures.some(function(f) { return f.regulated; }),
+          complianceProfile: memberFeatures.some(function(f) { return f.complianceProfile === 'regulated'; }) ? 'regulated' : 'standard',
+          traceStatus: memberFeatures.every(function(f) { return f.traceStatus === 'passed'; }) ? 'passed' : (memberFeatures.some(function(f) { return f.traceStatus === 'has-findings'; }) ? 'has-findings' : null),
+          epics: allEpics,
+          _memberCount: memberFeatures.length,
+        };
+      });
+    } else {
+      // No programmes defined — fall back to feature scope
+      rowSubjects = features;
+    }
+  } else if (governanceScope === 'epic') {
     rowSubjects = [];
     features.forEach(function(f) {
       (f.epics || []).forEach(function(e) {
@@ -1894,8 +1924,9 @@ function renderGovernance(features) {
   const policyNote      = governanceStrictPolicy ? 'Warn statuses for regulated features are treated as fail.' : 'Warn and fail are shown separately.';
   const policyBtnClass  = governanceStrictPolicy ? 'gov-btn active' : 'gov-btn';
   const policyBtnLabel  = 'Strict policy mode ' + (governanceStrictPolicy ? 'ON' : 'OFF');
-  const scopeBtnClass   = governanceScope === 'epic' ? 'gov-btn active' : 'gov-btn';
-  const scopeBtnLabel   = 'Scope: ' + (governanceScope === 'epic' ? 'Epic' : 'Feature');
+  const scopeLabels = { feature: 'Feature', epic: 'Epic', programme: 'Programme' };
+  const scopeBtnClass   = governanceScope !== 'feature' ? 'gov-btn active' : 'gov-btn';
+  const scopeBtnLabel   = 'Scope: ' + (scopeLabels[governanceScope] || 'Feature');
 
   // Compliance context banner — shows repo-level compliance posture from config
   let complianceBannerHTML = '';
@@ -1934,7 +1965,7 @@ function renderGovernance(features) {
   board.innerHTML = `
     ${complianceBannerHTML}
     <div class="gov-summary">
-      <span class="gov-pill">${governanceScope === 'epic' ? 'Epics' : 'Features'} ${rowSubjects.length}</span>
+      <span class="gov-pill">${scopeLabels[governanceScope] || 'Features'}s ${rowSubjects.length}</span>
       <span class="gov-pill pass">Pass ${passCount}</span>
       <span class="gov-pill warn">Warn ${warnCount}</span>
       <span class="gov-pill fail">Fail ${failCount}</span>
@@ -1964,7 +1995,7 @@ function renderGovernance(features) {
     </div>
     <div class="gov-matrix-wrap">
       <table class="gov-matrix">
-        <thead><tr><th>${governanceScope === 'epic' ? 'Epic' : 'Feature'}</th>${colHeadersHTML}</tr></thead>
+        <thead><tr><th>${scopeLabels[governanceScope] || 'Feature'}</th>${colHeadersHTML}</tr></thead>
         <tbody>${matrixRowsHTML}</tbody>
       </table>
     </div>
@@ -1972,11 +2003,14 @@ function renderGovernance(features) {
 }
 
 function governanceRowHTML(feature, gateResults) {
+  const metaLine = feature._isProgrammeRow
+    ? esc(feature.slug) + ' · ' + (feature._memberCount || 0) + ' workstream' + ((feature._memberCount || 0) !== 1 ? 's' : '')
+    : esc(feature.slug) + ' · ' + esc(stageLabel(feature.stage));
   return `
     <tr>
       <td class="gov-feature-cell">
         <div class="gov-feature-name">${esc(feature.name)}</div>
-        <div class="gov-feature-meta">${esc(feature.slug)} · ${esc(stageLabel(feature.stage))}</div>
+        <div class="gov-feature-meta">${metaLine}</div>
       </td>
       ${gateResults.map(gr => `
         <td class="gov-cell">
@@ -3015,7 +3049,8 @@ function handleBoardClick(e) {
     }
     const toggleGovScope = e.target.closest('[data-action="toggle-gov-scope"]');
     if (toggleGovScope) {
-      governanceScope = governanceScope === 'feature' ? 'epic' : 'feature';
+      const cycle = { feature: 'epic', epic: 'programme', programme: 'feature' };
+      governanceScope = cycle[governanceScope] || 'feature';
       render();
       return;
     }

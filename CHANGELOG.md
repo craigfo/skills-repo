@@ -6,6 +6,22 @@ All notable changes to this repository will be documented in this file.
 
 ---
 
+## [0.5.13] — 2026-04-01
+
+### Improved
+
+#### Governance scope: programme-level view
+
+The governance scope toggle now cycles through three levels: **Feature → Epic → Programme**.
+
+- **Programme scope** aggregates all workstream features belonging to a programme into a single governance row. Gate status is evaluated across all stories from all member features — if any workstream has HIGH review findings, the programme row shows fail.
+- Programme membership is resolved via `programme.workstreams[]` (array of feature slugs on the programme entry) with fallback to `feature.programme` (backlink slug on each feature).
+- When no programmes are defined in `pipeline-state.json`, programme scope falls back to feature scope gracefully.
+- Row meta shows workstream count (e.g. "3 workstreams") instead of stage label.
+- `/programme` skill updated to write `workstreams: [feature-slugs]` on programme creation and set `programme: "slug"` on each member feature.
+
+---
+
 ## [0.5.12] — 2026-04-01
 
 ### Improved
