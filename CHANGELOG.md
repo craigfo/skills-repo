@@ -33,9 +33,13 @@ A new sub-panel in the governance view showing per-feature compliance with indiv
 - `/definition` — seeds `guardrails[]` with not-assessed entries from the registry at story creation time
 - `/definition-of-ready` — updates guardrail entries from H9 and H-NFR/H-NFR2/H-NFR3 checks
 - `/definition-of-done` — updates NFR guardrail entries from Step 5 verification outcomes
-- `/trace` — updates guardrail entries from architecture compliance check
+- `/trace` — updates guardrail entries from architecture compliance check; added registry-sync check that flags prose IDs missing from the YAML block as LOW findings
 - `/workflow` — reconciliation seeds missing guardrails from registry and compliance frameworks
 - `/discovery` — seeds compliance-framework guardrail entries from context.yml at feature creation
+
+**Registry sync safeguards:**
+- `architecture-guardrails.md` and `templates/architecture-guardrails.md` — added "IMPORTANT: Keep this registry in sync" instruction inside the Guardrails Registry comment block, reminding authors to update YAML entries when prose sections change
+- Trace gate artefact path — added `artefactFallbacks` generating date-prefixed candidates (`[date]-trace.md`) for the last 14 days, matching the `trace/[date]-trace.md` naming convention
 
 ---
 

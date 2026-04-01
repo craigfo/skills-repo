@@ -216,6 +216,16 @@
   Format: YAML block fenced with ```yaml guardrails-registry / ```.
   The viz parses this block from the fetched .md file at runtime.
   
+  IMPORTANT: Keep this registry in sync with the prose sections above.
+  When you add a new mandatory constraint, ADR, pattern, or anti-pattern
+  to the prose sections, add a matching entry here. When you remove or
+  supersede one, remove or update the entry here. If this block is stale,
+  the Guardrails Compliance Matrix in the pipeline visualiser will not
+  reflect the actual guardrails in effect.
+  
+  The /trace skill can flag mismatches as LOW findings (e.g. an ADR-NNN
+  in the ADR table with no matching id: ADR-NNN in this block).
+  
   [FILL IN] — add entries matching your mandatory constraints, ADRs, patterns,
   and anti-patterns above. Use consistent IDs (MC-SEC-01, ADR-001, PAT-01, AP-01).
 -->

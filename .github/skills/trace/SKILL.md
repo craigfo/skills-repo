@@ -154,6 +154,12 @@ If `.github/architecture-guardrails.md` exists:
 Flag any violation as a finding. Superseded ADR references should trigger a
 story update before the next story in the same feature proceeds.
 
+**Registry sync check (if Guardrails Registry block exists):**
+Scan the prose sections of `architecture-guardrails.md` for ADR, mandatory constraint, pattern, and anti-pattern IDs (e.g. `ADR-001`, `MC-SEC-01`, `PAT-01`, `AP-01`). For each ID found in the prose that has no matching `id:` entry in the `yaml guardrails-registry` block, flag as a LOW finding:
+→ "[ID] exists in prose section '[section]' but has no entry in the Guardrails Registry block — the compliance matrix will not track it."
+
+This is a mechanical check — it catches stale registries where authors added prose but forgot to update the YAML block.
+
 If `.github/architecture-guardrails.md` does not exist:
 > ⚠️ No `architecture-guardrails.md` found — architecture compliance check skipped.
 
