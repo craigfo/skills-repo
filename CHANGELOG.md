@@ -6,6 +6,36 @@ All notable changes to this repository will be documented in this file.
 
 ---
 
+## [0.5.18] — 2026-04-09
+
+### Changed
+
+#### Repo structure — user-facing directories moved to root
+
+Established a consistent convention: user-facing directories (`artefacts/`, `contexts/`, `product/`) live at repo root; pipeline machinery stays under `.github/`.
+
+**`product/` moved from `.github/product/` to repo root:**
+- `product/` physically moved to root
+- References updated in `copilot-instructions.md`, `feature-additions.md`, `tests/smoke-tests.md`, `config.yml`
+- Skills updated: `benefit-metric/SKILL.md`, `discovery/SKILL.md`, `clarify/SKILL.md`, `definition/SKILL.md`
+- Install scripts updated: `scripts/install.ps1`, `scripts/install.sh`
+
+**`.github/contexts/` duplicate removed:**
+- Canonical location is root `contexts/` — used by all install/sync scripts
+- `.github/contexts/` was an identical duplicate; deleted
+- Fixed stale `.github/contexts/` references in `.github/context.yml` and `skill-pipeline-instructions.md`
+
+**`.github/artefacts/` leftover removed:**
+- Root `artefacts/` is and has always been canonical (per CHANGELOG entry at 0.5.12)
+- `.github/artefacts/` was a stale leftover; deleted along with its contents (moved to correct location)
+
+**`files/` orphaned directory removed:**
+- `files/constraints.md`, `files/roadmap.md`, `files/tech-stack.md`, `files/decisions.md` → moved to `product/` (replacing placeholder templates with real platform content)
+- `files/ref-skills-platform-standards-model.md` → moved to `artefacts/2026-04-09-skills-platform-phase1/reference/`
+- `files/` removed
+
+---
+
 ## [0.5.17] — 2026-04-02
 
 ### Added

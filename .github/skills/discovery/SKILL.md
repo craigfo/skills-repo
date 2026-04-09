@@ -31,7 +31,7 @@ Before asking any questions, check two things:
 
 **1. Product context:**
 
-Check whether `.github/product/` exists and contains:
+Check whether `product/` (repo root) exists and contains:
 - `mission.md` — what the product does and for whom
 - `constraints.md` — hard limits (regulatory, technical, budget)
 - `tech-stack.md` — current technology decisions

@@ -109,8 +109,8 @@ The installer prompts you for these during setup and writes them to the right fi
 ### 4. Choose your context profile
 
 ```bash
-cp .github/contexts/personal.yml .github/context.yml  # GitHub-native, small team
-cp .github/contexts/work.yml .github/context.yml       # enterprise, Atlassian stack
+cp contexts/personal.yml .github/context.yml  # GitHub-native, small team
+cp contexts/work.yml .github/context.yml       # enterprise, Atlassian stack
 ```
 
 ### 5. Commit and push

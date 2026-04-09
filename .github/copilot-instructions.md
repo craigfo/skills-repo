@@ -298,15 +298,15 @@ Rules:
 
 ## Product context files
 
-The `.github/product/` directory holds standing context that skills read automatically.
+The `product/` directory (repo root) holds standing context that skills read automatically.
 Bootstrap creates placeholder versions of all four files — fill them in before running the pipeline.
 
 | File | Read by | Purpose |
 |------|---------|---------|
-| `.github/product/mission.md` | `/discovery`, `/benefit-metric`, `/clarify` | What the product does and for whom. Frames problem scoping and metric relevance. |
-| `.github/product/roadmap.md` | `/benefit-metric` | Strategic priorities and horizon. Used to assess whether a proposed metric aligns with the current direction. |
-| `.github/product/tech-stack.md` | `/definition` | Current technology decisions and constraints. Informs story architecture choices and NFR defaults. |
-| `.github/product/constraints.md` | `/discovery`, `/definition` | Hard limits: budget, regulatory, team capability. Surfaced during scope discussions and story ACs. |
+| `product/mission.md` | `/discovery`, `/benefit-metric`, `/clarify` | What the product does and for whom. Frames problem scoping and metric relevance. |
+| `product/roadmap.md` | `/benefit-metric` | Strategic priorities and horizon. Used to assess whether a proposed metric aligns with the current direction. |
+| `product/tech-stack.md` | `/definition` | Current technology decisions and constraints. Informs story architecture choices and NFR defaults. |
+| `product/constraints.md` | `/discovery`, `/definition` | Hard limits: budget, regulatory, team capability. Surfaced during scope discussions and story ACs. |
 
 **Format:** each file is free-form markdown. A single paragraph plus bullet list is sufficient.
 Skills read the files as-is — no special syntax required.

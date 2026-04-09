@@ -164,7 +164,7 @@ Run /discovery. I want to build a feature that lets workshop facilitators export
 **Required assertions (check manually):**
 - [ ] Skill asks clarifying questions ONE AT A TIME — does not present a form or all questions at once
 - [ ] First question is about the problem, not the solution
-- [ ] Skill references product context if `.github/product/` files are mentioned
+- [ ] Skill references product context if `product/` files are mentioned
 - [ ] Output artefact path mentions `artefacts/[feature-slug]/discovery.md`
 - [ ] Reference materials section and `reference-index.md` are mentioned as output artefacts
 

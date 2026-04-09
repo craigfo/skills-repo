@@ -199,13 +199,13 @@ Right now bootstrapping a new repo requires manually copying files or running th
 **Analogues:** Agent OS `agent-os/product/`, BMAD Analyst agent brief, spec-kit constitution
 
 #### What it is
-A set of persistent product-level markdown files that live in `.github/product/` and are injected into `/discovery` and `/benefit-metric` at the start of each feature. These files capture the product's strategic goals, known constraints, architectural decisions, tech stack, and roadmap — context that should inform every feature's problem framing and metric selection but is currently re-established from scratch each session.
+A set of persistent product-level markdown files that live in `product/` (repo root) and are injected into `/discovery` and `/benefit-metric` at the start of each feature. These files capture the product's strategic goals, known constraints, architectural decisions, tech stack, and roadmap — context that should inform every feature's problem framing and metric selection but is currently re-established from scratch each session.
 
 #### Why it matters
 Every `/discovery` session currently starts cold. Benefit-metric tier detection has to infer strategic alignment without knowing the product's actual goals. For a Westpac payments context, decisions like "we are replacing VisionPLUS", "we are committed to open banking by [date]", "our architecture requires all new services to use [standard]" are permanent context that should shape every feature's framing automatically. Persistent product context also reduces the variability between discovery sessions run by different team members — the product intent is explicit and shared, not inferred.
 
 #### Implementation considerations
-- Create `.github/product/` directory with starter files:
+- Create `product/` directory (repo root) with starter files:
   - `mission.md` — product purpose, target users, strategic goals
   - `roadmap.md` — current initiatives, committed deliverables, known constraints
   - `tech-stack.md` — architectural standards, platform decisions, integration patterns, what's being decommissioned

@@ -206,10 +206,10 @@ copy_file ".github/standards/payments/payments-standards.md" "$TARGET_DIR/.githu
 copy_file ".github/standards/ui/ui-standards.md"            "$TARGET_DIR/.github/standards/ui/ui-standards.md"
 
 # product context scaffold
-copy_file ".github/product/mission.md"    "$TARGET_DIR/.github/product/mission.md"
-copy_file ".github/product/roadmap.md"    "$TARGET_DIR/.github/product/roadmap.md"
-copy_file ".github/product/tech-stack.md" "$TARGET_DIR/.github/product/tech-stack.md"
-copy_file ".github/product/constraints.md" "$TARGET_DIR/.github/product/constraints.md"
+copy_file "product/mission.md"    "$TARGET_DIR/product/mission.md"
+copy_file "product/roadmap.md"    "$TARGET_DIR/product/roadmap.md"
+copy_file "product/tech-stack.md" "$TARGET_DIR/product/tech-stack.md"
+copy_file "product/constraints.md" "$TARGET_DIR/product/constraints.md"
 
 copy_file "config.yml" "$TARGET_DIR/config.yml"
 
@@ -322,7 +322,7 @@ PYEOF
   success "Install complete."
   echo ""
   echo "  Next steps:"
-  echo "    1. Fill in .github/product/ (mission, roadmap, tech-stack, constraints)"
+  echo "    1. Fill in product/ (mission, roadmap, tech-stack, constraints)"
   echo "    2. Fill in .github/standards/ domain stubs with your rules"
   echo "    3. Open pipeline-viz.html in browser (Live Server or file://)"
   echo "    4. Run /workflow to start your first feature"

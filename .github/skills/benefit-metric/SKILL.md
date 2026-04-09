@@ -53,7 +53,7 @@ If not met (entry condition):
 
 **Before the meta-benefit check, read product context if available:**
 
-Check whether `.github/product/mission.md` and `.github/product/roadmap.md` exist.
+Check whether `product/mission.md` and `product/roadmap.md` exist.
 If they do, read them and extract:
 - The product's stated success outcomes (from `mission.md`) → use to validate Tier 1 alignment
 - The current strategic priorities (from `roadmap.md`) → confirm this feature aligns with Horizon 1 or 2

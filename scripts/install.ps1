@@ -215,7 +215,7 @@ foreach ($domain in @('api','auth','data','security','payments','ui')) {
 
 # product context scaffold
 foreach ($f in @('mission.md','roadmap.md','tech-stack.md','constraints.md')) {
-    Copy-SkillFile ".github/product/$f" (Join-Path $Target ".github/product/$f")
+    Copy-SkillFile "product/$f" (Join-Path $Target "product/$f")
 }
 
 Copy-SkillFile 'config.yml' (Join-Path $Target 'config.yml')
@@ -330,7 +330,7 @@ if (-not $DryRun) {
     Write-OK "Install complete."
     Write-Host ""
     Write-Host "  Next steps:"
-    Write-Host "    1. Fill in .github/product/ (mission, roadmap, tech-stack, constraints)"
+    Write-Host "    1. Fill in product/ (mission, roadmap, tech-stack, constraints)"
     Write-Host "    2. Fill in .github/standards/ domain stubs with your rules"
     Write-Host "    3. Open pipeline-viz.html in browser (Live Server or file://)"
     Write-Host "    4. Run /workflow to start your first feature"

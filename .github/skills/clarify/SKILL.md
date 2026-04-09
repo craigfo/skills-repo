@@ -40,7 +40,7 @@ If not found:
 
 ## Step 1 — Read product context
 
-Check whether `.github/product/` exists. If it does, read:
+Check whether `product/` (repo root) exists. If it does, read:
 - `mission.md` — product purpose, target users, success outcomes
 - `constraints.md` — hard limits
 - `tech-stack.md` — current technology decisions

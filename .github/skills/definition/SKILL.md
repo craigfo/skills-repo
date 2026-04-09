@@ -265,7 +265,7 @@ After scope accumulator, generate the feature-level NFR profile.
 
 Read from:
 1. `artefacts/[feature]/discovery.md` — Constraints section
-2. `.github/product/constraints.md` — hard product constraints (if exists)
+2. `product/constraints.md` — hard product constraints (if exists)
 3. Each story's NFR section — aggregate all story-level NFRs
 
 Consolidate into a feature-level NFR profile:
