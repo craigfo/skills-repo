@@ -50,4 +50,37 @@ Platform dogfood signal log. One entry per metric measurement event. Populated d
 
 ---
 
+## Pipeline gap — /checkpoint threshold too late for file-read-heavy phases
+
+### Observed — 2026-04-09
+
+**Circumstance:** /checkpoint triggered at ~61% context. Compaction fired during the write, not at 75% as the guideline states.
+
+**Root cause:** The 75% guideline was calibrated against message-heavy phases (conversation, clarification). File-read-heavy phases (definition, review) fill the Tool Results bucket faster than the Messages bucket. By the time the Messages bucket shows ~61%, the Tool Results bucket may already be near threshold. The effective safe working window is lower.
+
+**Finding:** Revise /checkpoint guidance: invoke at 55–60% for file-read-heavy phases (definition, review, trace). The 75% guideline remains appropriate for conversation-only phases. Distinguish the two cases in the checkpoint documentation.
+
+**Action:** Update /checkpoint invocation guidance in `copilot-instructions.md` or the relevant skill. Flag for `/levelup` post-merge.
+
+---
+
+## Pipeline gap — session-end commit is an agent initiative, not a named checkpoint step
+
+### Observed — 2026-04-09
+
+**Circumstance:** During checkpoint, the agent staged and committed all untracked artefacts (21 files, full definition phase output). This was correct behaviour — artefacts were committed with a descriptive message and hooks passed. However, it was not an explicitly instructed step; the agent inferred it from the session-end protocol comment in `copilot-instructions.md`.
+
+**Finding:** The session-end commit is load-bearing (it's the recovery point for the next session) but it's currently implicit. An agent that reads the protocol less carefully may skip it, or commit at the wrong granularity, or commit with an uninformative message. The commit step should be a named, sequenced item in the /checkpoint exit sequence — not inferred from prose.
+
+**Proposed checkpoint exit sequence (explicit):**
+1. Write learnings signal(s) to `workspace/learnings.md`
+2. Write checkpoint block to `workspace/state.json` with `resumeInstruction`
+3. Stage all untracked artefact files produced this session (`git add artefacts/[feature]/...`)
+4. Commit with message format: `chore: [phase] checkpoint [feature-slug] — [one-line summary]`
+5. Confirm commit hash and hook results in closing message
+
+**Action:** Add numbered exit sequence to /checkpoint skill or copilot-instructions.md. Flag for `/levelup` post-merge.
+
+---
+
 *More signals will be added here as Phase 1 dogfood run progresses.*
