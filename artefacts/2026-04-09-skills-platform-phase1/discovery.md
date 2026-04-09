@@ -112,7 +112,7 @@ Phase 1 delivers the foundation required for at least two squads to consume the 
 
 **No persistent agent runtime.** The platform must operate on standard CI/CD infrastructure. No hosted agent service, persistent message queue, or proprietary orchestration platform. (Product constraint #11.)
 
-**No GitHub Actions assumption.** Enterprise delivery targets Bitbucket Pipelines. CI gate implementations must not use GitHub Actions primitives. GitHub-native patterns used in the dogfood context must be documented as platform-specific with a Bitbucket equivalent.
+**GitHub Actions for Phase 1 dogfood.** The Phase 1 dogfood context uses GitHub Actions for CI gate implementation (P1.3) and distribution trigger (P1.1). The requirement to document a Bitbucket Pipelines equivalent is deferred to Phase 2 — authoring untested Bitbucket configuration without a live Bitbucket environment produces unreliable documentation. The platform-neutral portability constraint is reinstated as a concrete, testable requirement when enterprise Bitbucket becomes the delivery target. See decisions.md SCOPE entry 2026-04-10.
 
 **Credentials are structural — never in the agent's environment.** PAT and OAuth tokens must live in a secrets store. The agent never handles a credential directly. The `context.yml` MCP section references secret names, not values. (Product constraint #12.)
 

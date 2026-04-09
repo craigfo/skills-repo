@@ -101,3 +101,12 @@
 **Made by:** Hamish, 2026-04-10
 **Revisit trigger:** Not applicable — intent is preserved in the reworded AC.
 ---
+
+---
+**2026-04-10 | SCOPE | Phase 1 platform-neutral CI constraint**
+**Decision:** Defer the Bitbucket Pipelines equivalent documentation requirement from Phase 1 to Phase 2. Phase 1 CI gate (P1.3) and distribution trigger (P1.1) are implemented using GitHub Actions for the dogfood context only — no Bitbucket equivalent is authored, required, or tested as a Phase 1 AC. AC6 is removed from P1.3; the Bitbucket equivalent clause is removed from P1.1 and P1.3 Architecture Constraints and from discovery.md.
+**Alternatives considered:** (A) Keep the Bitbucket equivalent requirement as written — authoring Bitbucket YAML in a dogfood context where no Bitbucket environment is available produces untestable documentation; quality and correctness cannot be verified. (B) Write a "best effort" Bitbucket section without testing — indistinguishable from a placeholder and creates false assurance with no real validation path.
+**Rationale:** Untestable documentation written against a platform not available in the dogfood context is unreliable. A Bitbucket equivalent authored without a live Bitbucket environment to run it against is informed speculation, not verified configuration. The platform-neutral portability principle remains valid and important; the constraint is reinstated as a concrete, testable requirement when the enterprise Bitbucket target environment is available.
+**Made by:** Hamish, 2026-04-10
+**Revisit trigger:** When enterprise Bitbucket Pipelines becomes the delivery target (expected Phase 2 or Phase 3 depending on enterprise onboarding timeline). At that point: reinstate AC6 in P1.3, add a Bitbucket equivalent clause back into P1.1 Architecture Constraints, and author both against a live Bitbucket environment.
+---

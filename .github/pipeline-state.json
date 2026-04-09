@@ -19,7 +19,7 @@
           "status": "not-started",
           "stories": [
             { "slug": "p1.5-workspace-state-session-continuity", "name": "Implement workspace/state.json cross-session continuity and /checkpoint convention", "stage": "test-plan", "health": "green", "reviewStatus": "passed", "highFindings": 0, "testPlan": { "status": "written", "totalTests": 13, "passing": 0 }, "acTotal": 8, "acVerified": 0, "hasLayoutDependentGaps": false, "e2eToolingRequired": false, "updatedAt": "2026-04-10" },
-            { "slug": "p1.3-assurance-agent-ci-gate", "name": "Deploy assurance agent as automated CI gate on PR open/update", "stage": "test-plan", "health": "green", "reviewStatus": "passed", "highFindings": 0, "testPlan": { "status": "written", "totalTests": 11, "passing": 0 }, "acTotal": 7, "acVerified": 0, "hasLayoutDependentGaps": false, "e2eToolingRequired": false, "updatedAt": "2026-04-10" },
+            { "slug": "p1.3-assurance-agent-ci-gate", "name": "Deploy assurance agent as automated CI gate on PR open/update", "stage": "test-plan", "health": "green", "reviewStatus": "passed", "highFindings": 0, "testPlan": { "status": "written", "totalTests": 10, "passing": 0 }, "acTotal": 6, "acVerified": 0, "hasLayoutDependentGaps": false, "e2eToolingRequired": false, "updatedAt": "2026-04-10" },
             { "slug": "p1.4-watermark-gate", "name": "Implement watermark gate for eval regression detection", "stage": "test-plan", "health": "green", "reviewStatus": "passed", "highFindings": 0, "testPlan": { "status": "written", "totalTests": 15, "passing": 0 }, "acTotal": 6, "acVerified": 0, "hasLayoutDependentGaps": false, "e2eToolingRequired": false, "updatedAt": "2026-04-10" }
           ]
         },
