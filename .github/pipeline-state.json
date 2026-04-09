@@ -18,9 +18,9 @@
           "name": "Core Loop Infrastructure",
           "status": "not-started",
           "stories": [
-            { "slug": "p1.5-workspace-state-session-continuity", "name": "Implement workspace/state.json cross-session continuity and /checkpoint convention", "stage": "review", "health": "green", "reviewStatus": "passed", "highFindings": 0, "updatedAt": "2026-04-10" },
-            { "slug": "p1.3-assurance-agent-ci-gate", "name": "Deploy assurance agent as automated CI gate on PR open/update", "stage": "review", "health": "green", "reviewStatus": "passed", "highFindings": 0, "updatedAt": "2026-04-10" },
-            { "slug": "p1.4-watermark-gate", "name": "Implement watermark gate for eval regression detection", "stage": "review", "health": "green", "reviewStatus": "passed", "highFindings": 0, "updatedAt": "2026-04-10" }
+            { "slug": "p1.5-workspace-state-session-continuity", "name": "Implement workspace/state.json cross-session continuity and /checkpoint convention", "stage": "test-plan", "health": "green", "reviewStatus": "passed", "highFindings": 0, "testPlan": { "status": "written", "totalTests": 13, "passing": 0 }, "acTotal": 8, "acVerified": 0, "hasLayoutDependentGaps": false, "e2eToolingRequired": false, "updatedAt": "2026-04-10" },
+            { "slug": "p1.3-assurance-agent-ci-gate", "name": "Deploy assurance agent as automated CI gate on PR open/update", "stage": "test-plan", "health": "green", "reviewStatus": "passed", "highFindings": 0, "testPlan": { "status": "written", "totalTests": 11, "passing": 0 }, "acTotal": 7, "acVerified": 0, "hasLayoutDependentGaps": false, "e2eToolingRequired": false, "updatedAt": "2026-04-10" },
+            { "slug": "p1.4-watermark-gate", "name": "Implement watermark gate for eval regression detection", "stage": "test-plan", "health": "green", "reviewStatus": "passed", "highFindings": 0, "testPlan": { "status": "written", "totalTests": 15, "passing": 0 }, "acTotal": 6, "acVerified": 0, "hasLayoutDependentGaps": false, "e2eToolingRequired": false, "updatedAt": "2026-04-10" }
           ]
         },
         {
@@ -28,8 +28,8 @@
           "name": "Distribution and Surface Model",
           "status": "not-started",
           "stories": [
-            { "slug": "p1.1-distribution-progressive-disclosure", "name": "Implement versioned skill distribution and progressive skill disclosure", "stage": "review", "health": "green", "reviewStatus": "passed", "highFindings": 0, "updatedAt": "2026-04-10" },
-            { "slug": "p1.2-surface-adapter-model-foundations", "name": "Implement surface adapter model foundations — Path B git-native reference", "stage": "review", "health": "green", "reviewStatus": "passed", "highFindings": 0, "updatedAt": "2026-04-10" }
+            { "slug": "p1.1-distribution-progressive-disclosure", "name": "Implement versioned skill distribution and progressive skill disclosure", "stage": "test-plan", "health": "green", "reviewStatus": "passed", "highFindings": 0, "testPlan": { "status": "written", "totalTests": 12, "passing": 0 }, "acTotal": 8, "acVerified": 0, "hasLayoutDependentGaps": false, "e2eToolingRequired": false, "updatedAt": "2026-04-10" },
+            { "slug": "p1.2-surface-adapter-model-foundations", "name": "Implement surface adapter model foundations — Path B git-native reference", "stage": "test-plan", "health": "green", "reviewStatus": "passed", "highFindings": 0, "testPlan": { "status": "written", "totalTests": 13, "passing": 0 }, "acTotal": 6, "acVerified": 0, "hasLayoutDependentGaps": false, "e2eToolingRequired": false, "updatedAt": "2026-04-10" }
           ]
         },
         {
@@ -37,9 +37,9 @@
           "name": "Standards, Eval Suite, and Compliance Documentation",
           "status": "not-started",
           "stories": [
-            { "slug": "p1.6-living-eval-regression-suite", "name": "Implement workspace/suite.json living eval regression suite", "stage": "review", "health": "green", "reviewStatus": "passed", "highFindings": 0, "updatedAt": "2026-04-10" },
-            { "slug": "p1.7-standards-model-phase1", "name": "Implement standards model Phase 1 — three anchor disciplines, standards/index.yml, POLICY.md floors", "stage": "review", "health": "green", "reviewStatus": "passed", "highFindings": 0, "updatedAt": "2026-04-10" },
-            { "slug": "p1.8-model-risk-documentation", "name": "Author and review MODEL-RISK.md before non-dogfood adoption", "stage": "review", "health": "amber", "reviewStatus": "passed", "highFindings": 0, "updatedAt": "2026-04-10" }
+            { "slug": "p1.6-living-eval-regression-suite", "name": "Implement workspace/suite.json living eval regression suite", "stage": "test-plan", "health": "green", "reviewStatus": "passed", "highFindings": 0, "totalTests": 14, "acTotal": 6, "hasLayoutDependentGaps": false, "e2eToolingRequired": false, "updatedAt": "2026-04-10" },
+            { "slug": "p1.7-standards-model-phase1", "name": "Implement standards model Phase 1 — three anchor disciplines, standards/index.yml, POLICY.md floors", "stage": "test-plan", "health": "green", "reviewStatus": "passed", "highFindings": 0, "totalTests": 12, "acTotal": 6, "hasLayoutDependentGaps": false, "e2eToolingRequired": false, "updatedAt": "2026-04-10" },
+            { "slug": "p1.8-model-risk-documentation", "name": "Author and review MODEL-RISK.md before non-dogfood adoption", "stage": "test-plan", "health": "green", "reviewStatus": "passed", "highFindings": 0, "totalTests": 9, "acTotal": 5, "hasLayoutDependentGaps": false, "e2eToolingRequired": false, "updatedAt": "2026-04-10" }
           ]
         }
       ],

@@ -1,7 +1,7 @@
 {
   "feature": "2026-04-09-skills-platform-phase1",
-  "lastUpdated": "2026-04-09",
-  "currentPhase": "review",
+  "lastUpdated": "2026-04-10",
+  "currentPhase": "test-plan",
   "cycle": {
     "discovery": {
       "status": "approved",
@@ -72,12 +72,30 @@
     "openHighFindings": [],
     "openMediumFindings": []
   },
+  "testPlan": {
+    "status": "complete",
+    "startedDate": "2026-04-10",
+    "completedDate": "2026-04-10",
+    "deliveryOrder": ["p1.5", "p1.3", "p1.4", "p1.2", "p1.1", "p1.6", "p1.7", "p1.8"],
+    "completedSoFar": ["p1.5", "p1.3", "p1.4", "p1.2", "p1.1", "p1.6", "p1.7", "p1.8"],
+    "remaining": [],
+    "testTotals": {
+      "p1.5": { "tests": 13, "acTotal": 8 },
+      "p1.3": { "tests": 11, "acTotal": 7 },
+      "p1.4": { "tests": 15, "acTotal": 6 },
+      "p1.2": { "tests": 13, "acTotal": 6 },
+      "p1.1": { "tests": 12, "acTotal": 8 },
+      "p1.6": { "tests": 14, "acTotal": 6 },
+      "p1.7": { "tests": 12, "acTotal": 6 },
+      "p1.8": { "tests": 9, "acTotal": 5 }
+    }
+  },
   "checkpoint": {
     "writtenAt": "2026-04-10",
-    "contextAtWrite": "review complete — all 8 stories reviewed; 1-H1 on p1.3 still open; p1.3 dependencies fixed; re-review p1.3 then proceed to /test-plan",
-    "resumeInstruction": "Fix p1.3 Dependencies section (remove references to voided prototype-fix-s4-compilation and prototype-fix-s2-exit-code), re-review p1.3. Once p1.3 passes, acknowledge MEDIUM findings in decisions.md (1-M1/M2 for p1.5, 1-M3 for p1.2, 1-M4 for p1.8), then run /test-plan for all 8 stories in delivery order: p1.5 → p1.3 → p1.4 → p1.2 → p1.1 → p1.6 → p1.7 → p1.8.",
+    "contextAtWrite": "test-plan complete — all 8 stories done; 99 total tests across all stories; next phase: /definition-of-ready",
+    "resumeInstruction": "All test plans and verification scripts written. Run /definition-of-ready for all 8 stories in delivery order: p1.5 → p1.3 → p1.4 → p1.2 → p1.1 → p1.6 → p1.7 → p1.8.",
     "pendingActions": [
-      "run /test-plan for each story in delivery order: p1.5 → p1.3 → p1.4 → p1.2 → p1.1 → p1.6 → p1.7 → p1.8"
+      "run /definition-of-ready for all 8 stories"
     ]
   }
 }
