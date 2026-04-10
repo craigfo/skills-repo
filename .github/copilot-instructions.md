@@ -275,6 +275,7 @@ If you are picking up a feature after a break:
 - When a skill produces output, save it to the correct artefacts path immediately
 - If a skill asks a clarifying question, answer it before proceeding — do not skip
 - If you are unsure whether to proceed, run `/workflow` rather than guessing
+- **`/checkpoint` threshold: invoke at 55%** for any file-read-heavy phase (definition, review, test-plan, trace, inner loop implementation). The 75% guideline applies only to conversation-only phases. File reads fill the Tool Results context bucket faster than the Messages bucket — by the time the hover indicator shows 55–60%, the Tool Results bucket may be near threshold. Invoke `/checkpoint` at 55% with enough headroom for the write to complete before compaction fires.
 
 ### Ending a session
 

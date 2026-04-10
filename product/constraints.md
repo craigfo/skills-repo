@@ -126,7 +126,7 @@ Compaction cannot be prohibited — Copilot Agent mode applies it automatically 
 
 **Design for recovery when it occurs:**
 - `workspace/state.json` is the recovery mechanism — if compaction degrades a session or the session exits, the next session resumes from the last phase boundary checkpoint without reading the prior conversation
-- The human `/checkpoint` override at 75% is the proactive exit before compaction occurs
+- The human `/checkpoint` override is the proactive exit before compaction occurs. **Effective threshold: 55% for file-read-heavy phases (definition, review, test-plan, trace, inner loop)**. The 75% guideline was calibrated against conversation-only phases; file reads fill the Tool Results context bucket faster than the Messages bucket, so the effective safe window is lower. Updated 2026-04-10 from Phase 1 dogfood signal (8+ sessions — compaction consistently fired at ~60% in file-read-heavy phases). Use 75% only for conversation-only phases with no large artefact reads.
 
 **Why self-monitoring is not viable:** Agents cannot read their own token consumption. Phase boundaries are the structural checkpoint trigger — not token thresholds, which would require self-monitoring.
 

@@ -184,7 +184,7 @@ The platform does not use compaction for context window management. Compaction m
 **The platform's approach:**
 - Phase boundary writes to `workspace/state.json` are mandatory checkpoint writes — not conditional on context pressure
 - Sessions are designed to be disposable — all state externalises before session end
-- Human `/checkpoint` override is the escape valve when context approaches 75% before a phase boundary
+- Human `/checkpoint` override is the escape valve when context approaches 55% (file-read-heavy phases: definition, review, test-plan, trace, inner loop) or 75% (conversation-only phases) before a phase boundary — updated 2026-04-10 from Phase 1 dogfood signal
 - Progressive skill disclosure (P1.1) is the inner loop's context management mechanism
 - Self-monitoring is not viable — agents cannot read their own token consumption in the current runtime
 

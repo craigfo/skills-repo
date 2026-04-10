@@ -11,6 +11,9 @@ All notable changes to this repository will be documented in this file.
 - `bootstrap/SKILL.md` — redacted organisation name in example prompt ("Westpac NZ" → "Org x") to avoid embedding real client names in the template
 - `copilot-instructions.md` — added dogfooding comment to `## Product context` block flagging the filled-in prose as temporary and reminding post-Phase 4 cleanup to restore the generic placeholder
 - `review/SKILL.md` — added per-story incremental state write instruction to mandatory state update section; state is now written after each story's report file is created, before the next story is loaded (dogfood gap finding 2026-04-10 session 5)
+- `copilot-instructions.md` — `/checkpoint` threshold updated from 75% to 55% for file-read-heavy phases (definition, review, test-plan, trace, inner loop); added explicit threshold note to "During a session" section. Source: Phase 1 dogfood signal — compaction consistently fires at ~60% in file-read-heavy phases because Tool Results bucket fills faster than Messages bucket (2026-04-10)
+- `product/constraints.md` — constraint #14 updated with 55% effective threshold and dogfood rationale
+- `product/decisions.md` — `/checkpoint` escape valve threshold updated to phase-aware 55%/75%
 
 ---
 
