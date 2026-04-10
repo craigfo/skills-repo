@@ -386,6 +386,7 @@ const CONTRACTS = [
       '--target github-agent',
       'issueUrl',
       'dispatchTarget',
+      'Unpushed commits detected',
     ],
   },
   // ── Workflow navigator ────────────────────────────────────────────────────

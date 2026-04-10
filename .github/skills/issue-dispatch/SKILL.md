@@ -27,6 +27,28 @@ report this and stop — there is nothing to dispatch.
 
 ---
 
+## Step 0 — Preflight: verify remote is up to date
+
+**Run before creating any issues:**
+
+```bash
+git status
+git log --oneline origin/HEAD..HEAD 2>/dev/null || git log --oneline @{u}..HEAD 2>/dev/null
+```
+
+If any commits are shown (local commits not yet pushed to the remote), **stop and warn the operator:**
+
+> ⚠️ **Unpushed commits detected.** The agent clones at assignment time — anything not pushed is invisible to it. Push first, then re-run `/issue-dispatch`.
+>
+> Commits not yet on remote:
+> [list the commit hashes and messages]
+
+Do not create issues until the operator confirms all relevant commits are pushed.
+
+**Rationale:** The GitHub Copilot coding agent clones the remote at the moment the issue is assigned. Any local commits — including fixes, artefact changes, decisions, or rule updates — that have not been pushed are invisible to the agent. This causes stale-clone runs that block for reasons the operator has already resolved locally, producing throwaway PRs and wasted agent cycles.
+
+---
+
 ## Step 1 — Read pipeline state
 
 Read `.github/pipeline-state.json`. Identify all stories where:
