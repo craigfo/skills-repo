@@ -1,0 +1,38 @@
+name: Copilot Setup Steps
+
+# GitHub Copilot coding agent runs this workflow to set up its environment
+# and verify the repository baseline before making any changes.
+#
+# Job name must be "copilot-setup-steps" — GitHub Copilot looks for this
+# job specifically. workflow_dispatch allows Copilot to trigger it on demand.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  copilot-setup-steps:
+    name: Copilot Setup Steps
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install trace validation dependencies
+        run: pip install jsonschema pyyaml
+
+      - name: Verify baseline — governance checks
+        run: npm test
+
+      - name: Verify baseline — trace validation
+        run: bash scripts/validate-trace.sh --ci

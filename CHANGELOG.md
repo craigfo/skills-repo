@@ -6,8 +6,15 @@ All notable changes to this repository will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- `package.json` — minimal package with `test` script chaining the 5 governance checks (viz-syntax, governance-sync, skill-contracts, pipeline-artefact-paths, changelog-readme); zero external dependencies (2026-04-10)
+- `.github/workflows/copilot-setup-steps.yml` — GitHub Copilot coding agent setup workflow; installs Node.js + Python, runs `npm test` and `validate-trace.sh --ci` as baseline verification before agent starts work (2026-04-10)
+- `.github/instructions/pipeline.instructions.md` — artefact protection instruction for coding agent; `applyTo: "**"` guards `artefacts/`, `.github/skills/`, `.github/templates/` against agent modification (2026-04-10)
+
 ### Changed
 
+- `copilot-instructions.md` — added "GitHub Copilot coding agent — project orientation" section with 4-step orient-structure-verify-PR pattern; placed before existing "What the coding agent should NOT do" section (2026-04-10)
 - `bootstrap/SKILL.md` — redacted organisation name in example prompt ("Westpac NZ" → "Org x") to avoid embedding real client names in the template
 - `copilot-instructions.md` — added dogfooding comment to `## Product context` block flagging the filled-in prose as temporary and reminding post-Phase 4 cleanup to restore the generic placeholder
 - `review/SKILL.md` — added per-story incremental state write instruction to mandatory state update section; state is now written after each story's report file is created, before the next story is loaded (dogfood gap finding 2026-04-10 session 5)
