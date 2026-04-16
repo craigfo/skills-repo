@@ -205,6 +205,7 @@ Save to `artefacts/[feature]/dod/[story-slug]-dod.md`.
 Update `artefacts/<current-feature-slug>/pipeline-state.json` in the **project repository** when the DoD artefact is saved:
 
 - Set story `stage: "definition-of-done"`, `dodStatus: "complete"`, `prStatus: "merged"`, `health: "green"`, `updatedAt: [now]`
+- **(ec3.1 AC4)** When every story in the feature has `dodStatus: "complete"`, set the top-level `featureStatus: "complete"` on the per-artefact feature record. The `artefacts/<slug>/pipeline-state.json` file is **retained** (not deleted, not moved) — it becomes the feature's immutable audit record readable by any future pipeline run. If stories remain in-flight, `featureStatus` stays `"in-flight"` (the default for any active feature).
 - If all ACs are covered: set `releaseReady: true`
 - If deviations or gaps exist: set `releaseReady: false`, `health: "amber"`, note deviation in `blocker`
 - Update the epic `status`: if all stories in the epic are `dodStatus: "complete"`, set epic `status: "complete"`
@@ -225,6 +226,6 @@ Before writing, resolve the current feature-slug. Write targets are per-feature 
 
 1. **Preferred:** read `activeFeature.slug` from `workspace/state.json`.
 2. **Fallback:** run `node scripts/current-feature-slug.js` (stdout emits the slug; exits 1 if unresolvable).
-3. **Target:** write to `artefacts/<slug>/pipeline-state.json` — NOT `artefacts/<current-feature-slug>/pipeline-state.json` (that is a pointer doc since ec3.1; writes to it are forbidden).
+3. **Target:** write to `artefacts/<slug>/pipeline-state.json` — NOT `.github/pipeline-state.json` (that is a pointer doc since ec3.1; writes to it are forbidden).
 
 If the slug cannot be resolved, halt with the helper's error message and do not write.
