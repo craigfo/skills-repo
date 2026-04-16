@@ -1,0 +1,36 @@
+{
+  "name": "skills-repo",
+  "version": "0.1.0-mvp.1",
+  "description": "Skills-repo CLI — productisation thread MVP (ps1.1 walking skeleton)",
+  "type": "module",
+  "bin": {
+    "skills-repo": "./bin/skills-repo.mjs"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "vitest run && node scripts/round-trip.mjs",
+    "test:unit": "vitest run",
+    "test:watch": "vitest",
+    "test:round-trip": "node scripts/round-trip.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "tsx": "^4.7.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "private": true
+}

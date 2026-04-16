@@ -1,3 +1,10 @@
 .vscode/
 trace-validation-report.json
 .worktrees/
+.DS_Store
+cli/node_modules/
+cli/dist/
+cli/coverage/
+workspace/round-trip-evidence.json
+workspace/dogfood-evidence/
+cli/*.tgz

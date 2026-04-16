@@ -687,4 +687,9 @@ This repository is operated by a single engineer. The following posture applies 
   category: adr
   label: "Artefact-first: new SKILL.md files, src/ modules, and governance check scripts require a story artefact before or alongside the commit"
   section: Active ADRs
+
+- id: MC-CLI-01
+  category: mandatory-constraint
+  label: "CLI commands (skills-repo init/run/status/artefact new) never write outside .skills-repo/ or artefacts/, except the confirmed .gitignore append"
+  section: CLI-Sidecar-Integrity
 ```
