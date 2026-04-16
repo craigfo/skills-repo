@@ -2653,7 +2653,7 @@
       "name": "Engine consolidation (CLI as control plane)",
       "title": "Engine consolidation (CLI as control plane)",
       "track": "productisation-thread",
-      "stage": "branch-setup",
+      "stage": "definition",
       "health": "green",
       "discoveryStatus": "clarified",
       "benefitMetricStatus": "complete",
@@ -2989,13 +2989,13 @@
         {
           "slug": "epic-3-pipeline-state-isolation",
           "name": "Pipeline state becomes per-artefact; root is a derived aggregate",
-          "status": "in-progress",
+          "status": "not-started",
           "note": "Added post-discovery via /decisions Q5 (ARCH scope-add, 2026-04-16). Resolves MM4 pipeline-state write contention at the structural level.",
           "stories": [
             {
               "slug": "ec3.1",
               "name": "Relocate pipeline-state from .github/ root to per-artefact; root becomes derived",
-              "stage": "branch-setup",
+              "stage": "definition-of-ready",
               "health": "green",
               "reviewStatus": "passed",
               "highFindings": 0,
@@ -3028,26 +3028,6 @@
                 "signedOffBy": "Operator (tech lead + contributor, solo scale)",
                 "signedOffAt": "2026-04-17",
                 "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
-              },
-              "updatedAt": "2026-04-17T00:00:00Z",
-              "branchSetup": {
-                "status": "complete",
-                "worktree": ".worktrees/ec3.1-pipeline-state-isolation",
-                "branch": "feature/ec3.1-pipeline-state-isolation",
-                "baselineTests": {
-                  "cliVitest": {
-                    "passed": 50,
-                    "failed": 0
-                  },
-                  "rootValidators": {
-                    "passed": 38,
-                    "failed": 7,
-                    "preExistingAccepted": 7
-                  },
-                  "preExistingFailuresNote": "7 failures in tests/check-p3.14-concepts-docs.js — p3.14 TDD RED baseline, orthogonal to ec3.1 scope. Accepted as pre-existing via /decisions 2026-04-17."
-                },
-                "legacyFixtureCaptured": "tests/fixtures/pipeline-state-legacy.json (3157 lines, 5 features)",
-                "completedAt": "2026-04-17T00:00:00Z"
               }
             }
           ]
