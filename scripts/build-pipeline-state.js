@@ -9,6 +9,12 @@
  *
  * Usage:
  *   node scripts/build-pipeline-state.js [repoRoot]
+ *   node scripts/build-pipeline-state.js [repoRoot] --verify
+ *
+ * --verify: does NOT write. Reads what would be emitted and compares to
+ *           the existing derived file; exits non-zero if they differ
+ *           (with a diff hint). Used in CI to catch drift between
+ *           committed derived output and current per-artefact state.
  *
  * Exits 0 on success. Exits 1 if the artefacts/ directory is absent.
  * Malformed per-artefact JSON files are skipped with a warning on stderr
@@ -18,7 +24,10 @@
 const fs = require("fs");
 const path = require("path");
 
-const ROOT = process.argv[2] || process.cwd();
+const args = process.argv.slice(2);
+const VERIFY = args.includes("--verify");
+const positional = args.filter((a) => !a.startsWith("--"));
+const ROOT = positional[0] || process.cwd();
 const ARTEFACTS_DIR = path.join(ROOT, "artefacts");
 const OUTPUT_PATH = path.join(ROOT, ".github/pipeline-state.derived.json");
 
@@ -64,13 +73,41 @@ features.sort((a, b) => {
 
 const derived = {
   version: "1",
-  updated: new Date().toISOString(),
+  // In --verify mode, use the existing file's `updated` so mtime-only differences
+  // don't cause false positives in CI. Substantive drift (features content) is
+  // what --verify is for.
+  updated: VERIFY && fs.existsSync(OUTPUT_PATH)
+    ? (JSON.parse(fs.readFileSync(OUTPUT_PATH, "utf8")).updated || new Date().toISOString())
+    : new Date().toISOString(),
   derivedFrom: "scanner",
   sourcePaths: features.map((f) => `artefacts/${f.slug}/pipeline-state.json`),
   features,
 };
 
-fs.writeFileSync(OUTPUT_PATH, JSON.stringify(derived, null, 2) + "\n");
+const serialized = JSON.stringify(derived, null, 2) + "\n";
+
+if (VERIFY) {
+  if (!fs.existsSync(OUTPUT_PATH)) {
+    console.error(`build-pipeline-state --verify: derived file absent at ${OUTPUT_PATH}. Run without --verify to generate.`);
+    process.exit(1);
+  }
+  const current = fs.readFileSync(OUTPUT_PATH, "utf8");
+  // Compare features arrays only — ignore `updated` timestamp drift
+  const currentParsed = JSON.parse(current);
+  const currentFeatures = JSON.stringify(currentParsed.features || [], null, 2);
+  const newFeatures = JSON.stringify(derived.features, null, 2);
+  if (currentFeatures === newFeatures) {
+    console.log(`build-pipeline-state --verify: ${features.length} feature${features.length === 1 ? "" : "s"} — derived file is in sync ✓`);
+    process.exit(0);
+  }
+  console.error(`build-pipeline-state --verify: derived file differs from scan output.`);
+  console.error(`  Regenerate: node scripts/build-pipeline-state.js`);
+  console.error(`  Features on disk: ${(currentParsed.features || []).length}`);
+  console.error(`  Features in scan: ${features.length}`);
+  process.exit(1);
+}
+
+fs.writeFileSync(OUTPUT_PATH, serialized);
 console.log(
   `build-pipeline-state: ${features.length} feature${features.length === 1 ? "" : "s"} → ${OUTPUT_PATH}`
 );
