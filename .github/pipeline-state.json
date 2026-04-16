@@ -2826,14 +2826,79 @@
             {
               "slug": "ec2.1",
               "name": "Add CONTRIBUTING.md at repo root",
-              "stage": "definition",
-              "health": "green"
+              "stage": "test-plan",
+              "health": "green",
+              "reviewStatus": "passed",
+              "highFindings": 0,
+              "mediumFindings": 0,
+              "lowFindings": 3,
+              "reviewNotes": "Two review runs: run-1 found 1 MEDIUM (resolved in-story during run-2). Run-2 PASS, 0 HIGH / 0 MEDIUM / 3 LOW.",
+              "testPlan": {
+                "status": "written",
+                "totalTests": 4,
+                "passing": 0,
+                "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec2.1-contributing-md-test-plan.md",
+                "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec2.1-contributing-md-verification.md"
+              },
+              "acTotal": 4,
+              "acVerified": 0,
+              "hasLayoutDependentGaps": false,
+              "e2eToolingRequired": false
             },
             {
               "slug": "ec2.2",
               "name": "Apply product/* edits (roadmap + tech-stack + decisions ADR)",
-              "stage": "definition",
-              "health": "green"
+              "stage": "test-plan",
+              "health": "green",
+              "reviewStatus": "passed",
+              "highFindings": 0,
+              "mediumFindings": 0,
+              "lowFindings": 2,
+              "testPlan": {
+                "status": "written",
+                "totalTests": 4,
+                "passing": 0,
+                "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec2.2-product-edits-test-plan.md",
+                "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec2.2-product-edits-verification.md"
+              },
+              "acTotal": 3,
+              "acVerified": 0,
+              "hasLayoutDependentGaps": false,
+              "e2eToolingRequired": false,
+              "notes": "AC1 tightened at /test-plan (review 1-L1) by splitting into three unit checks — one per 006 text block — rather than reopening AC1 to split into AC1a/AC1b/AC1c."
+            }
+          ]
+        },
+        {
+          "slug": "epic-3-pipeline-state-isolation",
+          "name": "Pipeline state becomes per-artefact; root is a derived aggregate",
+          "status": "not-started",
+          "note": "Added post-discovery via /decisions Q5 (ARCH scope-add, 2026-04-16). Resolves MM4 pipeline-state write contention at the structural level.",
+          "stories": [
+            {
+              "slug": "ec3.1",
+              "name": "Relocate pipeline-state from .github/ root to per-artefact; root becomes derived",
+              "stage": "test-plan",
+              "health": "green",
+              "reviewStatus": "passed",
+              "highFindings": 0,
+              "mediumFindings": 0,
+              "mediumFindingsResolved": 1,
+              "lowFindings": 5,
+              "reviewNotes": "Review-1 PASS WITH CONDITIONS. MEDIUM M1 (slug-detection deferral) resolved 2026-04-17 via inline AC0 + /decisions entry (option (a) per reviewer recommendation).",
+              "testPlan": {
+                "status": "written",
+                "totalTests": 13,
+                "passing": 0,
+                "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec3.1-pipeline-state-isolation-test-plan.md",
+                "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec3.1-pipeline-state-isolation-verification.md",
+                "breakdown": "7 unit + 4 integration + 2 NFR (scanner runtime, backward readability)"
+              },
+              "acTotal": 8,
+              "acVerified": 0,
+              "hasLayoutDependentGaps": false,
+              "e2eToolingRequired": false,
+              "notes": "8 ACs (AC0–AC7). AC0 added post-review as the M1 resolution. Complexity 3 — feature-level complexity rerated to 3 when epic-3 was scoped in (per /decisions Q5)."
             }
           ]
         }
