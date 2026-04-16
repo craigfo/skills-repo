@@ -1,104 +1,162 @@
 {
-    "phase2Summary":  {
-                          "prsMerged":  [
-                                            58,
-                                            57,
-                                            56,
-                                            55,
-                                            54,
-                                            53,
-                                            52,
-                                            51,
-                                            50,
-                                            49
-                                        ],
-                          "postMergeWorkflowFixed":  "true (PR #55 trace-commit.yml)",
-                          "storiesSignedOff":  [
-                                                   "p2.1",
-                                                   "p2.2",
-                                                   "p2.3",
-                                                   "p2.4",
-                                                   "p2.5a",
-                                                   "p2.5b"
-                                               ],
-                          "storiesBlocked":  [
-                                                 "p2.6-assumption-02-unconfirmed"
-                                             ],
-                          "observabilityGapsIdentified":  4,
-                          "status":  "complete"
-                      },
-    "lastUpdated":  "2026-04-16T00:00:00Z",
-    "currentPhase":  "phase-3-improvement",
-    "cycle":  {
-                  "discovery":  {
-                                    "status":  "complete",
-                                    "artefact":  "artefacts/2026-04-14-skills-platform-phase3/discovery.md",
-                                    "completedAt":  "2026-04-14",
-                                    "approvedBy":  "Operator, 2026-04-14. ASSUMPTION-01 through ASSUMPTION-04 confirmed."
-                                },
-                  "benefitMetric":  {
-                                        "status":  "complete",
-                                        "artefact":  "artefacts/2026-04-14-skills-platform-phase3/benefit-metric.md",
-                                        "completedAt":  "2026-04-14",
-                                        "metrics":  ["M1","M2","M3","M4","M5","MM1","MM2","MM3","CR1","CR2"]
-                                    },
-                  "definition": {
-                                    "status": "complete",
-                                    "artefact": "artefacts/2026-04-14-skills-platform-phase3/",
-                                    "completedAt": "2026-04-14",
-                                    "epicCount": 7,
-                                    "storyCount": 18,
-                                    "slicingStrategy": "risk-first",
-                                    "nfrProfile": "artefacts/2026-04-14-skills-platform-phase3/nfr-profile.md",
-                                    "scopeAdjustment": "p3.9 scoped to compatibility matrix only — no live delivery run (operator confirmed 2026-04-14, ASSUMPTION-04 gated)"
-                                }
-              },
-    "estimate": {
-        "e2": {
-            "date": "2026-04-14",
-            "mode": "E2",
-            "storyCount": 18,
-            "complexity": { "1": 9, "2": 6, "3": 3 },
-            "outerLoopFocusH": 2.5,
-            "outerLoopFocusHRange": "2–3h (operator-stated directly)",
-            "engagementFraction": 0.25,
-            "impliedCalendarDays": 5,
-            "p75FocusHPerStory": 0.17,
-            "premiumRequestsForecast": 8,
-            "confidence": "medium",
-            "calibratedComparison": {
-                "phase1Actual": "1.4h/story — 28% engagement, 2 days, 8 stories (reference baseline)",
-                "phase2Actual": "0.08h/story — 25% engagement, 2 days, 13 stories (low-confidence anomaly, agent-heavy)",
-                "phase3E2": "0.17h/story — consistent with agent-heavy outer loop; between phase2 anomaly and phase1 reference"
-            },
-            "notes": "No E1 recorded — first Phase 3 estimate. outerLoopFocusH provided directly by operator (2–3h range; 2.5h midpoint used for p75 derivation). Phase 2 anomaly excluded as calibration anchor."
-        }
+  "phase2Summary": {
+    "prsMerged": [
+      58,
+      57,
+      56,
+      55,
+      54,
+      53,
+      52,
+      51,
+      50,
+      49
+    ],
+    "postMergeWorkflowFixed": "true (PR #55 trace-commit.yml)",
+    "storiesSignedOff": [
+      "p2.1",
+      "p2.2",
+      "p2.3",
+      "p2.4",
+      "p2.5a",
+      "p2.5b"
+    ],
+    "storiesBlocked": [
+      "p2.6-assumption-02-unconfirmed"
+    ],
+    "observabilityGapsIdentified": 4,
+    "status": "complete"
+  },
+  "lastUpdated": "2026-04-17T00:00:00Z",
+  "currentPhase": "engine-consolidation-review-complete",
+  "activeFeature": {
+    "slug": "2026-04-16-engine-consolidation",
+    "branch": "feature/engine-consolidation-outer-loop",
+    "artefactsDir": "artefacts/2026-04-16-engine-consolidation/",
+    "stage": "post-review / pre-test-plan",
+    "storyCount": 10,
+    "reviewSummary": "0 HIGH across all 11 review passes; 1 unresolved MEDIUM on ec3.1 (pipeline-state-isolation), 1 MEDIUM resolved in-story on ec2.1",
+    "notes": "Story count in estimate.e2 (9) predates ec3.1-pipeline-state-isolation being added; actual story count is 10."
+  },
+  "cycle": {
+    "discovery": {
+      "status": "complete",
+      "artefact": "artefacts/2026-04-14-skills-platform-phase3/discovery.md",
+      "completedAt": "2026-04-14",
+      "approvedBy": "Operator, 2026-04-14. ASSUMPTION-01 through ASSUMPTION-04 confirmed."
     },
-    "docsPRsMerged":  [61, 63, 64, 65],
-    "openPRs":  [
-                    {
-                        "pr":  66,
-                        "branch":  "chore/session-checkpoint-and-learnings-2026-04-14",
-                        "description":  "Workspace checkpoint (state.json) + learnings.md spec-immutability entry",
-                        "status":  "draft — awaiting merge"
-                    },
-                    {
-                        "pr":  67,
-                        "branch":  "docs/phase3-backlog-ac8-ac9-playbook-squad-registration",
-                        "description":  "AC8+AC9 full story blocks in phase3 backlog + Step 0 squad registration in validation playbook",
-                        "status":  "draft — awaiting merge"
-                    }
-                ],
-    "checkpoint":  {
-                       "writtenAt":  "2026-04-16",
-                       "contextAtWrite":  "/improvement run complete. 6 write-backs applied across definition/SKILL.md (D2-platform gate, D1-prereq validation), definition-of-done/SKILL.md (schema-valid enum), definition-of-ready/SKILL.md (schema-valid enum), copilot-instructions.md (state write-path safety), systematic-debugging/SKILL.md (coupled-change workflow). 4 retrospective stories created (p3.18–p3.21) with test plans and DoRs to satisfy artefact-first rule. Items 7+8 deferred pending operator confirmation.",
-                       "resumeInstruction":  "Phase 3 improvement write-back is on branch chore/improvement-write-backs-2026-04-16 awaiting merge. After merge: (1) confirm items 7+8 with operator — item 7 is docs/conflict-resolution-guide.md (PR merge conflict patterns), item 8 is second-session verification prompt (lightweight/moderate/structural). (2) Continue Phase 3 inner loop: issues #89-#92 are dispatched for p3.1a/p3.1b/p3.1d/p3.1e. (3) Stories p3.18–p3.21 are DoR-signed-off and ready for dispatch.",
-                       "pendingActions":  [
-                                              "Merge PR for chore/improvement-write-backs-2026-04-16 (improvement write-backs + p3.18–p3.21 artefacts).",
-                                              "Confirm item 7: create docs/conflict-resolution-guide.md with two PR merge conflict patterns (package.json sequential additions, workflow filename collision).",
-                                              "Confirm item 8: choose placement for second-session verification prompt — options: (A) lightweight: add to DoD template, (B) moderate: add verify-output sub-step to DoR/verify-completion, (C) structural: new /verify-output skill.",
-                                              "Monitor GitHub agent runs for issues #89 (p3.1a), #90 (p3.1b), #91 (p3.1d), #92 (p3.1e) — dispatch target: github-agent.",
-                                              "Dispatch p3.18–p3.21 once improvement PR is merged."
-                                          ]
-                   }
+    "benefitMetric": {
+      "status": "complete",
+      "artefact": "artefacts/2026-04-14-skills-platform-phase3/benefit-metric.md",
+      "completedAt": "2026-04-14",
+      "metrics": [
+        "M1",
+        "M2",
+        "M3",
+        "M4",
+        "M5",
+        "MM1",
+        "MM2",
+        "MM3",
+        "CR1",
+        "CR2"
+      ]
+    },
+    "definition": {
+      "status": "complete",
+      "artefact": "artefacts/2026-04-14-skills-platform-phase3/",
+      "completedAt": "2026-04-14",
+      "epicCount": 7,
+      "storyCount": 18,
+      "slicingStrategy": "risk-first",
+      "nfrProfile": "artefacts/2026-04-14-skills-platform-phase3/nfr-profile.md",
+      "scopeAdjustment": "p3.9 scoped to compatibility matrix only \u2014 no live delivery run (operator confirmed 2026-04-14, ASSUMPTION-04 gated)"
+    }
+  },
+  "estimate": {
+    "e2": {
+      "date": "2026-04-16",
+      "mode": "E2",
+      "feature": "2026-04-16-engine-consolidation",
+      "storyCount": 9,
+      "byStory": {
+        "count": 9,
+        "complexity": {
+          "1": 2,
+          "2": 7,
+          "3": 0
+        },
+        "p75FocusHPerStory": 0.069
+      },
+      "expectedCalendarDays": 1,
+      "engagementFraction": 0.25,
+      "outerLoopFocusH": 0.5,
+      "outerLoopFocusHDerivation": "calendarDays \u00d7 2 \u00d7 engagementFraction = 1 \u00d7 2 \u00d7 0.25 = 0.5h",
+      "innerLoopHuman": null,
+      "confidence": "medium",
+      "notes": "No E1 recorded for this feature; E2 produced directly. Work is highly mechanical (move-only per subcomponent with pre/post test parity invariant). Engagement lower than productisation's equivalent because all 7 subcomponent stories are the same template. Assumption: parallel branches merge cleanly (per /decisions Q1).",
+      "calibratedComparison": {
+        "phase1Actual": "1.4h/story \u2014 28%, 2 days, 8 stories (reference baseline)",
+        "phase2Actual": "0.08h/story \u2014 25%, 2 days, 13 stories (low-conf anomaly)",
+        "phase3E2": "0.17h/story \u2014 18 stories, 5 days, 25% (forecast)",
+        "productisationE2": "0.071h/story \u2014 7 stories, 1 day, 25% (forecast; end-of-day estimate came in at 3s total measured time for dogfood)",
+        "engineConsolidationE2": "0.056h/story \u2014 9 stories, 1 day, 25% (below productisation; mechanical template shape)"
+      },
+      "premiumRequestsForecast": null
+    },
+    "phase3E2": {
+      "date": "2026-04-14",
+      "mode": "E2",
+      "storyCount": 18,
+      "complexity": {
+        "1": 9,
+        "2": 6,
+        "3": 3
+      },
+      "outerLoopFocusH": 2.5,
+      "outerLoopFocusHRange": "2\u20133h (operator-stated directly)",
+      "engagementFraction": 0.25,
+      "impliedCalendarDays": 5,
+      "p75FocusHPerStory": 0.17,
+      "premiumRequestsForecast": 8,
+      "confidence": "medium",
+      "calibratedComparison": {
+        "phase1Actual": "1.4h/story \u2014 28% engagement, 2 days, 8 stories (reference baseline)",
+        "phase2Actual": "0.08h/story \u2014 25% engagement, 2 days, 13 stories (low-confidence anomaly, agent-heavy)",
+        "phase3E2": "0.17h/story \u2014 consistent with agent-heavy outer loop; between phase2 anomaly and phase1 reference"
+      },
+      "notes": "No E1 recorded \u2014 first Phase 3 estimate. outerLoopFocusH provided directly by operator (2\u20133h range; 2.5h midpoint used for p75 derivation). Phase 2 anomaly excluded as calibration anchor."
+    }
+  },
+  "docsPRsMerged": [
+    61,
+    63,
+    64,
+    65,
+    66,
+    67,
+    85,
+    87,
+    88,
+    99
+  ],
+  "openPRs": [],
+  "openPRsNote": "Reconciled 2026-04-17: no open PRs on origin (craigfo/skills-repo). Prior entries (#66, #67) merged as commits 6d622de and 02d637d. /improvement write-back branch merged as PR #99 (commit 5840910). GitHub agent dispatch PRs (#89\u2013#92) confirmed closed by operator.",
+  "checkpoint": {
+    "writtenAt": "2026-04-17",
+    "contextAtWrite": "State reconciliation after stale resume. Active feature pivoted to 2026-04-16-engine-consolidation. Prior Phase 3 improvement write-back PR #99 merged. All 11 engine-consolidation review passes show 0 HIGH findings \u2014 /review exit condition met. Working branch feature/engine-consolidation-outer-loop has uncommitted changes on discovery.md, pipeline-state.json, state.json (mostly PowerShell-style \u2192 compact JSON reformat; substantive addition is engine-consolidation E2 estimate block) plus untracked artefacts/2026-04-16-engine-consolidation/benefit-metric.md.",
+    "resumeInstruction": "Next pipeline step for engine-consolidation is /test-plan per story (10 stories: ec1.1\u2013ec1.7, ec2.1, ec2.2, ec3.1). Before running /test-plan, (a) resolve or accept the unresolved MEDIUM finding on ec3.1-pipeline-state-isolation review, (b) decide disposition of the uncommitted reformat changes on pipeline-state.json and state.json, (c) correct storyCount in estimate.e2 from 9 to 10 (ec3.1 added after estimate).",
+    "pendingActions": [
+      "Decide disposition of uncommitted pipeline-state.json + state.json reformat changes (commit as chore, revert, or keep local).",
+      "Update estimate.e2.storyCount (9 \u2192 10) and byStory.count to reflect ec3.1.",
+      "Resolve or accept unresolved MEDIUM finding on ec3.1-pipeline-state-isolation-review-1.md before /test-plan.",
+      "Run /test-plan per engine-consolidation story (ec1.1\u2013ec3.1).",
+      "Carry-forward from prior session \u2014 confirm item 7: create docs/conflict-resolution-guide.md (two PR merge conflict patterns).",
+      "Carry-forward from prior session \u2014 confirm item 8: second-session verification prompt placement (A lightweight / B moderate / C structural)."
+    ]
+  },
+  "carryForward": {
+    "phase3InnerLoop": "GitHub agent dispatch stories p3.1a/b/d/e (issues #89\u2013#92) and subsequent work closed on origin; state if/when resumed depends on whether master now contains those implementations \u2014 verify before re-dispatch. Stories p3.18\u2013p3.21 were DoR-signed-off pre-/improvement-merge; dispatch status unknown post-merge.",
+    "phase2Anchor": "phase2Summary retained for calibration reference \u2014 do not delete."
+  }
 }
