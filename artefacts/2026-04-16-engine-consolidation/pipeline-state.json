@@ -1,0 +1,650 @@
+{
+  "version": "1",
+  "updated": "2026-04-17T00:00:00Z",
+  "feature": {
+    "slug": "2026-04-16-engine-consolidation",
+    "name": "Engine consolidation (CLI as control plane)",
+    "title": "Engine consolidation (CLI as control plane)",
+    "track": "productisation-thread",
+    "stage": "implementation-plan",
+    "health": "green",
+    "discoveryStatus": "clarified",
+    "benefitMetricStatus": "complete",
+    "slicingStrategy": "vertical-slice",
+    "updatedAt": "2026-04-17T00:00:00Z",
+    "regulated": false,
+    "complianceProfile": "standard",
+    "complianceFrameworks": [],
+    "sensitiveDataCategories": [],
+    "epics": [
+      {
+        "slug": "epic-1-subcomponent-migrations",
+        "name": "Seven src/* subcomponents are authoritative under cli/",
+        "status": "not-started",
+        "stories": [
+          {
+            "slug": "ec1.1",
+            "name": "Migrate src/surface-adapter/ → cli/src/adapters/surface-adapter/",
+            "stage": "definition-of-ready",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "lowFindings": 3,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 6,
+              "passing": 0,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec1.1-surface-adapter-migration-test-plan.md",
+              "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec1.1-surface-adapter-migration-verification.md"
+            },
+            "acTotal": 6,
+            "acVerified": 0,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "dorStatus": "signed-off",
+            "oversight": "medium",
+            "dor": {
+              "status": "signed-off",
+              "hardBlocksPassed": 15,
+              "hardBlocksTotal": 15,
+              "warningsAcknowledged": 1,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.1-surface-adapter-migration-dor.md",
+              "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.1-surface-adapter-migration-dor-contract.md",
+              "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+              "signedOffAt": "2026-04-17",
+              "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+            }
+          },
+          {
+            "slug": "ec1.2",
+            "name": "Migrate src/improvement-agent/ → cli/src/agents/improvement-agent/",
+            "stage": "definition-of-ready",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "lowFindings": 3,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 6,
+              "passing": 0,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec1.2-improvement-agent-migration-test-plan.md",
+              "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec1.2-improvement-agent-migration-verification.md"
+            },
+            "acTotal": 6,
+            "acVerified": 0,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "dorStatus": "signed-off",
+            "oversight": "medium",
+            "dor": {
+              "status": "signed-off",
+              "hardBlocksPassed": 15,
+              "hardBlocksTotal": 15,
+              "warningsAcknowledged": 1,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.2-improvement-agent-migration-dor.md",
+              "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.2-improvement-agent-migration-dor-contract.md",
+              "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+              "signedOffAt": "2026-04-17",
+              "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+            }
+          },
+          {
+            "slug": "ec1.3",
+            "name": "Migrate src/approval-channel/ → cli/src/adapters/approval-channel/",
+            "stage": "definition-of-ready",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "lowFindings": 2,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 6,
+              "passing": 0,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec1.3-approval-channel-migration-test-plan.md",
+              "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec1.3-approval-channel-migration-verification.md"
+            },
+            "acTotal": 6,
+            "acVerified": 0,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "dorStatus": "signed-off",
+            "oversight": "medium",
+            "dor": {
+              "status": "signed-off",
+              "hardBlocksPassed": 15,
+              "hardBlocksTotal": 15,
+              "warningsAcknowledged": 1,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.3-approval-channel-migration-dor.md",
+              "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.3-approval-channel-migration-dor-contract.md",
+              "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+              "signedOffAt": "2026-04-17",
+              "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+            }
+          },
+          {
+            "slug": "ec1.4",
+            "name": "Migrate src/bitbucket-cloud-validator/ → cli/src/adapters/bitbucket/cloud/",
+            "stage": "definition-of-ready",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "lowFindings": 2,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 6,
+              "passing": 0,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec1.4-bitbucket-cloud-migration-test-plan.md",
+              "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec1.4-bitbucket-cloud-migration-verification.md"
+            },
+            "acTotal": 6,
+            "acVerified": 0,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "dorStatus": "signed-off",
+            "oversight": "medium",
+            "dor": {
+              "status": "signed-off",
+              "hardBlocksPassed": 15,
+              "hardBlocksTotal": 15,
+              "warningsAcknowledged": 1,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.4-bitbucket-cloud-migration-dor.md",
+              "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.4-bitbucket-cloud-migration-dor-contract.md",
+              "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+              "signedOffAt": "2026-04-17",
+              "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+            }
+          },
+          {
+            "slug": "ec1.5",
+            "name": "Migrate src/bitbucket-dc-validator/ → cli/src/adapters/bitbucket/dc/",
+            "stage": "definition-of-ready",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "lowFindings": 3,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 6,
+              "passing": 0,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec1.5-bitbucket-dc-migration-test-plan.md",
+              "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec1.5-bitbucket-dc-migration-verification.md"
+            },
+            "acTotal": 6,
+            "acVerified": 0,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "dorStatus": "signed-off",
+            "oversight": "medium",
+            "dor": {
+              "status": "signed-off",
+              "hardBlocksPassed": 15,
+              "hardBlocksTotal": 15,
+              "warningsAcknowledged": 1,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.5-bitbucket-dc-migration-dor.md",
+              "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.5-bitbucket-dc-migration-dor-contract.md",
+              "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+              "signedOffAt": "2026-04-17",
+              "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+            }
+          },
+          {
+            "slug": "ec1.6",
+            "name": "Migrate src/suite-parser/ → cli/src/engine/suite/",
+            "stage": "definition-of-ready",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "lowFindings": 2,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 6,
+              "passing": 0,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec1.6-suite-parser-migration-test-plan.md",
+              "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec1.6-suite-parser-migration-verification.md"
+            },
+            "acTotal": 6,
+            "acVerified": 0,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "dorStatus": "signed-off",
+            "oversight": "medium",
+            "dor": {
+              "status": "signed-off",
+              "hardBlocksPassed": 15,
+              "hardBlocksTotal": 15,
+              "warningsAcknowledged": 1,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.6-suite-parser-migration-dor.md",
+              "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.6-suite-parser-migration-dor-contract.md",
+              "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+              "signedOffAt": "2026-04-17",
+              "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+            }
+          },
+          {
+            "slug": "ec1.7",
+            "name": "Migrate src/definition-skill/ → cli/src/engine/story/",
+            "stage": "definition-of-ready",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "lowFindings": 2,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 6,
+              "passing": 0,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec1.7-definition-migration-test-plan.md",
+              "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec1.7-definition-migration-verification.md"
+            },
+            "acTotal": 6,
+            "acVerified": 0,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "dorStatus": "signed-off",
+            "oversight": "medium",
+            "dor": {
+              "status": "signed-off",
+              "hardBlocksPassed": 15,
+              "hardBlocksTotal": 15,
+              "warningsAcknowledged": 1,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.7-definition-migration-dor.md",
+              "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.7-definition-migration-dor-contract.md",
+              "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+              "signedOffAt": "2026-04-17",
+              "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+            }
+          }
+        ]
+      },
+      {
+        "slug": "epic-2-governance-documents",
+        "name": "CONTRIBUTING.md and product/* edits",
+        "status": "not-started",
+        "stories": [
+          {
+            "slug": "ec2.1",
+            "name": "Add CONTRIBUTING.md at repo root",
+            "stage": "definition-of-ready",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "lowFindings": 3,
+            "reviewNotes": "Two review runs: run-1 found 1 MEDIUM (resolved in-story during run-2). Run-2 PASS, 0 HIGH / 0 MEDIUM / 3 LOW.",
+            "testPlan": {
+              "status": "written",
+              "totalTests": 4,
+              "passing": 0,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec2.1-contributing-md-test-plan.md",
+              "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec2.1-contributing-md-verification.md"
+            },
+            "acTotal": 4,
+            "acVerified": 0,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "dorStatus": "signed-off",
+            "oversight": "low",
+            "dor": {
+              "status": "signed-off",
+              "hardBlocksPassed": 15,
+              "hardBlocksTotal": 15,
+              "warningsAcknowledged": 1,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec2.1-contributing-md-dor.md",
+              "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec2.1-contributing-md-dor-contract.md",
+              "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+              "signedOffAt": "2026-04-17",
+              "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+            }
+          },
+          {
+            "slug": "ec2.2",
+            "name": "Apply product/* edits (roadmap + tech-stack + decisions ADR)",
+            "stage": "definition-of-ready",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "lowFindings": 2,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 4,
+              "passing": 0,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec2.2-product-edits-test-plan.md",
+              "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec2.2-product-edits-verification.md"
+            },
+            "acTotal": 3,
+            "acVerified": 0,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "notes": "AC1 tightened at /test-plan (review 1-L1) by splitting into three unit checks — one per 006 text block — rather than reopening AC1 to split into AC1a/AC1b/AC1c.",
+            "dorStatus": "signed-off",
+            "oversight": "low",
+            "dor": {
+              "status": "signed-off",
+              "hardBlocksPassed": 15,
+              "hardBlocksTotal": 15,
+              "warningsAcknowledged": 1,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec2.2-product-edits-dor.md",
+              "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec2.2-product-edits-dor-contract.md",
+              "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+              "signedOffAt": "2026-04-17",
+              "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+            }
+          }
+        ]
+      },
+      {
+        "slug": "epic-3-pipeline-state-isolation",
+        "name": "Pipeline state becomes per-artefact; root is a derived aggregate",
+        "status": "in-progress",
+        "note": "Added post-discovery via /decisions Q5 (ARCH scope-add, 2026-04-16). Resolves MM4 pipeline-state write contention at the structural level.",
+        "stories": [
+          {
+            "slug": "ec3.1",
+            "name": "Relocate pipeline-state from .github/ root to per-artefact; root becomes derived",
+            "stage": "implementation-plan",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "mediumFindingsResolved": 1,
+            "lowFindings": 5,
+            "reviewNotes": "Review-1 PASS WITH CONDITIONS. MEDIUM M1 (slug-detection deferral) resolved 2026-04-17 via inline AC0 + /decisions entry (option (a) per reviewer recommendation).",
+            "testPlan": {
+              "status": "written",
+              "totalTests": 13,
+              "passing": 0,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec3.1-pipeline-state-isolation-test-plan.md",
+              "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec3.1-pipeline-state-isolation-verification.md",
+              "breakdown": "7 unit + 4 integration + 2 NFR (scanner runtime, backward readability)"
+            },
+            "acTotal": 8,
+            "acVerified": 0,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "notes": "8 ACs (AC0–AC7). AC0 added post-review as the M1 resolution. Complexity 3 — feature-level complexity rerated to 3 when epic-3 was scoped in (per /decisions Q5).",
+            "dorStatus": "signed-off",
+            "oversight": "medium",
+            "dor": {
+              "status": "signed-off",
+              "hardBlocksPassed": 15,
+              "hardBlocksTotal": 15,
+              "warningsAcknowledged": 1,
+              "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec3.1-pipeline-state-isolation-dor.md",
+              "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec3.1-pipeline-state-isolation-dor-contract.md",
+              "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+              "signedOffAt": "2026-04-17",
+              "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+            },
+            "updatedAt": "2026-04-17T00:00:00Z",
+            "branchSetup": {
+              "status": "complete",
+              "worktree": ".worktrees/ec3.1-pipeline-state-isolation",
+              "branch": "feature/ec3.1-pipeline-state-isolation",
+              "baselineTests": {
+                "cliVitest": {
+                  "passed": 50,
+                  "failed": 0
+                },
+                "rootValidators": {
+                  "passed": 38,
+                  "failed": 7,
+                  "preExistingAccepted": 7
+                },
+                "preExistingFailuresNote": "7 failures in tests/check-p3.14-concepts-docs.js — p3.14 TDD RED baseline, orthogonal to ec3.1 scope. Accepted as pre-existing via /decisions 2026-04-17."
+              },
+              "legacyFixtureCaptured": "tests/fixtures/pipeline-state-legacy.json (3157 lines, 5 features)",
+              "completedAt": "2026-04-17T00:00:00Z"
+            },
+            "implementationPlan": {
+              "status": "written",
+              "artefact": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+              "commitsExpected": 9,
+              "agentEstimateHours": "3-4",
+              "operatorDecisionGates": 2
+            },
+            "tasks": [
+              {
+                "id": "task-1",
+                "name": "AC0 slug-detection audit",
+                "tddState": "not-started",
+                "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                "coversACs": [
+                  "AC0"
+                ]
+              },
+              {
+                "id": "task-2",
+                "name": "Schema — add featureStatus enum",
+                "tddState": "not-started",
+                "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                "coversACs": [
+                  "AC7"
+                ]
+              },
+              {
+                "id": "task-3",
+                "name": "Scanner — build-pipeline-state.js",
+                "tddState": "not-started",
+                "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                "coversACs": [
+                  "AC2"
+                ]
+              },
+              {
+                "id": "task-4",
+                "name": "Rewrite SKILL.md state-write paths (batch)",
+                "tddState": "not-started",
+                "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                "coversACs": [
+                  "AC1"
+                ]
+              },
+              {
+                "id": "task-5",
+                "name": "Localised slug-derivation patches",
+                "tddState": "not-started",
+                "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                "coversACs": [
+                  "AC0"
+                ]
+              },
+              {
+                "id": "task-6",
+                "name": "Viz input-path constant",
+                "tddState": "not-started",
+                "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                "coversACs": [
+                  "AC3"
+                ]
+              },
+              {
+                "id": "task-7",
+                "name": "DoD skill featureStatus write",
+                "tddState": "not-started",
+                "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                "coversACs": [
+                  "AC4"
+                ]
+              },
+              {
+                "id": "task-8",
+                "name": "Root file disposition (operator choice)",
+                "tddState": "not-started",
+                "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                "coversACs": [
+                  "AC5"
+                ],
+                "operatorGate": "A=delete or B=pointer-doc (recommended B)"
+              },
+              {
+                "id": "task-9",
+                "name": "NFR tests — scanner runtime + backward readability",
+                "tddState": "not-started",
+                "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                "coversACs": [
+                  "AC4-NFR"
+                ]
+              },
+              {
+                "id": "task-10",
+                "name": "Wire scanner into root test chain",
+                "tddState": "not-started",
+                "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                "coversACs": []
+              },
+              {
+                "id": "task-11",
+                "name": "End-to-end verification (AC6 round-trip)",
+                "tddState": "not-started",
+                "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                "coversACs": [
+                  "AC6"
+                ]
+              },
+              {
+                "id": "task-12",
+                "name": "/verify-completion",
+                "tddState": "not-started",
+                "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                "coversACs": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "discoveryArtefact": "artefacts/2026-04-16-engine-consolidation/discovery.md",
+    "decisionsArtefact": "artefacts/2026-04-16-engine-consolidation/decisions.md",
+    "benefitMetricArtefact": "artefacts/2026-04-16-engine-consolidation/benefit-metric.md",
+    "metrics": [
+      {
+        "id": "m1",
+        "name": "src/*→cli/ migration completeness",
+        "target": "7 of 7 migrated; src/ has 0 executable files",
+        "baseline": "0 of 7 migrated",
+        "signal": "not-yet-measured",
+        "lastMeasured": null,
+        "evidence": null,
+        "contributingStories": [
+          "ec1.1",
+          "ec1.2",
+          "ec1.3",
+          "ec1.4",
+          "ec1.5",
+          "ec1.6",
+          "ec1.7"
+        ]
+      },
+      {
+        "id": "m2",
+        "name": "Pre/post test invariant per subcomponent",
+        "target": "100% test-count + pass-rate match across all PRs",
+        "baseline": "captured per story at /branch-setup",
+        "signal": "not-yet-measured",
+        "lastMeasured": null,
+        "evidence": null,
+        "contributingStories": [
+          "ec1.1",
+          "ec1.2",
+          "ec1.3",
+          "ec1.4",
+          "ec1.5",
+          "ec1.6",
+          "ec1.7"
+        ]
+      },
+      {
+        "id": "m3",
+        "name": "CONTRIBUTING.md + product/* edits landed",
+        "target": "all 4 present on develop",
+        "baseline": "none present today",
+        "signal": "not-yet-measured",
+        "lastMeasured": null,
+        "evidence": null,
+        "contributingStories": [
+          "ec2.1",
+          "ec2.2"
+        ]
+      },
+      {
+        "id": "m4",
+        "name": "Host-repo cleanliness post-migration",
+        "target": "src/ has 0 executable files",
+        "baseline": "16 .js files",
+        "signal": "not-yet-measured",
+        "lastMeasured": null,
+        "evidence": null,
+        "contributingStories": [
+          "ec1.1",
+          "ec1.2",
+          "ec1.3",
+          "ec1.4",
+          "ec1.5",
+          "ec1.6",
+          "ec1.7"
+        ]
+      },
+      {
+        "id": "mm1",
+        "name": "Control-plane principle realised",
+        "target": "0 non-cli references to migrated subcomponents",
+        "baseline": "≥2 references today",
+        "signal": "not-yet-measured",
+        "lastMeasured": null,
+        "evidence": null,
+        "contributingStories": [
+          "ec1.1",
+          "ec1.2",
+          "ec1.3",
+          "ec1.4",
+          "ec1.5",
+          "ec1.6",
+          "ec1.7"
+        ]
+      },
+      {
+        "id": "mm2",
+        "name": "Parallel migration approach validated",
+        "target": "≤1 cross-branch collision at integration",
+        "baseline": "0 today",
+        "signal": "not-yet-measured",
+        "lastMeasured": null,
+        "evidence": null,
+        "contributingStories": []
+      },
+      {
+        "id": "mm3",
+        "name": "Phase 3 contributor experiences no blocking",
+        "target": "0 blocking incidents",
+        "baseline": "0 today",
+        "signal": "not-yet-measured",
+        "lastMeasured": null,
+        "evidence": null,
+        "contributingStories": [
+          "ec1.1",
+          "ec1.2",
+          "ec1.3",
+          "ec1.4",
+          "ec1.5",
+          "ec1.6",
+          "ec1.7"
+        ]
+      }
+    ],
+    "nfrProfile": "artefacts/2026-04-16-engine-consolidation/nfr-profile.md"
+  },
+  "slug": "2026-04-16-engine-consolidation",
+  "name": "Engine consolidation (CLI as control plane)",
+  "track": "productisation-thread",
+  "stage": "implementation-plan",
+  "health": "green",
+  "updatedAt": "2026-04-17T00:00:00Z",
+  "featureStatus": "in-flight"
+}

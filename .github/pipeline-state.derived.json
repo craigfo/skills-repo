@@ -1,0 +1,3353 @@
+{
+  "version": "1",
+  "updated": "2026-04-16T21:02:21.687Z",
+  "derivedFrom": "scanner",
+  "sourcePaths": [
+    "artefacts/2026-04-11-skills-platform-phase2/pipeline-state.json",
+    "artefacts/2026-04-16-engine-consolidation/pipeline-state.json",
+    "artefacts/2026-04-15-productise-cli-and-sidecar/pipeline-state.json",
+    "artefacts/2026-04-14-skills-platform-phase3/pipeline-state.json",
+    "artefacts/2026-04-09-skills-platform-phase1/pipeline-state.json"
+  ],
+  "features": [
+    {
+      "version": "1",
+      "updated": "2026-04-17T00:00:00Z",
+      "feature": {
+        "slug": "2026-04-11-skills-platform-phase2",
+        "name": "Skills Platform — Phase 2: Scale, Observability, and Self-Improving Harness",
+        "track": "library",
+        "stage": "definition-of-done",
+        "health": "green",
+        "discoveryStatus": "approved",
+        "benefitMetricStatus": "active",
+        "slicingStrategy": "risk-first",
+        "updatedAt": "2026-05-01",
+        "lastImprove": "2026-04-12",
+        "standards": {
+          "recentUpdates": [
+            "standards/quality-assurance/core.md",
+            ".github/architecture-guardrails.md",
+            "workspace/learnings.md"
+          ],
+          "improveNotes": "Phase 2 /improve (formerly /levelup): ADR-007 (EA registry mapping), ADR-008 (DoR contract binding), PAT-06 (execution pre-condition gate), PAT-07 (grouped instruction-text changes), AP-07 (multi-story contamination), AP-08 (runtime artefact churn), Operating Posture section (W4 solo operator). Automation displacement finding added to learnings.md."
+        },
+        "dorBatch1": {
+          "complete": [
+            "p2.1",
+            "p2.2",
+            "p2.3",
+            "p2.4",
+            "p2.5a",
+            "p2.5b",
+            "p2.6"
+          ],
+          "blocked": [],
+          "remaining": [],
+          "assessedAt": "2026-04-11"
+        },
+        "dorBatch2": {
+          "complete": [
+            "p2.7",
+            "p2.8",
+            "p2.9",
+            "p2.10",
+            "p2.11",
+            "p2.12"
+          ],
+          "proceedBlocked": [
+            "p2.11",
+            "p2.12"
+          ],
+          "assessedAt": "2026-04-11"
+        },
+        "reviewSummary": {
+          "totalStories": 13,
+          "passed": 13,
+          "hasFindings": 0,
+          "blocked": 0,
+          "highFindings": 0,
+          "reviewCompleted": "2026-04-11",
+          "note": "8 MEDIUM findings resolved by operator-directed AC amendments; p2.11 HIGH resolved and re-reviewed (Run 2 PASSED)"
+        },
+        "guardrails": [
+          {
+            "id": "MC-SEC-01",
+            "category": "mandatory-constraint",
+            "label": "No user-supplied content in innerHTML without sanitisation",
+            "status": "na",
+            "note": "No Phase 2 story adds innerHTML-rendered user content"
+          },
+          {
+            "id": "MC-SEC-02",
+            "category": "mandatory-constraint",
+            "label": "No credentials, tokens, or personal data in committed files",
+            "status": "met",
+            "assessedAt": "2026-05-01",
+            "note": "Checked across all 13 stories — all stories cite compliance; no credential-carrying fields added"
+          },
+          {
+            "id": "MC-SEC-03",
+            "category": "mandatory-constraint",
+            "label": "Viz reads local JSON only — no external fetch calls",
+            "status": "met",
+            "assessedAt": "2026-05-01",
+            "note": "p2.6 EA registry is the one permitted external call (HTTPS-only, resolver not viz); all other stories read local state only"
+          },
+          {
+            "id": "MC-CORRECT-01",
+            "category": "mandatory-constraint",
+            "label": "Gate logic reads evidence fields from pipeline-state.json (not stage alone)",
+            "status": "met",
+            "assessedAt": "2026-05-01",
+            "note": "p2.8 dorStatus uses evidence field per ADR-002; no stage-proxy gate logic introduced"
+          },
+          {
+            "id": "MC-CORRECT-02",
+            "category": "mandatory-constraint",
+            "label": "Fields written to pipeline-state.json must exist in schema",
+            "status": "met",
+            "assessedAt": "2026-05-01",
+            "note": "p2.4/p2.5a/p2.5b/p2.7/p2.8/p2.11/p2.12 all cite ADR-003 schema-first; no field written without schema definition"
+          },
+          {
+            "id": "MC-CORRECT-03",
+            "category": "mandatory-constraint",
+            "label": "Fields read by viz from pipeline-state.json must exist in schema",
+            "status": "met",
+            "assessedAt": "2026-05-01",
+            "note": "p2.7 fleet panel reads fleet-state.json fields; schema-first (ADR-003) covers this"
+          },
+          {
+            "id": "MC-SELF-01",
+            "category": "mandatory-constraint",
+            "label": "pipeline-viz.html renders without build step, server, or network",
+            "status": "not-assessed",
+            "note": "p2.7 fleet panel additive change; to be verified at implementation"
+          },
+          {
+            "id": "MC-SELF-02",
+            "category": "mandatory-constraint",
+            "label": "No npm devDependencies in pipeline-viz.html runtime",
+            "status": "not-assessed",
+            "note": "p2.7 fleet panel additive change; to be verified at implementation"
+          },
+          {
+            "id": "MC-CONSIST-01",
+            "category": "mandatory-constraint",
+            "label": "Stage enum in schema updated when skill adds/removes stage",
+            "status": "na",
+            "note": "No Phase 2 story adds or removes a pipeline stage"
+          },
+          {
+            "id": "MC-CONSIST-02",
+            "category": "mandatory-constraint",
+            "label": "Gate add/remove synced with SKILL.md criteria",
+            "status": "not-met",
+            "assessedAt": "2026-05-01",
+            "note": "p2.3 MEDIUM: H8-ext and B1-enforce gates lack eval scenario names — see p2.3-dor-dod-template-improvements-review-1.md F-1"
+          },
+          {
+            "id": "MC-A11Y-01",
+            "category": "mandatory-constraint",
+            "label": "Interactive elements keyboard-accessible",
+            "status": "not-met",
+            "assessedAt": "2026-05-01",
+            "note": "p2.7 MEDIUM: fleet panel viz interactive elements not covered — see p2.7-fleet-registry-ci-aggregation-review-1.md F-1"
+          },
+          {
+            "id": "MC-A11Y-02",
+            "category": "mandatory-constraint",
+            "label": "Colour not sole indicator of gate status (icons/labels present)",
+            "status": "not-met",
+            "assessedAt": "2026-05-01",
+            "note": "p2.7 MEDIUM: fleet panel health colour not paired with text/icon requirement — see p2.7-fleet-registry-ci-aggregation-review-1.md F-1"
+          },
+          {
+            "id": "ADR-001",
+            "category": "adr",
+            "label": "Single-file viz, no build step",
+            "status": "not-assessed",
+            "note": "p2.7 fleet panel additive; to be verified at implementation"
+          },
+          {
+            "id": "ADR-002",
+            "category": "adr",
+            "label": "Gates must use evidence fields, not stage-proxy",
+            "status": "met",
+            "assessedAt": "2026-05-01",
+            "note": "p2.8 dorStatus evidence field confirmed per ADR-002"
+          },
+          {
+            "id": "ADR-003",
+            "category": "adr",
+            "label": "Schema-first: fields defined before use",
+            "status": "met",
+            "assessedAt": "2026-05-01",
+            "note": "Cited and compliant across p2.3/p2.4/p2.5a/p2.5b/p2.7/p2.8/p2.11/p2.12"
+          },
+          {
+            "id": "ADR-004",
+            "category": "adr",
+            "label": "context.yml is the single config source of truth",
+            "status": "met",
+            "assessedAt": "2026-05-01",
+            "note": "Cited in all 13 stories; no hardcoded config values introduced"
+          },
+          {
+            "id": "ADR-005",
+            "category": "adr",
+            "label": "Agent instructions format driven by vcs.type (surface adapter concern)",
+            "status": "met",
+            "assessedAt": "2026-05-01",
+            "note": "p2.4 is the ADR-005 implementation story; format driven by context.yml vcs.type"
+          },
+          {
+            "id": "PAT-01",
+            "category": "pattern",
+            "label": "Single-file HTML viz architecture",
+            "status": "not-assessed"
+          },
+          {
+            "id": "PAT-02",
+            "category": "pattern",
+            "label": "State access via parsed pipelineState global",
+            "status": "not-assessed"
+          },
+          {
+            "id": "PAT-03",
+            "category": "pattern",
+            "label": "Gate pass/fail by evidence fields",
+            "status": "met",
+            "assessedAt": "2026-05-01",
+            "note": "Evidence-field gating pattern confirmed in p2.8"
+          },
+          {
+            "id": "PAT-04",
+            "category": "pattern",
+            "label": "Schema evolution: add fields simultaneously",
+            "status": "met",
+            "assessedAt": "2026-05-01",
+            "note": "All new field stories cite simultaneous schema + code addition (ADR-003 pattern)"
+          },
+          {
+            "id": "PAT-05",
+            "category": "pattern",
+            "label": "Config reading via context.yml",
+            "status": "met",
+            "assessedAt": "2026-05-01",
+            "note": "Cited in p2.7 fleet registry and other stories"
+          },
+          {
+            "id": "AP-01",
+            "category": "anti-pattern",
+            "label": "Gate logic checking feature.stage only",
+            "status": "met",
+            "assessedAt": "2026-05-01",
+            "note": "No stage-proxy gate logic found in any Phase 2 story"
+          },
+          {
+            "id": "AP-02",
+            "category": "anti-pattern",
+            "label": "Hardcoded org/tool names in skill files",
+            "status": "met",
+            "assessedAt": "2026-05-01",
+            "note": "AC6 in p2.9 explicitly prohibits hardcoded names; p2.10 uses context.yml; no violations found in spec"
+          },
+          {
+            "id": "AP-03",
+            "category": "anti-pattern",
+            "label": "External CDN dependencies in viz at runtime",
+            "status": "na",
+            "note": "No Phase 2 story introduces new viz runtime dependencies"
+          },
+          {
+            "id": "AP-04",
+            "category": "anti-pattern",
+            "label": "Fields used by viz/skills but not in schema",
+            "status": "met",
+            "assessedAt": "2026-05-01",
+            "note": "ADR-003 schema-first compliance confirmed across all field-adding stories"
+          },
+          {
+            "id": "AP-05",
+            "category": "anti-pattern",
+            "label": "Committing viz changes without passing check-viz-syntax.js",
+            "status": "not-assessed",
+            "note": "p2.7 fleet panel — to be enforced at implementation"
+          },
+          {
+            "id": "AP-06",
+            "category": "anti-pattern",
+            "label": "Directly mutating pipeline-state.json outside skills",
+            "status": "na",
+            "note": "No Phase 2 story bypasses the skill/agent pipeline-state.json write pattern"
+          }
+        ],
+        "epics": [
+          {
+            "slug": "epic-1-pipeline-evolution-foundation",
+            "name": "Pipeline Evolution Foundation",
+            "status": "complete",
+            "stories": [
+              {
+                "slug": "p2.1-definition-skill-improvements",
+                "name": "/definition skill improvements — dependency chain validation, testability filter, learnings exit step (D1/D2/D3)",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 14,
+                  "passing": 14
+                },
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "dorStatus": "signed-off",
+                "dorDate": "2026-05-01",
+                "dorAssessedBy": "Copilot",
+                "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.1-definition-skill-improvements-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/19",
+                "dispatchedAt": "2026-04-12T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/28",
+                "mergedAt": "2026-04-11",
+                "updatedAt": "2026-04-12",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": false,
+                "blocker": "Scope deviation recorded in DoD: additional executable/test-harness files changed beyond declared touch points.",
+                "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.1-definition-skill-improvements-dod.md",
+                "layoutGapsAtMerge": false,
+                "layoutGapsRiskAccepted": false
+              },
+              {
+                "slug": "p2.2-review-incremental-write",
+                "name": "/review skill improvement — incremental per-story write (D4)",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 9,
+                  "passing": 9
+                },
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "dorStatus": "signed-off",
+                "dorDate": "2026-05-01",
+                "dorAssessedBy": "Copilot",
+                "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.2-review-incremental-write-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/21",
+                "dispatchedAt": "2026-04-12T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/29",
+                "mergedAt": "2026-04-11",
+                "updatedAt": "2026-04-12",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.2-review-incremental-write-dod.md",
+                "layoutGapsAtMerge": false,
+                "layoutGapsRiskAccepted": false
+              },
+              {
+                "slug": "p2.3-dor-dod-template-improvements",
+                "name": "DoR and DoD template improvements — cross-story schema dependency check, AC verification prompt, NFR guardrail enforcement (D8/D9/B1-enforce)",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 13,
+                  "passing": 13
+                },
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "dorStatus": "signed-off",
+                "dorDate": "2026-05-01",
+                "dorAssessedBy": "Copilot",
+                "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.3-dor-dod-template-improvements-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/23",
+                "dispatchedAt": "2026-04-12T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/30",
+                "mergedAt": "2026-04-11",
+                "updatedAt": "2026-04-12",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.3-dor-dod-template-improvements-dod.md",
+                "layoutGapsAtMerge": false,
+                "layoutGapsRiskAccepted": false
+              }
+            ]
+          },
+          {
+            "slug": "epic-2-full-surface-adapter-model",
+            "name": "Full Surface Adapter Model",
+            "status": "complete",
+            "stories": [
+              {
+                "slug": "p2.4-agents-md-adapter",
+                "name": "AGENTS.md adapter in assembly script — agent instruction format driven by vcs.type (ADR-005)",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 13,
+                  "passing": 13
+                },
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "dorStatus": "signed-off",
+                "dorDate": "2026-05-01",
+                "dorAssessedBy": "Copilot",
+                "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.4-agents-md-adapter-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/25",
+                "dispatchedAt": "2026-04-12T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/31",
+                "mergedAt": "2026-04-11",
+                "updatedAt": "2026-04-12",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.4-agents-md-adapter-dod.md",
+                "layoutGapsAtMerge": false,
+                "layoutGapsRiskAccepted": false
+              },
+              {
+                "slug": "p2.5a-iac-saas-api-adapters",
+                "name": "IaC and SaaS-API surface adapters with POLICY.md floor variants (p2.5a)",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 18,
+                  "passing": 18
+                },
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "dorStatus": "signed-off",
+                "dorDate": "2026-05-01",
+                "dorAssessedBy": "Copilot",
+                "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.5a-iac-saas-api-adapters-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/27",
+                "dispatchedAt": "2026-04-12T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/38",
+                "mergedAt": "2026-04-11",
+                "updatedAt": "2026-04-12",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.5a-iac-saas-api-adapters-dod.md",
+                "layoutGapsAtMerge": false,
+                "layoutGapsRiskAccepted": false
+              },
+              {
+                "slug": "p2.5b-saas-gui-m365-manual-adapters",
+                "name": "SaaS-GUI, M365-admin, and manual surface adapters with POLICY.md floor variants (p2.5b)",
+                "stage": "definition-of-done",
+                "health": "amber",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 20,
+                  "passing": 20
+                },
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "dorStatus": "signed-off",
+                "dorDate": "2026-05-01",
+                "dorAssessedBy": "Copilot",
+                "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.5b-saas-gui-m365-manual-adapters-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/32",
+                "dispatchedAt": "2026-04-12T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/46",
+                "mergedAt": "2026-04-12",
+                "updatedAt": "2026-04-12",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": false,
+                "blocker": "Scope deviation recorded in DoD: PR bundled unrelated p2.11 implementation payload.",
+                "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.5b-saas-gui-m365-manual-adapters-dod.md",
+                "layoutGapsAtMerge": false,
+                "layoutGapsRiskAccepted": false
+              },
+              {
+                "slug": "p2.6-ea-registry-path-a",
+                "name": "EA registry Path A surface type resolution in surface adapter resolver",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 15,
+                  "passing": 15
+                },
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "dorStatus": "signed-off",
+                "dorDate": "2026-04-11",
+                "dorAssessedBy": "Copilot",
+                "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.6-ea-registry-path-a-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/33",
+                "dispatchedAt": "2026-04-12T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/41",
+                "mergedAt": "2026-04-12",
+                "updatedAt": "2026-04-12",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.6-ea-registry-path-a-dod.md",
+                "layoutGapsAtMerge": false,
+                "layoutGapsRiskAccepted": false
+              }
+            ]
+          }
+        ],
+        "metrics": [
+          {
+            "metricId": "M1",
+            "name": "Second squad outer loop — unassisted",
+            "signal": "on-track",
+            "evidence": "p2.4 merged and DoD-complete: assembly now emits AGENTS.md for non-GitHub contexts with passing check-assembly coverage.",
+            "lastMeasured": "2026-04-12",
+            "targetDescription": "Second squad completes full outer loop in one session with zero blocking lookups"
+          },
+          {
+            "metricId": "M2",
+            "name": "Non-git-native surface adapter — passing assurance verdict",
+            "signal": "on-track",
+            "evidence": "Adapters for iac, saas-api, saas-gui, m365-admin, and manual are merged and DoD-assessed; resolver Path A/Path B routing is operational.",
+            "lastMeasured": "2026-04-12",
+            "targetDescription": "At least one non-git-native adapter produces a passing assurance verdict on a real PR"
+          },
+          {
+            "metricId": "M3",
+            "name": "Improvement agent — first SKILL.md diff proposal from real failure",
+            "signal": "on-track",
+            "evidence": "p2.11 and p2.12 are merged and DoD-complete: trace proposals, challenger pre-check, and proposal review workflow are implemented end-to-end.",
+            "lastMeasured": "2026-04-12",
+            "targetDescription": "At least one proposal in workspace/proposals/ with evidence source, rationale, and challenger pre-check result, reviewed and actioned"
+          },
+          {
+            "metricId": "M4",
+            "name": "Fleet observability — ≥2 squad states without manual entry",
+            "signal": "on-track",
+            "evidence": "p2.7 merged and DoD-complete: fleet registry files, CI aggregation workflow, and viz fleet panel implemented with passing checks.",
+            "lastMeasured": "2026-04-12",
+            "targetDescription": "fleet-state.json generated by CI with ≥2 squad entries; pipeline-viz renders both"
+          },
+          {
+            "metricId": "M5",
+            "name": "Non-engineer approval interface — DoR sign-off outside VS Code",
+            "signal": "not-started",
+            "evidence": null,
+            "lastMeasured": null,
+            "targetDescription": "At least one real DoR sign-off completed via Jira, Confluence, or Slack/Teams by a genuine non-engineer approver"
+          },
+          {
+            "id": "MM1",
+            "name": "Solo operator outer loop — Phase 2 calibration",
+            "signal": "on-track",
+            "evidence": "p2.2 and p2.3 DoD confirm flow-finding write-backs landed, reducing expected outer-loop rework and late gate failures.",
+            "lastMeasured": "2026-04-12",
+            "targetDescription": "All outer loop stages complete with ≤1 blocking lookup; calendar span ≤3 days; focus H/story ≤2.9h"
+          },
+          {
+            "id": "MM2",
+            "name": "Cross-session resume — ISO datetime upgrade",
+            "signal": "not-started",
+            "evidence": null,
+            "lastMeasured": null,
+            "targetDescription": "All Phase 2 E3 phase duration rows sourced as tier-1 (state.json ISO datetime); zero tier-2/3 fallback"
+          },
+          {
+            "id": "MM3",
+            "name": "Improvement loop — first proposal reviewed within one feature cycle",
+            "signal": "on-track",
+            "evidence": "p2.11 proposal generation and p2.12 challenger/review workflow are both delivered in the same feature cycle.",
+            "lastMeasured": "2026-04-12",
+            "targetDescription": "At least one proposal with evidence, pre-check, and action taken within Phase 2 delivery cycle"
+          },
+          {
+            "id": "MM4",
+            "name": "Estimation calibration accuracy",
+            "signal": "not-started",
+            "evidence": null,
+            "lastMeasured": null,
+            "targetDescription": "|E2−actual|/actual < 20% by feature 3; measured automatically from results.tsv at each /improve E3"
+          },
+          {
+            "id": "MM5",
+            "name": "Flow findings conversion rate",
+            "signal": "on-track",
+            "evidence": "D4 (p2.2), D8/D9/B1-enforce (p2.3) delivered and verified DoD-complete, continuing conversion of logged flow findings into shipped changes.",
+            "lastMeasured": "2026-04-12",
+            "targetDescription": "≥50% of logged flow findings result in pipeline improvement within 2 features; operator confirms at each /improve"
+          }
+        ],
+        "epics_batch2": [
+          {
+            "slug": "epic-3-fleet-observability-personas",
+            "name": "Fleet Observability and Non-Engineer Approval Interface",
+            "status": "complete",
+            "stories": [
+              {
+                "slug": "p2.7-fleet-registry-ci-aggregation",
+                "name": "Fleet registry files and CI-aggregated fleet-state.json",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 18,
+                  "passing": 18
+                },
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "dorStatus": "signed-off",
+                "dorDate": "2026-04-11",
+                "dorAssessedBy": "Copilot",
+                "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.7-fleet-registry-ci-aggregation-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/34",
+                "dispatchedAt": "2026-04-12T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/42",
+                "mergedAt": "2026-04-12",
+                "updatedAt": "2026-04-12",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.7-fleet-registry-ci-aggregation-dod.md",
+                "layoutGapsAtMerge": false,
+                "layoutGapsRiskAccepted": false
+              },
+              {
+                "slug": "p2.8-persona-routing-non-engineer-approval",
+                "name": "Persona routing and non-engineer approval interface (depends on p2.7)",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 17,
+                  "passing": 17
+                },
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "dorStatus": "signed-off",
+                "dorDate": "2026-04-11",
+                "dorAssessedBy": "Copilot",
+                "w2ScopeStability": "unstable-p2.7-dependency",
+                "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.8-persona-routing-non-engineer-approval-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/35",
+                "dispatchedAt": "2026-04-12T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/45",
+                "mergedAt": "2026-04-12",
+                "updatedAt": "2026-04-12",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.8-persona-routing-non-engineer-approval-dod.md",
+                "layoutGapsAtMerge": false,
+                "layoutGapsRiskAccepted": false
+              }
+            ]
+          },
+          {
+            "slug": "epic-4-standards-ci-validation",
+            "name": "Remaining Discipline Standards and Bitbucket CI Validation",
+            "status": "complete",
+            "stories": [
+              {
+                "slug": "p2.9-discipline-standards-remaining",
+                "name": "Eight remaining discipline standards and three pilot domain standards",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 17,
+                  "passing": 17
+                },
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "medium",
+                "dorStatus": "signed-off",
+                "dorDate": "2026-04-11",
+                "dorAssessedBy": "Copilot",
+                "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.9-discipline-standards-remaining-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/36",
+                "dispatchedAt": "2026-04-12T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/43",
+                "mergedAt": "2026-04-12",
+                "updatedAt": "2026-04-12",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.9-discipline-standards-remaining-dod.md",
+                "layoutGapsAtMerge": false,
+                "layoutGapsRiskAccepted": false
+              },
+              {
+                "slug": "p2.10-bitbucket-ci-validation",
+                "name": "Bitbucket CI validation — Cloud pipeline-shape tests and DC Docker auth topology",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 15,
+                  "passing": 12
+                },
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "dorStatus": "signed-off",
+                "dorDate": "2026-04-11",
+                "dorAssessedBy": "Copilot",
+                "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.10-bitbucket-ci-validation-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/37",
+                "dispatchedAt": "2026-04-12T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/44",
+                "mergedAt": "2026-04-12",
+                "updatedAt": "2026-04-12",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.10-bitbucket-ci-validation-dod.md",
+                "layoutGapsAtMerge": false,
+                "layoutGapsRiskAccepted": false,
+                "dodNote": "AC3/AC4/AC5 Docker-gated tests accepted as skipped with [PREREQ-DOCKER] when Docker daemon unavailable; harness and compose deliverable verified."
+              }
+            ]
+          },
+          {
+            "slug": "epic-5-self-improving-harness",
+            "name": "Self-Improving Harness",
+            "status": "complete",
+            "sequencingNote": "p2.11 and p2.12 must not be dispatched to inner loop until at least one Phase 2 inner loop story batch is merged and its trace written",
+            "stories": [
+              {
+                "slug": "p2.11-improvement-agent-trace-proposals",
+                "name": "Improvement agent — queryable trace interface, failure and staleness detection, and diff proposals",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 21,
+                  "passing": 21,
+                  "executionGate": "after-first-phase2-inner-loop-trace"
+                },
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "dorStatus": "signed-off",
+                "dorProceedStatus": "PROCEED",
+                "dorBlockedReason": "Gate cleared 2026-04-12: workspace/traces/ confirmed ≥1 real Phase 2 inner loop trace (2026-04-11T21-33-02-002Z-ci-84f82370.jsonl)",
+                "dorDate": "2026-04-11",
+                "dorAssessedBy": "Copilot",
+                "sequencingConstraint": "after-first-inner-loop-batch",
+                "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.11-improvement-agent-trace-proposals-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/39",
+                "dispatchedAt": "2026-04-12T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/47",
+                "mergedAt": "2026-04-12",
+                "updatedAt": "2026-04-12",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.11-improvement-agent-trace-proposals-dod.md",
+                "layoutGapsAtMerge": false,
+                "layoutGapsRiskAccepted": false,
+                "dodNote": "failurePattern dependency explicitly verified in .github/scripts/run-assurance-gate.js via commit 5869050."
+              },
+              {
+                "slug": "p2.12-improvement-agent-challenger-skill",
+                "name": "Improvement agent — challenger pre-check, proposal review workflow, and improvement-agent SKILL.md (depends on p2.11)",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 22,
+                  "passing": 22,
+                  "executionGate": "after-p2.11-dod-complete-and-phase2-inner-loop-trace"
+                },
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "dorStatus": "signed-off",
+                "dorProceedStatus": "PROCEED",
+                "dorBlockedReason": "Gate (1) cleared 2026-04-12: workspace/traces/ confirmed ≥1 real Phase 2 inner loop trace. Gate (2) sequencing: must dispatch after p2.11 DoD-complete per sequencingConstraint.",
+                "dorDate": "2026-04-11",
+                "dorAssessedBy": "Copilot",
+                "sequencingConstraint": "after-first-inner-loop-batch-and-p2.11-dod",
+                "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.12-improvement-agent-challenger-skill-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/40",
+                "dispatchedAt": "2026-04-12T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/48",
+                "mergedAt": "2026-04-12",
+                "updatedAt": "2026-04-12",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.12-improvement-agent-challenger-skill-dod.md",
+                "layoutGapsAtMerge": false,
+                "layoutGapsRiskAccepted": false,
+                "dodNote": "Gate verification completed before sign-off: Phase 2 trace present and p2.11 DoD artefact confirmed."
+              }
+            ]
+          }
+        ]
+      },
+      "slug": "2026-04-11-skills-platform-phase2",
+      "name": "Skills Platform — Phase 2: Scale, Observability, and Self-Improving Harness",
+      "track": "library",
+      "stage": "definition-of-done",
+      "health": "green",
+      "updatedAt": "2026-05-01",
+      "featureStatus": "complete"
+    },
+    {
+      "version": "1",
+      "updated": "2026-04-17T00:00:00Z",
+      "feature": {
+        "slug": "2026-04-16-engine-consolidation",
+        "name": "Engine consolidation (CLI as control plane)",
+        "title": "Engine consolidation (CLI as control plane)",
+        "track": "productisation-thread",
+        "stage": "implementation-plan",
+        "health": "green",
+        "discoveryStatus": "clarified",
+        "benefitMetricStatus": "complete",
+        "slicingStrategy": "vertical-slice",
+        "updatedAt": "2026-04-17T00:00:00Z",
+        "regulated": false,
+        "complianceProfile": "standard",
+        "complianceFrameworks": [],
+        "sensitiveDataCategories": [],
+        "epics": [
+          {
+            "slug": "epic-1-subcomponent-migrations",
+            "name": "Seven src/* subcomponents are authoritative under cli/",
+            "status": "not-started",
+            "stories": [
+              {
+                "slug": "ec1.1",
+                "name": "Migrate src/surface-adapter/ → cli/src/adapters/surface-adapter/",
+                "stage": "definition-of-ready",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "lowFindings": 3,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 6,
+                  "passing": 0,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec1.1-surface-adapter-migration-test-plan.md",
+                  "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec1.1-surface-adapter-migration-verification.md"
+                },
+                "acTotal": 6,
+                "acVerified": 0,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "dorStatus": "signed-off",
+                "oversight": "medium",
+                "dor": {
+                  "status": "signed-off",
+                  "hardBlocksPassed": 15,
+                  "hardBlocksTotal": 15,
+                  "warningsAcknowledged": 1,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.1-surface-adapter-migration-dor.md",
+                  "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.1-surface-adapter-migration-dor-contract.md",
+                  "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                  "signedOffAt": "2026-04-17",
+                  "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+                }
+              },
+              {
+                "slug": "ec1.2",
+                "name": "Migrate src/improvement-agent/ → cli/src/agents/improvement-agent/",
+                "stage": "definition-of-ready",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "lowFindings": 3,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 6,
+                  "passing": 0,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec1.2-improvement-agent-migration-test-plan.md",
+                  "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec1.2-improvement-agent-migration-verification.md"
+                },
+                "acTotal": 6,
+                "acVerified": 0,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "dorStatus": "signed-off",
+                "oversight": "medium",
+                "dor": {
+                  "status": "signed-off",
+                  "hardBlocksPassed": 15,
+                  "hardBlocksTotal": 15,
+                  "warningsAcknowledged": 1,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.2-improvement-agent-migration-dor.md",
+                  "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.2-improvement-agent-migration-dor-contract.md",
+                  "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                  "signedOffAt": "2026-04-17",
+                  "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+                }
+              },
+              {
+                "slug": "ec1.3",
+                "name": "Migrate src/approval-channel/ → cli/src/adapters/approval-channel/",
+                "stage": "definition-of-ready",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "lowFindings": 2,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 6,
+                  "passing": 0,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec1.3-approval-channel-migration-test-plan.md",
+                  "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec1.3-approval-channel-migration-verification.md"
+                },
+                "acTotal": 6,
+                "acVerified": 0,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "dorStatus": "signed-off",
+                "oversight": "medium",
+                "dor": {
+                  "status": "signed-off",
+                  "hardBlocksPassed": 15,
+                  "hardBlocksTotal": 15,
+                  "warningsAcknowledged": 1,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.3-approval-channel-migration-dor.md",
+                  "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.3-approval-channel-migration-dor-contract.md",
+                  "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                  "signedOffAt": "2026-04-17",
+                  "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+                }
+              },
+              {
+                "slug": "ec1.4",
+                "name": "Migrate src/bitbucket-cloud-validator/ → cli/src/adapters/bitbucket/cloud/",
+                "stage": "definition-of-ready",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "lowFindings": 2,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 6,
+                  "passing": 0,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec1.4-bitbucket-cloud-migration-test-plan.md",
+                  "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec1.4-bitbucket-cloud-migration-verification.md"
+                },
+                "acTotal": 6,
+                "acVerified": 0,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "dorStatus": "signed-off",
+                "oversight": "medium",
+                "dor": {
+                  "status": "signed-off",
+                  "hardBlocksPassed": 15,
+                  "hardBlocksTotal": 15,
+                  "warningsAcknowledged": 1,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.4-bitbucket-cloud-migration-dor.md",
+                  "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.4-bitbucket-cloud-migration-dor-contract.md",
+                  "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                  "signedOffAt": "2026-04-17",
+                  "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+                }
+              },
+              {
+                "slug": "ec1.5",
+                "name": "Migrate src/bitbucket-dc-validator/ → cli/src/adapters/bitbucket/dc/",
+                "stage": "definition-of-ready",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "lowFindings": 3,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 6,
+                  "passing": 0,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec1.5-bitbucket-dc-migration-test-plan.md",
+                  "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec1.5-bitbucket-dc-migration-verification.md"
+                },
+                "acTotal": 6,
+                "acVerified": 0,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "dorStatus": "signed-off",
+                "oversight": "medium",
+                "dor": {
+                  "status": "signed-off",
+                  "hardBlocksPassed": 15,
+                  "hardBlocksTotal": 15,
+                  "warningsAcknowledged": 1,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.5-bitbucket-dc-migration-dor.md",
+                  "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.5-bitbucket-dc-migration-dor-contract.md",
+                  "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                  "signedOffAt": "2026-04-17",
+                  "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+                }
+              },
+              {
+                "slug": "ec1.6",
+                "name": "Migrate src/suite-parser/ → cli/src/engine/suite/",
+                "stage": "definition-of-ready",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "lowFindings": 2,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 6,
+                  "passing": 0,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec1.6-suite-parser-migration-test-plan.md",
+                  "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec1.6-suite-parser-migration-verification.md"
+                },
+                "acTotal": 6,
+                "acVerified": 0,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "dorStatus": "signed-off",
+                "oversight": "medium",
+                "dor": {
+                  "status": "signed-off",
+                  "hardBlocksPassed": 15,
+                  "hardBlocksTotal": 15,
+                  "warningsAcknowledged": 1,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.6-suite-parser-migration-dor.md",
+                  "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.6-suite-parser-migration-dor-contract.md",
+                  "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                  "signedOffAt": "2026-04-17",
+                  "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+                }
+              },
+              {
+                "slug": "ec1.7",
+                "name": "Migrate src/definition-skill/ → cli/src/engine/story/",
+                "stage": "definition-of-ready",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "lowFindings": 2,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 6,
+                  "passing": 0,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec1.7-definition-migration-test-plan.md",
+                  "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec1.7-definition-migration-verification.md"
+                },
+                "acTotal": 6,
+                "acVerified": 0,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "dorStatus": "signed-off",
+                "oversight": "medium",
+                "dor": {
+                  "status": "signed-off",
+                  "hardBlocksPassed": 15,
+                  "hardBlocksTotal": 15,
+                  "warningsAcknowledged": 1,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.7-definition-migration-dor.md",
+                  "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.7-definition-migration-dor-contract.md",
+                  "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                  "signedOffAt": "2026-04-17",
+                  "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+                }
+              }
+            ]
+          },
+          {
+            "slug": "epic-2-governance-documents",
+            "name": "CONTRIBUTING.md and product/* edits",
+            "status": "not-started",
+            "stories": [
+              {
+                "slug": "ec2.1",
+                "name": "Add CONTRIBUTING.md at repo root",
+                "stage": "definition-of-ready",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "lowFindings": 3,
+                "reviewNotes": "Two review runs: run-1 found 1 MEDIUM (resolved in-story during run-2). Run-2 PASS, 0 HIGH / 0 MEDIUM / 3 LOW.",
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 4,
+                  "passing": 0,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec2.1-contributing-md-test-plan.md",
+                  "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec2.1-contributing-md-verification.md"
+                },
+                "acTotal": 4,
+                "acVerified": 0,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "dorStatus": "signed-off",
+                "oversight": "low",
+                "dor": {
+                  "status": "signed-off",
+                  "hardBlocksPassed": 15,
+                  "hardBlocksTotal": 15,
+                  "warningsAcknowledged": 1,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec2.1-contributing-md-dor.md",
+                  "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec2.1-contributing-md-dor-contract.md",
+                  "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                  "signedOffAt": "2026-04-17",
+                  "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+                }
+              },
+              {
+                "slug": "ec2.2",
+                "name": "Apply product/* edits (roadmap + tech-stack + decisions ADR)",
+                "stage": "definition-of-ready",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "lowFindings": 2,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 4,
+                  "passing": 0,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec2.2-product-edits-test-plan.md",
+                  "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec2.2-product-edits-verification.md"
+                },
+                "acTotal": 3,
+                "acVerified": 0,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "notes": "AC1 tightened at /test-plan (review 1-L1) by splitting into three unit checks — one per 006 text block — rather than reopening AC1 to split into AC1a/AC1b/AC1c.",
+                "dorStatus": "signed-off",
+                "oversight": "low",
+                "dor": {
+                  "status": "signed-off",
+                  "hardBlocksPassed": 15,
+                  "hardBlocksTotal": 15,
+                  "warningsAcknowledged": 1,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec2.2-product-edits-dor.md",
+                  "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec2.2-product-edits-dor-contract.md",
+                  "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                  "signedOffAt": "2026-04-17",
+                  "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+                }
+              }
+            ]
+          },
+          {
+            "slug": "epic-3-pipeline-state-isolation",
+            "name": "Pipeline state becomes per-artefact; root is a derived aggregate",
+            "status": "in-progress",
+            "note": "Added post-discovery via /decisions Q5 (ARCH scope-add, 2026-04-16). Resolves MM4 pipeline-state write contention at the structural level.",
+            "stories": [
+              {
+                "slug": "ec3.1",
+                "name": "Relocate pipeline-state from .github/ root to per-artefact; root becomes derived",
+                "stage": "implementation-plan",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "mediumFindingsResolved": 1,
+                "lowFindings": 5,
+                "reviewNotes": "Review-1 PASS WITH CONDITIONS. MEDIUM M1 (slug-detection deferral) resolved 2026-04-17 via inline AC0 + /decisions entry (option (a) per reviewer recommendation).",
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 13,
+                  "passing": 0,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/test-plans/ec3.1-pipeline-state-isolation-test-plan.md",
+                  "verificationScript": "artefacts/2026-04-16-engine-consolidation/verification-scripts/ec3.1-pipeline-state-isolation-verification.md",
+                  "breakdown": "7 unit + 4 integration + 2 NFR (scanner runtime, backward readability)"
+                },
+                "acTotal": 8,
+                "acVerified": 0,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "notes": "8 ACs (AC0–AC7). AC0 added post-review as the M1 resolution. Complexity 3 — feature-level complexity rerated to 3 when epic-3 was scoped in (per /decisions Q5).",
+                "dorStatus": "signed-off",
+                "oversight": "medium",
+                "dor": {
+                  "status": "signed-off",
+                  "hardBlocksPassed": 15,
+                  "hardBlocksTotal": 15,
+                  "warningsAcknowledged": 1,
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec3.1-pipeline-state-isolation-dor.md",
+                  "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec3.1-pipeline-state-isolation-dor-contract.md",
+                  "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                  "signedOffAt": "2026-04-17",
+                  "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+                },
+                "updatedAt": "2026-04-17T00:00:00Z",
+                "branchSetup": {
+                  "status": "complete",
+                  "worktree": ".worktrees/ec3.1-pipeline-state-isolation",
+                  "branch": "feature/ec3.1-pipeline-state-isolation",
+                  "baselineTests": {
+                    "cliVitest": {
+                      "passed": 50,
+                      "failed": 0
+                    },
+                    "rootValidators": {
+                      "passed": 38,
+                      "failed": 7,
+                      "preExistingAccepted": 7
+                    },
+                    "preExistingFailuresNote": "7 failures in tests/check-p3.14-concepts-docs.js — p3.14 TDD RED baseline, orthogonal to ec3.1 scope. Accepted as pre-existing via /decisions 2026-04-17."
+                  },
+                  "legacyFixtureCaptured": "tests/fixtures/pipeline-state-legacy.json (3157 lines, 5 features)",
+                  "completedAt": "2026-04-17T00:00:00Z"
+                },
+                "implementationPlan": {
+                  "status": "written",
+                  "artefact": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                  "commitsExpected": 9,
+                  "agentEstimateHours": "3-4",
+                  "operatorDecisionGates": 2
+                },
+                "tasks": [
+                  {
+                    "id": "task-1",
+                    "name": "AC0 slug-detection audit",
+                    "tddState": "not-started",
+                    "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                    "coversACs": [
+                      "AC0"
+                    ]
+                  },
+                  {
+                    "id": "task-2",
+                    "name": "Schema — add featureStatus enum",
+                    "tddState": "not-started",
+                    "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                    "coversACs": [
+                      "AC7"
+                    ]
+                  },
+                  {
+                    "id": "task-3",
+                    "name": "Scanner — build-pipeline-state.js",
+                    "tddState": "not-started",
+                    "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                    "coversACs": [
+                      "AC2"
+                    ]
+                  },
+                  {
+                    "id": "task-4",
+                    "name": "Rewrite SKILL.md state-write paths (batch)",
+                    "tddState": "not-started",
+                    "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                    "coversACs": [
+                      "AC1"
+                    ]
+                  },
+                  {
+                    "id": "task-5",
+                    "name": "Localised slug-derivation patches",
+                    "tddState": "not-started",
+                    "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                    "coversACs": [
+                      "AC0"
+                    ]
+                  },
+                  {
+                    "id": "task-6",
+                    "name": "Viz input-path constant",
+                    "tddState": "not-started",
+                    "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                    "coversACs": [
+                      "AC3"
+                    ]
+                  },
+                  {
+                    "id": "task-7",
+                    "name": "DoD skill featureStatus write",
+                    "tddState": "not-started",
+                    "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                    "coversACs": [
+                      "AC4"
+                    ]
+                  },
+                  {
+                    "id": "task-8",
+                    "name": "Root file disposition (operator choice)",
+                    "tddState": "not-started",
+                    "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                    "coversACs": [
+                      "AC5"
+                    ],
+                    "operatorGate": "A=delete or B=pointer-doc (recommended B)"
+                  },
+                  {
+                    "id": "task-9",
+                    "name": "NFR tests — scanner runtime + backward readability",
+                    "tddState": "not-started",
+                    "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                    "coversACs": [
+                      "AC4-NFR"
+                    ]
+                  },
+                  {
+                    "id": "task-10",
+                    "name": "Wire scanner into root test chain",
+                    "tddState": "not-started",
+                    "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                    "coversACs": []
+                  },
+                  {
+                    "id": "task-11",
+                    "name": "End-to-end verification (AC6 round-trip)",
+                    "tddState": "not-started",
+                    "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                    "coversACs": [
+                      "AC6"
+                    ]
+                  },
+                  {
+                    "id": "task-12",
+                    "name": "/verify-completion",
+                    "tddState": "not-started",
+                    "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
+                    "coversACs": []
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "discoveryArtefact": "artefacts/2026-04-16-engine-consolidation/discovery.md",
+        "decisionsArtefact": "artefacts/2026-04-16-engine-consolidation/decisions.md",
+        "benefitMetricArtefact": "artefacts/2026-04-16-engine-consolidation/benefit-metric.md",
+        "metrics": [
+          {
+            "id": "m1",
+            "name": "src/*→cli/ migration completeness",
+            "target": "7 of 7 migrated; src/ has 0 executable files",
+            "baseline": "0 of 7 migrated",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "ec1.1",
+              "ec1.2",
+              "ec1.3",
+              "ec1.4",
+              "ec1.5",
+              "ec1.6",
+              "ec1.7"
+            ]
+          },
+          {
+            "id": "m2",
+            "name": "Pre/post test invariant per subcomponent",
+            "target": "100% test-count + pass-rate match across all PRs",
+            "baseline": "captured per story at /branch-setup",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "ec1.1",
+              "ec1.2",
+              "ec1.3",
+              "ec1.4",
+              "ec1.5",
+              "ec1.6",
+              "ec1.7"
+            ]
+          },
+          {
+            "id": "m3",
+            "name": "CONTRIBUTING.md + product/* edits landed",
+            "target": "all 4 present on develop",
+            "baseline": "none present today",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "ec2.1",
+              "ec2.2"
+            ]
+          },
+          {
+            "id": "m4",
+            "name": "Host-repo cleanliness post-migration",
+            "target": "src/ has 0 executable files",
+            "baseline": "16 .js files",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "ec1.1",
+              "ec1.2",
+              "ec1.3",
+              "ec1.4",
+              "ec1.5",
+              "ec1.6",
+              "ec1.7"
+            ]
+          },
+          {
+            "id": "mm1",
+            "name": "Control-plane principle realised",
+            "target": "0 non-cli references to migrated subcomponents",
+            "baseline": "≥2 references today",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "ec1.1",
+              "ec1.2",
+              "ec1.3",
+              "ec1.4",
+              "ec1.5",
+              "ec1.6",
+              "ec1.7"
+            ]
+          },
+          {
+            "id": "mm2",
+            "name": "Parallel migration approach validated",
+            "target": "≤1 cross-branch collision at integration",
+            "baseline": "0 today",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": []
+          },
+          {
+            "id": "mm3",
+            "name": "Phase 3 contributor experiences no blocking",
+            "target": "0 blocking incidents",
+            "baseline": "0 today",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "ec1.1",
+              "ec1.2",
+              "ec1.3",
+              "ec1.4",
+              "ec1.5",
+              "ec1.6",
+              "ec1.7"
+            ]
+          }
+        ],
+        "nfrProfile": "artefacts/2026-04-16-engine-consolidation/nfr-profile.md"
+      },
+      "slug": "2026-04-16-engine-consolidation",
+      "name": "Engine consolidation (CLI as control plane)",
+      "track": "productisation-thread",
+      "stage": "implementation-plan",
+      "health": "green",
+      "updatedAt": "2026-04-17T00:00:00Z",
+      "featureStatus": "in-flight"
+    },
+    {
+      "version": "1",
+      "updated": "2026-04-17T00:00:00Z",
+      "feature": {
+        "slug": "2026-04-15-productise-cli-and-sidecar",
+        "name": "Productise skills-repo — CLI + Sidecar",
+        "title": "Productise skills-repo — CLI + Sidecar",
+        "track": "productisation-thread",
+        "stage": "definition-of-done",
+        "health": "green",
+        "discoveryStatus": "approved",
+        "benefitMetricStatus": "complete",
+        "slicingStrategy": "walking-skeleton",
+        "updatedAt": "2026-04-15T14:45:00Z",
+        "regulated": false,
+        "complianceProfile": "standard",
+        "complianceFrameworks": [],
+        "sensitiveDataCategories": [],
+        "epics": [
+          {
+            "slug": "epic-1-walking-skeleton",
+            "name": "Walking skeleton — end-to-end CLI backbone",
+            "status": "complete",
+            "stories": [
+              {
+                "slug": "ps1.1",
+                "name": "End-to-end CLI skeleton",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "updatedAt": "2026-04-15T14:15:00Z",
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 13,
+                  "passing": 13
+                },
+                "acTotal": 5,
+                "acVerified": 5,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "dorStatus": "signed-off",
+                "oversightLevel": "medium",
+                "signedOffBy": "Operator (solo; tech-lead = operator)",
+                "signedOffAt": "2026-04-15",
+                "dorArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps1.1-dor.md",
+                "dorContractArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps1.1-dor-contract.md",
+                "dodStatus": "complete",
+                "dodArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dod/ps1.1-end-to-end-cli-skeleton-dod.md",
+                "prUrl": null,
+                "mergedAt": "2026-04-15",
+                "prStatus": "merged-to-master"
+              }
+            ]
+          },
+          {
+            "slug": "epic-2-fetch-lockfile-hash-integrity",
+            "name": "Fetch, lockfile, and hash integrity",
+            "status": "complete",
+            "stories": [
+              {
+                "slug": "ps2.1",
+                "name": "Fetch skills and standards from a configurable source at init",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "updatedAt": "2026-04-15T14:20:00Z",
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 20,
+                  "passing": 20
+                },
+                "acTotal": 5,
+                "acVerified": 5,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "dorStatus": "signed-off",
+                "oversightLevel": "medium",
+                "signedOffBy": "Operator (solo; tech-lead = operator)",
+                "signedOffAt": "2026-04-15",
+                "dorArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps2.1-dor.md",
+                "dorContractArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps2.1-dor-contract.md",
+                "dodStatus": "complete",
+                "dodArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dod/ps2.1-fetch-from-configurable-source-dod.md",
+                "mergedAt": "2026-04-15",
+                "prStatus": "merged-to-master"
+              },
+              {
+                "slug": "ps2.2",
+                "name": "Lockfile pinning and verification",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "updatedAt": "2026-04-15T14:25:00Z",
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 29,
+                  "passing": 29
+                },
+                "acTotal": 6,
+                "acVerified": 6,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "dorStatus": "signed-off",
+                "oversightLevel": "medium",
+                "signedOffBy": "Operator (solo; tech-lead = operator)",
+                "signedOffAt": "2026-04-15",
+                "dorArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps2.2-dor.md",
+                "dorContractArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps2.2-dor-contract.md",
+                "dodStatus": "complete",
+                "dodArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dod/ps2.2-lockfile-pinning-and-verification-dod.md",
+                "mergedAt": "2026-04-15",
+                "prStatus": "merged-to-master"
+              },
+              {
+                "slug": "ps2.3",
+                "name": "Cross-machine hash round-trip acceptance test",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "updatedAt": "2026-04-15T14:30:00Z",
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 34,
+                  "passing": 34
+                },
+                "acTotal": 5,
+                "acVerified": 5,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "dorStatus": "signed-off",
+                "oversightLevel": "medium",
+                "signedOffBy": "Operator (solo; tech-lead = operator)",
+                "signedOffAt": "2026-04-15",
+                "dorArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps2.3-dor.md",
+                "dorContractArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps2.3-dor-contract.md",
+                "dodStatus": "complete",
+                "dodArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dod/ps2.3-cross-machine-hash-round-trip-dod.md",
+                "mergedAt": "2026-04-15",
+                "prStatus": "merged-to-master"
+              }
+            ]
+          },
+          {
+            "slug": "epic-3-workflow-and-commands",
+            "name": "Workflow schema, commands, and dogfood acceptance",
+            "status": "complete",
+            "stories": [
+              {
+                "slug": "ps3.1",
+                "name": "workflow.yaml schema and one real preset",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "updatedAt": "2026-04-15T14:35:00Z",
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 42,
+                  "passing": 42
+                },
+                "acTotal": 6,
+                "acVerified": 6,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "dorStatus": "signed-off",
+                "oversightLevel": "medium",
+                "signedOffBy": "Operator (solo; tech-lead = operator)",
+                "signedOffAt": "2026-04-15",
+                "dorArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps3.1-dor.md",
+                "dorContractArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps3.1-dor-contract.md",
+                "dodStatus": "complete",
+                "dodArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dod/ps3.1-workflow-schema-and-preset-dod.md",
+                "mergedAt": "2026-04-15",
+                "prStatus": "merged-to-master"
+              },
+              {
+                "slug": "ps3.2",
+                "name": "status and artefact new commands",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "updatedAt": "2026-04-15T14:40:00Z",
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 50,
+                  "passing": 50
+                },
+                "acTotal": 6,
+                "acVerified": 6,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "dorStatus": "signed-off",
+                "oversightLevel": "medium",
+                "signedOffBy": "Operator (solo; tech-lead = operator)",
+                "signedOffAt": "2026-04-15",
+                "dorArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps3.2-dor.md",
+                "dorContractArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps3.2-dor-contract.md",
+                "dodStatus": "complete",
+                "dodArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dod/ps3.2-status-and-artefact-new-dod.md",
+                "mergedAt": "2026-04-15",
+                "prStatus": "merged-to-master"
+              },
+              {
+                "slug": "ps3.3",
+                "name": "Dogfood acceptance run",
+                "stage": "definition-of-done",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "mediumFindings": 0,
+                "updatedAt": "2026-04-15T14:45:00Z",
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 9,
+                  "passing": 0
+                },
+                "acTotal": 6,
+                "acVerified": 5,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "dorStatus": "signed-off",
+                "oversightLevel": "medium",
+                "signedOffBy": "Operator (solo; tech-lead = operator)",
+                "signedOffAt": "2026-04-15",
+                "dorArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps3.3-dor.md",
+                "dorContractArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps3.3-dor-contract.md",
+                "dodStatus": "complete",
+                "dodArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dod/ps3.3-dogfood-acceptance-run-dod.md",
+                "mergedAt": "2026-04-15",
+                "prStatus": "merged-to-master"
+              }
+            ]
+          }
+        ],
+        "discoveryArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/discovery.md",
+        "decisionsArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/decisions.md",
+        "benefitMetricArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/benefit-metric.md",
+        "metrics": [
+          {
+            "id": "m1",
+            "name": "Sidecar-only footprint",
+            "target": "2 top-level paths (.skills-repo/, artefacts/) + optional .gitignore append",
+            "baseline": "N/A (new)",
+            "signal": "measured",
+            "lastMeasured": "2026-04-15T14:45:00Z",
+            "evidence": null,
+            "contributingStories": [
+              "ps1.1",
+              "ps3.3"
+            ]
+          },
+          {
+            "id": "m2",
+            "name": "Time-to-first-artefact",
+            "target": "<15 min (min signal: <30 min)",
+            "baseline": "N/A (new)",
+            "signal": "measured",
+            "lastMeasured": "2026-04-15T14:45:00Z",
+            "evidence": null,
+            "contributingStories": [
+              "ps3.1",
+              "ps3.3"
+            ]
+          },
+          {
+            "id": "m3",
+            "name": "Resume-after-pause works",
+            "target": "pass (binary)",
+            "baseline": "N/A (new)",
+            "signal": "measured",
+            "lastMeasured": "2026-04-15T14:45:00Z",
+            "evidence": null,
+            "contributingStories": [
+              "ps3.1",
+              "ps3.2",
+              "ps3.3"
+            ]
+          },
+          {
+            "id": "m4",
+            "name": "Auditor self-service on resolved snapshots",
+            "target": "pass (binary)",
+            "baseline": "in-tree layout passes today; must not regress",
+            "signal": "measured",
+            "lastMeasured": "2026-04-15T14:45:00Z",
+            "evidence": null,
+            "contributingStories": [
+              "ps2.1",
+              "ps2.2"
+            ]
+          },
+          {
+            "id": "m5",
+            "name": "Cross-machine hash round-trip",
+            "target": "100% hash match across >=2 environments",
+            "baseline": "N/A (new)",
+            "signal": "measured",
+            "lastMeasured": "2026-04-15T14:45:00Z",
+            "evidence": null,
+            "contributingStories": [
+              "ps2.2",
+              "ps2.3",
+              "ps3.3"
+            ]
+          },
+          {
+            "id": "mm1",
+            "name": "Dogfood delivery ran on packaged CLI",
+            "target": ">=1 full artefact chain via CLI before ship",
+            "baseline": "0",
+            "signal": "measured",
+            "lastMeasured": "2026-04-15T14:45:00Z",
+            "evidence": null,
+            "contributingStories": [
+              "ps1.1",
+              "ps3.3"
+            ]
+          },
+          {
+            "id": "mm2",
+            "name": "No §12-tension incidents during MVP",
+            "target": "0 incidents",
+            "baseline": "0 expected",
+            "signal": "measured",
+            "lastMeasured": "2026-04-15T14:45:00Z",
+            "evidence": null,
+            "contributingStories": [
+              "ps3.3"
+            ]
+          },
+          {
+            "id": "mm3",
+            "name": "Fetch-and-pin model held",
+            "target": "0 fetch-related failures",
+            "baseline": "0 expected",
+            "signal": "measured",
+            "lastMeasured": "2026-04-15T14:45:00Z",
+            "evidence": null,
+            "contributingStories": [
+              "ps2.1",
+              "ps2.3",
+              "ps3.3"
+            ]
+          }
+        ],
+        "nfrProfile": "artefacts/2026-04-15-productise-cli-and-sidecar/nfr-profile.md",
+        "guardrails": [],
+        "dodStatus": "complete"
+      },
+      "slug": "2026-04-15-productise-cli-and-sidecar",
+      "name": "Productise skills-repo — CLI + Sidecar",
+      "track": "productisation-thread",
+      "stage": "definition-of-done",
+      "health": "green",
+      "updatedAt": "2026-04-15T14:45:00Z",
+      "featureStatus": "complete"
+    },
+    {
+      "version": "1",
+      "updated": "2026-04-17T00:00:00Z",
+      "feature": {
+        "slug": "2026-04-14-skills-platform-phase3",
+        "name": "Skills Platform — Phase 3: Governance Hardening, T3M1 Close, and Enterprise Scale",
+        "stage": "definition",
+        "health": "green",
+        "track": "library",
+        "discoveryArtefact": "artefacts/2026-04-14-skills-platform-phase3/discovery.md",
+        "benefitMetricArtefact": "artefacts/2026-04-14-skills-platform-phase3/benefit-metric.md",
+        "nfrProfileArtefact": "artefacts/2026-04-14-skills-platform-phase3/nfr-profile.md",
+        "metaBenefit": true,
+        "slicingStrategy": "risk-first",
+        "storyCount": 18,
+        "epicCount": 7,
+        "createdAt": "2026-04-14",
+        "updatedAt": "2026-04-14",
+        "metrics": [
+          {
+            "id": "M1",
+            "name": "T3M1 audit question coverage",
+            "target": "8/8 questions answered by independent non-engineer reviewer",
+            "baseline": "3/8 at Phase 2 close",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "p3.2a",
+              "p3.2b"
+            ]
+          },
+          {
+            "id": "M2",
+            "name": "Assurance gate substantive signal (completedAt duration)",
+            "target": "All post-Phase-3 production traces show completedAt >50ms after startedAt",
+            "baseline": "1–2ms (Phase 2 actuals, adversarial audit 2026-04-12)",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "p3.1b"
+            ]
+          },
+          {
+            "id": "M3",
+            "name": "Post-merge silent failure detection rate",
+            "target": "Zero silent failures persisting beyond one CI cycle",
+            "baseline": "4 silent failures across Phase 2 (PRs #51, #52, #56)",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "p3.1a",
+              "p3.5"
+            ]
+          },
+          {
+            "id": "M4",
+            "name": "Enterprise approval channel end-to-end",
+            "target": "At least one complete DoR sign-off via Teams or Jira adapter",
+            "baseline": "GitHub Issue adapter only — no enterprise channel exists",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "p3.8"
+            ]
+          },
+          {
+            "id": "M5",
+            "name": "AGENTS.md adapter: non-GitHub inner loop validated",
+            "target": "One complete story delivered end-to-end via real non-GitHub agent",
+            "baseline": "Adapter delivered but validated against fixture mocks only (Phase 2)",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "p3.9"
+            ]
+          },
+          {
+            "id": "MM1",
+            "name": "Estimation calibration continuity (Phase 3 E1→E3)",
+            "target": "Phase 3 E2 estimates within 25% of E3 actuals for ≥70% of stories",
+            "baseline": "Phase 2 E3 actuals in workspace/estimation-norms.md",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "p3.1a",
+              "p3.1b",
+              "p3.1c",
+              "p3.1d",
+              "p3.1e",
+              "p3.2a",
+              "p3.2b",
+              "p3.3",
+              "p3.4",
+              "p3.5",
+              "p3.6",
+              "p3.7",
+              "p3.8",
+              "p3.9",
+              "p3.10",
+              "p3.11",
+              "p3.12",
+              "p3.13",
+              "p3.15",
+              "p3.16",
+              "p3.17"
+            ]
+          },
+          {
+            "id": "MM2",
+            "name": "Outer loop self-sufficiency: zero blocking lookups",
+            "target": "Zero blocking external lookups during Phase 3 outer loop stages",
+            "baseline": "Zero blocking lookups during Phase 2 outer loop (established as baseline)",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "p3.5",
+              "p3.6",
+              "p3.10",
+              "p3.12"
+            ]
+          },
+          {
+            "id": "MM3",
+            "name": "Priority 1 hardening: reduction in governance check failures per story",
+            "target": "Zero npm test failures on master after any Phase 3 story merge",
+            "baseline": "Phase 2: non-zero post-merge governance failures (establishing Phase 3 baseline from first PR)",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "p3.1a",
+              "p3.1b",
+              "p3.1c",
+              "p3.1d",
+              "p3.1e",
+              "p3.4",
+              "p3.7"
+            ]
+          },
+          {
+            "id": "CR1",
+            "name": "T3M1 independent validation on record",
+            "target": "8/8 MODEL-RISK.md audit questions answered by named independent reviewer with date and role on record",
+            "baseline": "Not on record — prerequisite: Priority 2 trace-field stories must be DoD-complete first",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "p3.2a",
+              "p3.2b",
+              "p3.7",
+              "p3.13"
+            ]
+          },
+          {
+            "id": "EC1",
+            "name": "Phase 3 exit criterion: artefact coverage score ≥80%",
+            "target": "Post-pipeline CHANGELOG coverage score ≥80% by Phase 3 close",
+            "baseline": "45% coverage at 2026-04-16 audit (9/20 post-pipeline item groups covered by a formal story)",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "p3.15",
+              "p3.16",
+              "p3.17"
+            ]
+          },
+          {
+            "id": "CR2",
+            "name": "Gate structural independence: agent cannot weaken its own gate",
+            "target": "Gate scripts in separate repo, CI validates SHA-256 checksum before execution",
+            "baseline": "Gate scripts in delivery repo — agent has write access (structural gap confirmed Phase 2)",
+            "signal": "not-yet-measured",
+            "lastMeasured": null,
+            "evidence": null,
+            "contributingStories": [
+              "p3.3",
+              "p3.4"
+            ]
+          }
+        ],
+        "epics": [
+          {
+            "slug": "e1-governance-chain-integrity",
+            "name": "Governance Chain Integrity Hardened",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/epics/e1-governance-chain-integrity.md",
+            "stories": [
+              "p3.1a",
+              "p3.1b",
+              "p3.1c",
+              "p3.1d",
+              "p3.1e"
+            ]
+          },
+          {
+            "slug": "e2-t3m1-audit-gap-closure",
+            "name": "T3M1 Audit Gap Closed",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/epics/e2-t3m1-audit-gap-closure.md",
+            "stories": [
+              "p3.2a",
+              "p3.2b"
+            ]
+          },
+          {
+            "slug": "e3-platform-structural-integrity",
+            "name": "Platform Structural Integrity",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/epics/e3-platform-structural-integrity.md",
+            "stories": [
+              "p3.3",
+              "p3.4"
+            ]
+          },
+          {
+            "slug": "e4-windows-ci-parity-pipeline-evolution",
+            "name": "Windows CI Parity and Pipeline Evolution",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/epics/e4-windows-ci-parity-pipeline-evolution.md",
+            "stories": [
+              "p3.5",
+              "p3.6"
+            ]
+          },
+          {
+            "slug": "e5-cross-team-trace-registry",
+            "name": "Cross-Team Trace Registry",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/epics/e5-cross-team-trace-registry.md",
+            "stories": [
+              "p3.7"
+            ]
+          },
+          {
+            "slug": "e6-enterprise-adapters-agents-validation",
+            "name": "Enterprise Adapters and AGENTS.md Validation",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/epics/e6-enterprise-adapters-agents-validation.md",
+            "stories": [
+              "p3.8",
+              "p3.9"
+            ]
+          },
+          {
+            "slug": "e7-platform-maturity",
+            "name": "Platform Maturity",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/epics/e7-platform-maturity.md",
+            "stories": [
+              "p3.10",
+              "p3.11",
+              "p3.12",
+              "p3.13",
+              "p3.15",
+              "p3.16",
+              "p3.17"
+            ]
+          }
+        ],
+        "guardrails": [
+          {
+            "id": "MC-SEC-01",
+            "category": "mandatory-constraint",
+            "label": "No user-supplied content in innerHTML without sanitisation",
+            "status": "na",
+            "evidence": "No viz/DOM changes in any E1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          },
+          {
+            "id": "MC-SEC-02",
+            "category": "mandatory-constraint",
+            "label": "No credentials, tokens, or personal data in committed files",
+            "status": "met",
+            "evidence": "All E1 stories specify read-only operations. p3.1a, p3.1b, p3.1c, p3.1d: read-only filesystem access only, no network calls. p3.1e: documentation only. No credentials or PII in any deliverable.",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          },
+          {
+            "id": "MC-SEC-03",
+            "category": "mandatory-constraint",
+            "label": "Viz reads local JSON only — no external fetch calls",
+            "status": "na",
+            "evidence": "No viz changes in any E1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          },
+          {
+            "id": "MC-CORRECT-01",
+            "category": "mandatory-constraint",
+            "label": "Gate logic reads evidence fields from pipeline-state.json (not stage alone)",
+            "status": "met",
+            "evidence": "p3.1b Architecture Constraints cite ADR-002 — new gate checks must evaluate at least one evidence field per file, not merely assert file existence.",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          },
+          {
+            "id": "MC-CORRECT-02",
+            "category": "mandatory-constraint",
+            "label": "Fields written to pipeline-state.json must exist in schema",
+            "status": "met",
+            "evidence": "p3.1b Architecture Constraints cite ADR-003 — any new gate output fields (e.g. checksRun, failedChecks) must be added to pipeline-state.schema.json in the same commit.",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          },
+          {
+            "id": "MC-CORRECT-03",
+            "category": "mandatory-constraint",
+            "label": "Fields read by viz from pipeline-state.json must exist in schema",
+            "status": "na",
+            "evidence": "No new pipeline-state.json fields read by viz introduced in E1 stories reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          },
+          {
+            "id": "MC-SELF-01",
+            "category": "mandatory-constraint",
+            "label": "pipeline-viz.html renders without build step, server, or network",
+            "status": "na",
+            "evidence": "No viz changes in any E1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          },
+          {
+            "id": "MC-SELF-02",
+            "category": "mandatory-constraint",
+            "label": "No npm devDependencies in pipeline-viz.html runtime",
+            "status": "na",
+            "evidence": "No viz changes in any E1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          },
+          {
+            "id": "MC-CONSIST-01",
+            "category": "mandatory-constraint",
+            "label": "Stage enum in schema updated when skill adds/removes stage",
+            "status": "na",
+            "evidence": "No new pipeline stages added or removed in E1 stories reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          },
+          {
+            "id": "MC-CONSIST-02",
+            "category": "mandatory-constraint",
+            "label": "Gate add/remove synced with SKILL.md criteria",
+            "status": "na",
+            "evidence": "No new governance gates added or removed in E1 stories reviewed (p3.1b extends an existing gate, not a new gate)",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          },
+          {
+            "id": "MC-A11Y-01",
+            "category": "mandatory-constraint",
+            "label": "Interactive elements keyboard-accessible",
+            "status": "na",
+            "evidence": "No viz/UI changes in any E1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          },
+          {
+            "id": "MC-A11Y-02",
+            "category": "mandatory-constraint",
+            "label": "Colour not sole indicator of gate status (icons/labels present)",
+            "status": "na",
+            "evidence": "No viz/UI changes in any E1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          },
+          {
+            "id": "ADR-002",
+            "category": "adr",
+            "label": "Gates must use evidence fields, not stage-proxy",
+            "status": "met",
+            "evidence": "p3.1b Architecture Constraints cite ADR-002 — assurance gate extension must evaluate at least one evidence field per file. Assessed in p3.1b-assurance-gate-substantive-checks-review-1.",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          },
+          {
+            "id": "ADR-003",
+            "category": "adr",
+            "label": "Schema-first: fields defined before use",
+            "status": "met",
+            "evidence": "p3.1b Architecture Constraints cite ADR-003 — new gate output fields added to pipeline-state.schema.json in same commit. Assessed in p3.1b-assurance-gate-substantive-checks-review-1.",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          },
+          {
+            "id": "ADR-008",
+            "category": "adr",
+            "label": "DoR touch-point contract binding at pre-merge — no silent scope bundling",
+            "status": "met",
+            "evidence": "p3.1c Architecture Constraints cite ADR-008 — anti-overfitting gate change applies only to proposals evaluated after merge; retroactive re-evaluation explicitly excluded. Assessed in p3.1c-test-suite-integrity-review-1.",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          },
+          {
+            "id": "ADR-009",
+            "category": "adr",
+            "label": "Evaluation and write-back workflows must be separate triggers with separate permission scopes",
+            "status": "met",
+            "evidence": "p3.1a and p3.1d Architecture Constraints both cite ADR-009. p3.1a: check-trace-commit.js reads origin/traces (not local). p3.1d Option A: scheduled workflow must follow two-workflow CI audit pattern. Assessed in p3.1a-review-1 and p3.1d-review-1.",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          },
+          {
+            "id": "ADR-010",
+            "category": "adr",
+            "label": "CI audit records must be persisted to main post-merge, not to feature branches",
+            "status": "met",
+            "evidence": "p3.1a and p3.1d Architecture Constraints both cite ADR-010. p3.1a reads from origin/traces (post-merge main). p3.1d Option A: scheduled workflow persists audit records to main post-merge. Assessed in p3.1a-review-1 and p3.1d-review-1.",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-14"
+          }
+        ],
+        "stories": [
+          {
+            "slug": "p3.1a",
+            "name": "Trace-commit observability",
+            "stage": "definition-of-ready",
+            "dorStatus": "signed-off",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "reviewArtefact": "artefacts/2026-04-14-skills-platform-phase3/review/p3.1a-trace-commit-observability-review-1.md",
+            "testPlan": {
+              "status": "written",
+              "totalTests": 12,
+              "passing": 0
+            },
+            "acTotal": 6,
+            "acVerified": 0,
+            "health": "green",
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "updatedAt": "2026-04-14",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/89",
+            "dispatchedAt": "2026-04-16T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.1a-trace-commit-observability.md"
+          },
+          {
+            "slug": "p3.1b",
+            "name": "Assurance gate substantive checks",
+            "stage": "definition-of-ready",
+            "dorStatus": "signed-off",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "reviewArtefact": "artefacts/2026-04-14-skills-platform-phase3/review/p3.1b-assurance-gate-substantive-checks-review-1.md",
+            "testPlan": {
+              "status": "written",
+              "totalTests": 15,
+              "passing": 0
+            },
+            "acTotal": 6,
+            "acVerified": 0,
+            "health": "green",
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "updatedAt": "2026-04-14",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/90",
+            "dispatchedAt": "2026-04-16T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.1b-assurance-gate-substantive-checks.md"
+          },
+          {
+            "slug": "p3.1c",
+            "name": "Test suite integrity",
+            "stage": "definition-of-ready",
+            "dorStatus": "signed-off",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "reviewArtefact": "artefacts/2026-04-14-skills-platform-phase3/review/p3.1c-test-suite-integrity-review-1.md",
+            "testPlan": {
+              "status": "written",
+              "totalTests": 11,
+              "passing": 0
+            },
+            "acTotal": 5,
+            "acVerified": 0,
+            "health": "green",
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "updatedAt": "2026-04-14",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.1c-test-suite-integrity.md"
+          },
+          {
+            "slug": "p3.1d",
+            "name": "Bitbucket DC auth tests",
+            "stage": "definition-of-ready",
+            "dorStatus": "signed-off",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "reviewArtefact": "artefacts/2026-04-14-skills-platform-phase3/review/p3.1d-bitbucket-dc-auth-tests-review-1.md",
+            "testPlan": {
+              "status": "written",
+              "totalTests": 10,
+              "passing": 0
+            },
+            "acTotal": 5,
+            "acVerified": 0,
+            "health": "green",
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "updatedAt": "2026-04-14",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/91",
+            "dispatchedAt": "2026-04-16T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.1d-bitbucket-dc-auth-tests.md"
+          },
+          {
+            "slug": "p3.1e",
+            "name": "Agent behaviour observability register",
+            "stage": "definition-of-ready",
+            "dorStatus": "signed-off",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "reviewArtefact": "artefacts/2026-04-14-skills-platform-phase3/review/p3.1e-agent-behaviour-observability-register-review-1.md",
+            "testPlan": {
+              "status": "written",
+              "totalTests": 7,
+              "passing": 0
+            },
+            "acTotal": 3,
+            "acVerified": 0,
+            "health": "green",
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "updatedAt": "2026-04-14",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/92",
+            "dispatchedAt": "2026-04-16T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.1e-agent-behaviour-observability-register.md"
+          },
+          {
+            "slug": "p3.2a",
+            "name": "T3M1 trace fields",
+            "stage": "definition-of-ready",
+            "dorStatus": "signed-off",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "reviewArtefact": "artefacts/2026-04-14-skills-platform-phase3/review/p3.2a-t3m1-trace-fields-review-1.md",
+            "testPlan": {
+              "status": "written",
+              "totalTests": 17,
+              "passing": 0
+            },
+            "dorArtefact": "artefacts/2026-04-14-skills-platform-phase3/dor/p3.2a-t3m1-trace-fields-dor.md",
+            "acTotal": 5,
+            "acVerified": 0,
+            "health": "green",
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "updatedAt": "2026-04-15",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.2a-t3m1-trace-fields.md"
+          },
+          {
+            "slug": "p3.2b",
+            "name": "T3M1 tamper-evidence registry",
+            "stage": "definition-of-ready",
+            "dorStatus": "blocked",
+            "blocker": "H8-ext: fields [standardsInjected, watermarkResult, stalenessFlag, sessionIdentity] not yet in pipeline-state.schema.json — pending p3.2a DoD",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 2,
+            "reviewArtefact": "artefacts/2026-04-14-skills-platform-phase3/review/p3.2b-t3m1-tamper-evidence-registry-review-1.md",
+            "testPlan": {
+              "status": "written",
+              "totalTests": 12,
+              "passing": 0
+            },
+            "dorArtefact": "artefacts/2026-04-14-skills-platform-phase3/dor/p3.2b-t3m1-tamper-evidence-registry-dor.md",
+            "acTotal": 5,
+            "acVerified": 0,
+            "health": "red",
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "assumptionResolved": "DEC-P3-002 (2026-04-15): Option A — GitHub Artifact Attestation",
+            "updatedAt": "2026-04-15",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.2b-t3m1-tamper-evidence-registry.md"
+          },
+          {
+            "slug": "p3.3",
+            "name": "Gate structural independence",
+            "stage": "not-started",
+            "assumption": "ASSUMPTION-01",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.3-gate-structural-independence.md"
+          },
+          {
+            "slug": "p3.4",
+            "name": "Eval anti-gaming controls",
+            "stage": "not-started",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.4-eval-anti-gaming-controls.md"
+          },
+          {
+            "slug": "p3.5",
+            "name": "Windows native trace validator",
+            "stage": "not-started",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.5-windows-native-trace-validator.md"
+          },
+          {
+            "slug": "p3.6",
+            "name": "Pipeline evolution dispatch",
+            "stage": "not-started",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.6-pipeline-evolution-dispatch.md"
+          },
+          {
+            "slug": "p3.7",
+            "name": "Cross-team trace registry",
+            "stage": "not-started",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.7-cross-team-trace-registry.md"
+          },
+          {
+            "slug": "p3.8",
+            "name": "Enterprise approval channel adapters",
+            "stage": "not-started",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.8-enterprise-approval-channel-adapters.md"
+          },
+          {
+            "slug": "p3.9",
+            "name": "AGENTS.md compatibility matrix",
+            "stage": "not-started",
+            "scopeNote": "compat-matrix-only-phase3",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.9-agents-md-compatibility-matrix.md"
+          },
+          {
+            "slug": "p3.10",
+            "name": "EA registry live integration",
+            "stage": "not-started",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.10-ea-registry-live-integration.md"
+          },
+          {
+            "slug": "p3.11",
+            "name": "Estimation calibration eval",
+            "stage": "not-started",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.11-estimation-calibration-eval.md"
+          },
+          {
+            "slug": "p3.12",
+            "name": "Squad contribution flow",
+            "stage": "not-started",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.12-squad-contribution-flow.md"
+          },
+          {
+            "slug": "p3.13",
+            "name": "Compliance monitoring report",
+            "stage": "not-started",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.13-compliance-monitoring-report.md"
+          },
+          {
+            "slug": "p3.15",
+            "name": "Retrospective — /estimate skill",
+            "stage": "definition-of-ready",
+            "dorStatus": "signed-off",
+            "retrospective": true,
+            "health": "green",
+            "updatedAt": "2026-04-16",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.15-estimate-skill-retrospective.md",
+            "dorArtefact": "artefacts/2026-04-14-skills-platform-phase3/dor/p3.15-estimate-skill-retrospective-dor.md"
+          },
+          {
+            "slug": "p3.16",
+            "name": "Retrospective — /issue-dispatch skill",
+            "stage": "definition-of-ready",
+            "dorStatus": "signed-off",
+            "retrospective": true,
+            "health": "green",
+            "updatedAt": "2026-04-16",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.16-issue-dispatch-skill-retrospective.md",
+            "dorArtefact": "artefacts/2026-04-14-skills-platform-phase3/dor/p3.16-issue-dispatch-skill-retrospective-dor.md"
+          },
+          {
+            "slug": "p3.17",
+            "name": "Retrospective — feat/repo-tidy docs structure",
+            "stage": "definition-of-ready",
+            "dorStatus": "signed-off",
+            "retrospective": true,
+            "health": "green",
+            "updatedAt": "2026-04-16",
+            "artefact": "artefacts/2026-04-14-skills-platform-phase3/stories/p3.17-repo-tidy-docs-structure-retrospective.md",
+            "dorArtefact": "artefacts/2026-04-14-skills-platform-phase3/dor/p3.17-repo-tidy-docs-structure-retrospective-dor.md"
+          }
+        ]
+      },
+      "slug": "2026-04-14-skills-platform-phase3",
+      "name": "Skills Platform — Phase 3: Governance Hardening, T3M1 Close, and Enterprise Scale",
+      "track": "library",
+      "stage": "definition",
+      "health": "green",
+      "updatedAt": "2026-04-14",
+      "featureStatus": "in-flight"
+    },
+    {
+      "version": "1",
+      "updated": "2026-04-17T00:00:00Z",
+      "feature": {
+        "slug": "2026-04-09-skills-platform-phase1",
+        "name": "Skills Platform â€” Phase 1 Foundation",
+        "title": "Skills Platform â€” Phase 1 Foundation",
+        "track": "library",
+        "stage": "definition-of-done",
+        "health": "green",
+        "discoveryStatus": "approved",
+        "benefitMetricStatus": "complete",
+        "slicingStrategy": "risk-first",
+        "updatedAt": "2026-04-11",
+        "epics": [
+          {
+            "slug": "epic-2-core-loop-infrastructure",
+            "name": "Core Loop Infrastructure",
+            "status": "not-started",
+            "stories": [
+              {
+                "slug": "p1.5-workspace-state-session-continuity",
+                "name": "Implement workspace/state.json cross-session continuity and /checkpoint convention",
+                "stage": "definition-of-done",
+                "dorStatus": "signed-off",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 13,
+                  "passing": 10
+                },
+                "acTotal": 8,
+                "acVerified": 8,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "signedOffBy": "Hamish â€” platform maintainer / operator",
+                "signedOffAt": "2026-04-10",
+                "dorArtefact": "artefacts/2026-04-09-skills-platform-phase1/dor/p1.5-workspace-state-session-continuity-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/1",
+                "dispatchedAt": "2026-04-10T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/10",
+                "mergedAt": "2026-04-10",
+                "updatedAt": "2026-04-11",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-09-skills-platform-phase1/dod/p1.5-workspace-state-session-continuity-dod.md",
+                "layoutGapsAtMerge": false,
+                "layoutGapsRiskAccepted": false
+              },
+              {
+                "slug": "p1.3-assurance-agent-ci-gate",
+                "name": "Deploy assurance agent as automated CI gate on PR open/update",
+                "stage": "definition-of-done",
+                "dorStatus": "signed-off",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 11,
+                  "passing": 11
+                },
+                "acTotal": 6,
+                "acVerified": 6,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "signedOffBy": "Hamish â€” platform maintainer / operator",
+                "signedOffAt": "2026-04-10",
+                "dorArtefact": "artefacts/2026-04-09-skills-platform-phase1/dor/p1.3-assurance-agent-ci-gate-dor.md",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/15",
+                "mergedAt": "2026-04-11",
+                "updatedAt": "2026-04-11",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-09-skills-platform-phase1/dod/p1.3-assurance-agent-ci-gate-dod.md"
+              },
+              {
+                "slug": "p1.4-watermark-gate",
+                "name": "Implement watermark gate for eval regression detection",
+                "stage": "definition-of-done",
+                "dorStatus": "signed-off",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 32,
+                  "passing": 32
+                },
+                "acTotal": 6,
+                "acVerified": 6,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "signedOffBy": "Hamish â€” platform maintainer / operator",
+                "signedOffAt": "2026-04-10",
+                "dorArtefact": "artefacts/2026-04-09-skills-platform-phase1/dor/p1.4-watermark-gate-dor.md",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/16",
+                "mergedAt": "2026-04-11",
+                "updatedAt": "2026-04-11",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-09-skills-platform-phase1/dod/p1.4-watermark-gate-dod.md"
+              }
+            ]
+          },
+          {
+            "slug": "epic-3-distribution-surface-model",
+            "name": "Distribution and Surface Model",
+            "status": "not-started",
+            "stories": [
+              {
+                "slug": "p1.1-distribution-progressive-disclosure",
+                "name": "Implement versioned skill distribution and progressive skill disclosure",
+                "stage": "definition-of-done",
+                "dorStatus": "signed-off",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 12,
+                  "passing": 10
+                },
+                "acTotal": 8,
+                "acVerified": 8,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "signedOffBy": "Hamish â€” platform maintainer / operator",
+                "signedOffAt": "2026-04-10",
+                "dorArtefact": "artefacts/2026-04-09-skills-platform-phase1/dor/p1.1-distribution-progressive-disclosure-dor.md",
+                "updatedAt": "2026-04-11",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/11",
+                "dispatchedAt": "2026-04-10T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/12",
+                "mergedAt": "2026-04-10",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-09-skills-platform-phase1/dod/p1.1-distribution-progressive-disclosure-dod.md"
+              },
+              {
+                "slug": "p1.2-surface-adapter-model-foundations",
+                "name": "Implement surface adapter model foundations â€” Path B git-native reference",
+                "stage": "definition-of-done",
+                "dorStatus": "signed-off",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 13,
+                  "passing": 13
+                },
+                "acTotal": 6,
+                "acVerified": 6,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "signedOffBy": "Hamish â€” platform maintainer / operator",
+                "signedOffAt": "2026-04-10",
+                "dorArtefact": "artefacts/2026-04-09-skills-platform-phase1/dor/p1.2-surface-adapter-model-foundations-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/4",
+                "dispatchedAt": "2026-04-10T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/13",
+                "mergedAt": "2026-04-10",
+                "updatedAt": "2026-04-11",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-09-skills-platform-phase1/dod/p1.2-surface-adapter-model-foundations-dod.md"
+              }
+            ]
+          },
+          {
+            "slug": "epic-4-standards-eval-compliance",
+            "name": "Standards, Eval Suite, and Compliance Documentation",
+            "status": "not-started",
+            "stories": [
+              {
+                "slug": "p1.6-living-eval-regression-suite",
+                "name": "Implement workspace/suite.json living eval regression suite",
+                "stage": "definition-of-done",
+                "dorStatus": "signed-off",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 14,
+                  "passing": 20
+                },
+                "acTotal": 6,
+                "acVerified": 6,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "signedOffBy": "Hamish â€” platform maintainer / operator",
+                "signedOffAt": "2026-04-10",
+                "dorArtefact": "artefacts/2026-04-09-skills-platform-phase1/dor/p1.6-living-eval-regression-suite-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/6",
+                "dispatchedAt": "2026-04-10T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/17",
+                "mergedAt": "2026-04-10",
+                "updatedAt": "2026-04-11",
+                "dodStatus": "complete",
+                "prStatus": "merged",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-09-skills-platform-phase1/dod/p1.6-living-eval-regression-suite-dod.md"
+              },
+              {
+                "slug": "p1.7-standards-model-phase1",
+                "name": "Implement standards model Phase 1 â€” three anchor disciplines, standards/index.yml, POLICY.md floors",
+                "stage": "definition-of-done",
+                "dorStatus": "signed-off",
+                "health": "green",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 31,
+                  "passing": 31
+                },
+                "acTotal": 6,
+                "acVerified": 6,
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "signedOffBy": "Hamish â€” platform maintainer / operator",
+                "signedOffAt": "2026-04-10",
+                "dorArtefact": "artefacts/2026-04-09-skills-platform-phase1/dor/p1.7-standards-model-phase1-dor.md",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/18",
+                "mergedAt": "2026-04-11",
+                "updatedAt": "2026-04-11",
+                "dodStatus": "complete",
+                "releaseReady": true,
+                "dodArtefact": "artefacts/2026-04-09-skills-platform-phase1/dod/p1.7-standards-model-phase1-dod.md"
+              },
+              {
+                "slug": "p1.8-model-risk-documentation",
+                "name": "Author and review MODEL-RISK.md before non-dogfood adoption",
+                "stage": "definition-of-done",
+                "dorStatus": "signed-off",
+                "health": "amber",
+                "reviewStatus": "passed",
+                "highFindings": 0,
+                "testPlan": {
+                  "status": "written",
+                  "totalTests": 9,
+                  "passing": 11
+                },
+                "acTotal": 5,
+                "acVerified": 4,
+                "acNotes": "AC3 requires real trace evidence from a story run through the P1.3 CI gate — cannot be completed until next delivery cycle",
+                "hasLayoutDependentGaps": false,
+                "e2eToolingRequired": false,
+                "oversightLevel": "high",
+                "signedOffBy": "Hamish â€” platform maintainer / operator",
+                "signedOffAt": "2026-04-10",
+                "dorArtefact": "artefacts/2026-04-09-skills-platform-phase1/dor/p1.8-model-risk-documentation-dor.md",
+                "issueUrl": "https://github.com/heymishy/skills-repo/issues/8",
+                "dispatchedAt": "2026-04-10T00:00:00Z",
+                "dispatchTarget": "github-agent",
+                "prUrl": "https://github.com/heymishy/skills-repo/pull/14",
+                "mergedAt": "2026-04-10",
+                "updatedAt": "2026-04-11",
+                "dodStatus": "complete",
+                "releaseReady": false,
+                "dodNote": "AC3 (T3M1 evidence record) and AC4 (sign-off) deferred — pending first Phase 2 inner loop PR through P1.3 gate",
+                "dodArtefact": "artefacts/2026-04-09-skills-platform-phase1/dod/p1.8-model-risk-documentation-dod.md"
+              }
+            ]
+          }
+        ],
+        "guardrails": [
+          {
+            "id": "MC-SEC-01",
+            "category": "mandatory-constraint",
+            "label": "No user-supplied content in innerHTML without sanitisation",
+            "status": "na",
+            "evidence": "No viz/DOM changes in any Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "MC-SEC-02",
+            "category": "mandatory-constraint",
+            "label": "No credentials, tokens, or personal data in committed files",
+            "status": "met",
+            "evidence": "NFRs across p1.6, p1.7, p1.8 explicitly exclude credentials/PII; p1.3 Architecture Constraints reference product constraint #12 (credential names only in CI config). No violations found across 8 stories.",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "MC-SEC-03",
+            "category": "mandatory-constraint",
+            "label": "Viz reads local JSON only â€” no external fetch calls",
+            "status": "na",
+            "evidence": "No viz changes in any Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "MC-CORRECT-01",
+            "category": "mandatory-constraint",
+            "label": "Gate logic reads evidence fields from pipeline-state.json (not stage alone)",
+            "status": "na",
+            "evidence": "No new gate logic introduced in stories reviewed. P1.4 watermark gate and P1.3 CI gate stories do not define viz gate logic â€” that is existing viz scope, not story deliverable.",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "MC-CORRECT-02",
+            "category": "mandatory-constraint",
+            "label": "Fields written to pipeline-state.json must exist in schema",
+            "status": "na",
+            "evidence": "No new pipeline-state.json schema fields introduced in stories reviewed (p1.6, p1.7, p1.8 all content-only)",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "MC-CORRECT-03",
+            "category": "mandatory-constraint",
+            "label": "Fields read by viz from pipeline-state.json must exist in schema",
+            "status": "na",
+            "evidence": "No new pipeline-state.json fields read by viz introduced in stories reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "MC-SELF-01",
+            "category": "mandatory-constraint",
+            "label": "pipeline-viz.html renders without build step, server, or network",
+            "status": "na",
+            "evidence": "No viz changes in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "MC-SELF-02",
+            "category": "mandatory-constraint",
+            "label": "No npm devDependencies in pipeline-viz.html runtime",
+            "status": "na",
+            "evidence": "No viz changes in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "MC-CONSIST-01",
+            "category": "mandatory-constraint",
+            "label": "Stage enum in schema updated when skill adds/removes stage",
+            "status": "na",
+            "evidence": "No new stages added or removed in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "MC-CONSIST-02",
+            "category": "mandatory-constraint",
+            "label": "Gate add/remove synced with SKILL.md criteria",
+            "status": "na",
+            "evidence": "No new governance gates added or removed in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "MC-A11Y-01",
+            "category": "mandatory-constraint",
+            "label": "Interactive elements keyboard-accessible",
+            "status": "na",
+            "evidence": "No viz/UI changes in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "MC-A11Y-02",
+            "category": "mandatory-constraint",
+            "label": "Colour not sole indicator of gate status (icons/labels present)",
+            "status": "na",
+            "evidence": "No viz/UI changes in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "ADR-001",
+            "category": "adr",
+            "label": "Single-file viz, no build step",
+            "status": "na",
+            "evidence": "No viz changes in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "ADR-002",
+            "category": "adr",
+            "label": "Gates must use evidence fields, not stage-proxy",
+            "status": "na",
+            "evidence": "No new gate logic in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "ADR-003",
+            "category": "adr",
+            "label": "Schema-first: fields defined before use",
+            "status": "na",
+            "evidence": "No new pipeline-state.json schema fields introduced in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "ADR-004",
+            "category": "adr",
+            "label": "context.yml is the single config source of truth",
+            "status": "met",
+            "evidence": "p1.3 Architecture Constraints explicitly requires CI config to use context.yml secret names, not hardcoded values. No skill file hardcoding found across 8 stories.",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "PAT-01",
+            "category": "pattern",
+            "label": "Single-file HTML viz architecture",
+            "status": "na",
+            "evidence": "No viz changes in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "PAT-02",
+            "category": "pattern",
+            "label": "State access via parsed pipelineState global",
+            "status": "na",
+            "evidence": "No viz changes in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "PAT-03",
+            "category": "pattern",
+            "label": "Gate pass/fail by evidence fields",
+            "status": "na",
+            "evidence": "No new gate logic introduced; existing gate pattern not violated by story scope",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "PAT-04",
+            "category": "pattern",
+            "label": "Schema evolution: add fields simultaneously",
+            "status": "na",
+            "evidence": "No schema evolution in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "PAT-05",
+            "category": "pattern",
+            "label": "Config reading via context.yml",
+            "status": "na",
+            "evidence": "No new skill config reading introduced in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "AP-01",
+            "category": "anti-pattern",
+            "label": "Gate logic checking feature.stage only",
+            "status": "na",
+            "evidence": "No new gate logic introduced",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "AP-02",
+            "category": "anti-pattern",
+            "label": "Hardcoded org/tool names in skill files",
+            "status": "na",
+            "evidence": "No skill file content changes in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "AP-03",
+            "category": "anti-pattern",
+            "label": "External CDN dependencies in viz at runtime",
+            "status": "na",
+            "evidence": "No viz changes in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "AP-04",
+            "category": "anti-pattern",
+            "label": "Fields used by viz/skills but not in schema",
+            "status": "na",
+            "evidence": "No new pipeline-state.json fields introduced in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "AP-05",
+            "category": "anti-pattern",
+            "label": "Committing viz changes without passing check-viz-syntax.js",
+            "status": "na",
+            "evidence": "No viz changes in Phase 1 story deliverables reviewed",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "AP-06",
+            "category": "anti-pattern",
+            "label": "Directly mutating pipeline-state.json outside skills",
+            "status": "na",
+            "evidence": "No story deliverable requires direct pipeline-state.json mutation outside skill execution",
+            "assessedBy": "/review",
+            "assessedAt": "2026-04-10"
+          },
+          {
+            "id": "NFR-checkpoint-performance",
+            "category": "nfr",
+            "label": "/checkpoint write completes within 60 seconds",
+            "status": "met",
+            "evidence": "Multiple /checkpoint invocations during Phase 1 dogfood run (2026-04-09 to 2026-04-11). All sessions completed without hanging — confirmed by commit history. MM3 sub-condition 1 confirmed met at DoD (2026-04-11).",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-state-no-credentials",
+            "category": "nfr",
+            "label": "state.json must not contain credentials, PAT tokens, or secrets",
+            "status": "met",
+            "evidence": "Automated test nfr-state-json-no-credentials passes. workspace/state.json inspected — contains only pipeline metadata (phases, artefact paths, timestamps). No credential patterns found. Confirmed at DoD (2026-04-11).",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-state-audit-timestamp",
+            "category": "nfr",
+            "label": "Each phase section in state.json includes lastUpdated timestamp",
+            "status": "met",
+            "evidence": "Automated test nfr-state-json-audit-lastUpdated-present passes. Live workspace/state.json verified: lastUpdated present at ISO 8601. Confirmed at DoD (2026-04-11).",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-watermark-performance",
+            "category": "nfr",
+            "label": "Watermark gate completes within 2 minutes (component of 10-min gate budget)",
+            "status": "met",
+            "evidence": "AC scope is TSV read + comparison + append; no network calls; test plan NFR test nfr-gate-completes-within-10-minutes covers timeout; DoR passed â€” enforcement deferred to DoD verify-completion",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-10",
+            "updatedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-results-tsv-no-secrets",
+            "category": "nfr",
+            "label": "results.tsv contains no credentials, secrets, or PII â€” scores, hashes, timestamps only",
+            "status": "met",
+            "evidence": "Story NFR security section explicit; coding agent instructions block prohibits secrets; data classification confirmed Internal",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-10",
+            "updatedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-results-tsv-append-only",
+            "category": "nfr",
+            "label": "results.tsv rows are never deleted or modified â€” append-only audit history",
+            "status": "met",
+            "evidence": "AC2/AC3/AC5 tests verify append behaviour; story NFR audit section explicit; referenced in product constraint #5 (two-layer model)",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-10",
+            "updatedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-p1.1-assembled-token-budget",
+            "category": "nfr",
+            "label": "Assembled copilot-instructions.md base layer â‰¤8,000 tokens at session-start (outer loop phase only)",
+            "status": "met",
+            "evidence": "Story NFR section explicit; AC3/AC5 test assembled file structure; enforcement deferred to DoD token count measurement",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-10",
+            "updatedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-p1.1-no-credentials-in-config",
+            "category": "nfr",
+            "label": "Distribution mechanism config references credential names only â€” no credential values or PAT tokens in committed files",
+            "status": "met",
+            "evidence": "Story NFR security section explicit; coding agent instructions block enforces constraint #12; data classification confirmed Internal",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-10",
+            "updatedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-p1.1-composition-audit-trail",
+            "category": "nfr",
+            "label": "Assembly composition order and source versions readable from assembled file header",
+            "status": "met",
+            "evidence": "Story NFR audit section explicit; AC5 tests header contains platform version reference; AC5 unit tests assert layer order documented",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-10",
+            "updatedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-p1.2-path-b-resolution-performance",
+            "category": "nfr",
+            "label": "Path B surface type resolution completes within 1 second",
+            "status": "met",
+            "evidence": "Story NFR performance section explicit; DoR passed â€” enforcement deferred to DoD verify-completion",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-10",
+            "updatedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-p1.2-adapter-no-credentials",
+            "category": "nfr",
+            "label": "git-native adapter must not log, persist, or transmit credential values",
+            "status": "met",
+            "evidence": "Story NFR security section explicit; credential-pattern test in test plan; coding agent instructions block enforces constraint #12",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-10",
+            "updatedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-p1.2-result-audit-fields",
+            "category": "nfr",
+            "label": "result object from adapter includes surface type and adapter version for trace audit",
+            "status": "met",
+            "evidence": "AC1 unit tests assert result.surface echoed; story NFR audit section explicit; coding agent instructions specify result object fields required",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-10",
+            "updatedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-p1.6-suite-eval-performance",
+            "category": "nfr",
+            "label": "Full suite evaluation completes within 8 minutes (component of 10-minute gate budget)",
+            "status": "met",
+            "evidence": "Story NFR performance section explicit; NFR test N1 in test plan; DoR passed â€” enforcement deferred to DoD verify-completion",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-10",
+            "updatedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-p1.6-suite-no-credentials",
+            "category": "nfr",
+            "label": "suite.json contains no credentials, secrets, or PII â€” scenario descriptions only",
+            "status": "met",
+            "evidence": "Story NFR security section explicit; NFR test N2 scans for credential patterns; coding agent instructions block explicit",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-10",
+            "updatedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-p1.6-review-note-audit",
+            "category": "nfr",
+            "label": "Every scenario merge has reviewNote field populated â€” null reviewNote is an audit gap",
+            "status": "met",
+            "evidence": "Story NFR audit section explicit; NFR test N3 + unit tests U4/U5 enforce non-null reviewNote; coding agent instructions block explicit",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-10",
+            "updatedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-p1.7-standards-injection-performance",
+            "category": "nfr",
+            "label": "Standards file injection (read + hash 3 files) completes within 30 seconds in P1.3 CI gate run",
+            "status": "not-assessed",
+            "evidence": "Structural design meets budget; live timed acceptance test pending first Phase 2 CI gate run",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-p1.7-security-policy-floors",
+            "category": "nfr",
+            "label": "security-engineering POLICY.md includes OWASP high/critical check + secrets-never-committed floor as binary requirements",
+            "status": "met",
+            "evidence": "N2 tests passing: n2-security-policy-has-owasp-check and n2-security-policy-has-secrets-check — both PASS",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-p1.7-standards-review-record",
+            "category": "nfr",
+            "label": "Every standards file has lastReviewedBy and lastReviewedDate populated — no file missing a review record",
+            "status": "met",
+            "evidence": "N3 — 6 assertions, all passing; all three core.md and all three POLICY.md files have both review fields populated",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-p1.8-model-risk-no-attack-surface",
+            "category": "nfr",
+            "label": "MODEL-RISK.md must not expose credentials, attack surface specifics, or adversarially useful internal topology",
+            "status": "met",
+            "evidence": "Manual inspection at DoD: document framed at governance-audience level; no ports, admin endpoints, credentials, or topology specifics observed",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-11"
+          },
+          {
+            "id": "NFR-p1.8-git-audit-trail",
+            "category": "nfr",
+            "label": "Each substantive MODEL-RISK.md update committed with traceable commit message naming the change type",
+            "status": "met",
+            "evidence": "Initial commit 0aada65 uses \"doc: add MODEL-RISK.md...\"; merge commit 147c341 traceable. Audit trail established.",
+            "assessedBy": "/definition-of-done",
+            "assessedAt": "2026-04-11"
+          }
+        ],
+        "metrics": [
+          {
+            "id": "MM2",
+            "name": "Cross-session resume via workspace/state.json",
+            "contributingStories": [
+              "p1.5-workspace-state-session-continuity"
+            ],
+            "signal": "on-track",
+            "evidence": "Multiple natural session boundaries crossed during Phase 1 dogfood run (2026-04-09 to 2026-04-11). Each new session correctly identified the current phase without operator verbal priming. This session (2026-04-11) is itself a clean resume: state.json read first, definition-of-done reported, pendingActions surfaced before operator confirmation. Target: clean resume within 2 natural session boundaries — met.",
+            "lastMeasured": "2026-04-11"
+          },
+          {
+            "id": "MM3",
+            "name": "/checkpoint mid-phase write",
+            "contributingStories": [
+              "p1.5-workspace-state-session-continuity"
+            ],
+            "signal": "on-track",
+            "evidence": "/checkpoint invoked multiple times across Phase 1 dogfood run. All three sub-conditions observed met: (1) sessions completed within 60s; (2) required fields present — automated tests confirm; (3) subsequent sessions resumed correctly without verbal priming. Target: all three sub-conditions pass within 2 invocations — met.",
+            "lastMeasured": "2026-04-11"
+          },
+          {
+            "metricId": "M1",
+            "name": "Update channel latency",
+            "signal": "on-track",
+            "evidence": "P1.1 DoD — pull model operational; change present without squad merge step; < 1 session open elapsed",
+            "lastMeasured": "2026-04-11",
+            "dodArtefact": "artefacts/2026-04-09-skills-platform-phase1/dod/p1.1-distribution-progressive-disclosure-dod.md"
+          },
+          {
+            "metricId": "M2",
+            "name": "CI-triggered assurance gate",
+            "signal": "on-track",
+            "evidence": "P1.3 DoD — gate mechanism validated by 11 automated tests (synthetic); live CI acceptance test pending first Phase 2 inner loop PR",
+            "lastMeasured": "2026-04-11",
+            "dodArtefact": "artefacts/2026-04-09-skills-platform-phase1/dod/p1.3-assurance-agent-ci-gate-dod.md"
+          },
+          {
+            "metricId": "M4",
+            "name": "Watermark gate blocks regression",
+            "signal": "on-track",
+            "evidence": "P1.4 DoD — 32 automated tests passing; block-on-drop and PR-surface mechanisms validated; live acceptance test pending operator run before Phase 2",
+            "lastMeasured": "2026-04-11",
+            "dodArtefact": "artefacts/2026-04-09-skills-platform-phase1/dod/p1.4-watermark-gate-dod.md"
+          },
+          {
+            "metricId": "M3",
+            "name": "Standards injection in trace — verifiable governance",
+            "signal": "deferred",
+            "evidence": "P1.7 DoD — standards files, index.yml, and POLICY.md floors all in place; standardsInjected hash evidence pending first Phase 2 inner loop PR through P1.3 CI gate",
+            "lastMeasured": "2026-04-11",
+            "dodArtefact": "artefacts/2026-04-09-skills-platform-phase1/dod/p1.7-standards-model-phase1-dod.md"
+          },
+          {
+            "metricId": "T3M1",
+            "name": "Trace readability for risk review",
+            "signal": "deferred",
+            "evidence": "P1.8 DoD — MODEL-RISK.md authored with 5 risks, 8 audit question mappings, sign-off structure in place; T3M1 acceptance test record pending first Phase 2 inner loop PR through P1.3 gate",
+            "lastMeasured": "2026-04-11",
+            "dodArtefact": "artefacts/2026-04-09-skills-platform-phase1/dod/p1.8-model-risk-documentation-dod.md"
+          }
+        ]
+      },
+      "slug": "2026-04-09-skills-platform-phase1",
+      "name": "Skills Platform â€” Phase 1 Foundation",
+      "track": "library",
+      "stage": "definition-of-done",
+      "health": "green",
+      "updatedAt": "2026-04-11",
+      "featureStatus": "complete"
+    }
+  ]
+}

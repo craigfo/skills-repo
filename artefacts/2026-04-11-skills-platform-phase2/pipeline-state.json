@@ -1,0 +1,835 @@
+{
+  "version": "1",
+  "updated": "2026-04-17T00:00:00Z",
+  "feature": {
+    "slug": "2026-04-11-skills-platform-phase2",
+    "name": "Skills Platform — Phase 2: Scale, Observability, and Self-Improving Harness",
+    "track": "library",
+    "stage": "definition-of-done",
+    "health": "green",
+    "discoveryStatus": "approved",
+    "benefitMetricStatus": "active",
+    "slicingStrategy": "risk-first",
+    "updatedAt": "2026-05-01",
+    "lastImprove": "2026-04-12",
+    "standards": {
+      "recentUpdates": [
+        "standards/quality-assurance/core.md",
+        ".github/architecture-guardrails.md",
+        "workspace/learnings.md"
+      ],
+      "improveNotes": "Phase 2 /improve (formerly /levelup): ADR-007 (EA registry mapping), ADR-008 (DoR contract binding), PAT-06 (execution pre-condition gate), PAT-07 (grouped instruction-text changes), AP-07 (multi-story contamination), AP-08 (runtime artefact churn), Operating Posture section (W4 solo operator). Automation displacement finding added to learnings.md."
+    },
+    "dorBatch1": {
+      "complete": [
+        "p2.1",
+        "p2.2",
+        "p2.3",
+        "p2.4",
+        "p2.5a",
+        "p2.5b",
+        "p2.6"
+      ],
+      "blocked": [],
+      "remaining": [],
+      "assessedAt": "2026-04-11"
+    },
+    "dorBatch2": {
+      "complete": [
+        "p2.7",
+        "p2.8",
+        "p2.9",
+        "p2.10",
+        "p2.11",
+        "p2.12"
+      ],
+      "proceedBlocked": [
+        "p2.11",
+        "p2.12"
+      ],
+      "assessedAt": "2026-04-11"
+    },
+    "reviewSummary": {
+      "totalStories": 13,
+      "passed": 13,
+      "hasFindings": 0,
+      "blocked": 0,
+      "highFindings": 0,
+      "reviewCompleted": "2026-04-11",
+      "note": "8 MEDIUM findings resolved by operator-directed AC amendments; p2.11 HIGH resolved and re-reviewed (Run 2 PASSED)"
+    },
+    "guardrails": [
+      {
+        "id": "MC-SEC-01",
+        "category": "mandatory-constraint",
+        "label": "No user-supplied content in innerHTML without sanitisation",
+        "status": "na",
+        "note": "No Phase 2 story adds innerHTML-rendered user content"
+      },
+      {
+        "id": "MC-SEC-02",
+        "category": "mandatory-constraint",
+        "label": "No credentials, tokens, or personal data in committed files",
+        "status": "met",
+        "assessedAt": "2026-05-01",
+        "note": "Checked across all 13 stories — all stories cite compliance; no credential-carrying fields added"
+      },
+      {
+        "id": "MC-SEC-03",
+        "category": "mandatory-constraint",
+        "label": "Viz reads local JSON only — no external fetch calls",
+        "status": "met",
+        "assessedAt": "2026-05-01",
+        "note": "p2.6 EA registry is the one permitted external call (HTTPS-only, resolver not viz); all other stories read local state only"
+      },
+      {
+        "id": "MC-CORRECT-01",
+        "category": "mandatory-constraint",
+        "label": "Gate logic reads evidence fields from pipeline-state.json (not stage alone)",
+        "status": "met",
+        "assessedAt": "2026-05-01",
+        "note": "p2.8 dorStatus uses evidence field per ADR-002; no stage-proxy gate logic introduced"
+      },
+      {
+        "id": "MC-CORRECT-02",
+        "category": "mandatory-constraint",
+        "label": "Fields written to pipeline-state.json must exist in schema",
+        "status": "met",
+        "assessedAt": "2026-05-01",
+        "note": "p2.4/p2.5a/p2.5b/p2.7/p2.8/p2.11/p2.12 all cite ADR-003 schema-first; no field written without schema definition"
+      },
+      {
+        "id": "MC-CORRECT-03",
+        "category": "mandatory-constraint",
+        "label": "Fields read by viz from pipeline-state.json must exist in schema",
+        "status": "met",
+        "assessedAt": "2026-05-01",
+        "note": "p2.7 fleet panel reads fleet-state.json fields; schema-first (ADR-003) covers this"
+      },
+      {
+        "id": "MC-SELF-01",
+        "category": "mandatory-constraint",
+        "label": "pipeline-viz.html renders without build step, server, or network",
+        "status": "not-assessed",
+        "note": "p2.7 fleet panel additive change; to be verified at implementation"
+      },
+      {
+        "id": "MC-SELF-02",
+        "category": "mandatory-constraint",
+        "label": "No npm devDependencies in pipeline-viz.html runtime",
+        "status": "not-assessed",
+        "note": "p2.7 fleet panel additive change; to be verified at implementation"
+      },
+      {
+        "id": "MC-CONSIST-01",
+        "category": "mandatory-constraint",
+        "label": "Stage enum in schema updated when skill adds/removes stage",
+        "status": "na",
+        "note": "No Phase 2 story adds or removes a pipeline stage"
+      },
+      {
+        "id": "MC-CONSIST-02",
+        "category": "mandatory-constraint",
+        "label": "Gate add/remove synced with SKILL.md criteria",
+        "status": "not-met",
+        "assessedAt": "2026-05-01",
+        "note": "p2.3 MEDIUM: H8-ext and B1-enforce gates lack eval scenario names — see p2.3-dor-dod-template-improvements-review-1.md F-1"
+      },
+      {
+        "id": "MC-A11Y-01",
+        "category": "mandatory-constraint",
+        "label": "Interactive elements keyboard-accessible",
+        "status": "not-met",
+        "assessedAt": "2026-05-01",
+        "note": "p2.7 MEDIUM: fleet panel viz interactive elements not covered — see p2.7-fleet-registry-ci-aggregation-review-1.md F-1"
+      },
+      {
+        "id": "MC-A11Y-02",
+        "category": "mandatory-constraint",
+        "label": "Colour not sole indicator of gate status (icons/labels present)",
+        "status": "not-met",
+        "assessedAt": "2026-05-01",
+        "note": "p2.7 MEDIUM: fleet panel health colour not paired with text/icon requirement — see p2.7-fleet-registry-ci-aggregation-review-1.md F-1"
+      },
+      {
+        "id": "ADR-001",
+        "category": "adr",
+        "label": "Single-file viz, no build step",
+        "status": "not-assessed",
+        "note": "p2.7 fleet panel additive; to be verified at implementation"
+      },
+      {
+        "id": "ADR-002",
+        "category": "adr",
+        "label": "Gates must use evidence fields, not stage-proxy",
+        "status": "met",
+        "assessedAt": "2026-05-01",
+        "note": "p2.8 dorStatus evidence field confirmed per ADR-002"
+      },
+      {
+        "id": "ADR-003",
+        "category": "adr",
+        "label": "Schema-first: fields defined before use",
+        "status": "met",
+        "assessedAt": "2026-05-01",
+        "note": "Cited and compliant across p2.3/p2.4/p2.5a/p2.5b/p2.7/p2.8/p2.11/p2.12"
+      },
+      {
+        "id": "ADR-004",
+        "category": "adr",
+        "label": "context.yml is the single config source of truth",
+        "status": "met",
+        "assessedAt": "2026-05-01",
+        "note": "Cited in all 13 stories; no hardcoded config values introduced"
+      },
+      {
+        "id": "ADR-005",
+        "category": "adr",
+        "label": "Agent instructions format driven by vcs.type (surface adapter concern)",
+        "status": "met",
+        "assessedAt": "2026-05-01",
+        "note": "p2.4 is the ADR-005 implementation story; format driven by context.yml vcs.type"
+      },
+      {
+        "id": "PAT-01",
+        "category": "pattern",
+        "label": "Single-file HTML viz architecture",
+        "status": "not-assessed"
+      },
+      {
+        "id": "PAT-02",
+        "category": "pattern",
+        "label": "State access via parsed pipelineState global",
+        "status": "not-assessed"
+      },
+      {
+        "id": "PAT-03",
+        "category": "pattern",
+        "label": "Gate pass/fail by evidence fields",
+        "status": "met",
+        "assessedAt": "2026-05-01",
+        "note": "Evidence-field gating pattern confirmed in p2.8"
+      },
+      {
+        "id": "PAT-04",
+        "category": "pattern",
+        "label": "Schema evolution: add fields simultaneously",
+        "status": "met",
+        "assessedAt": "2026-05-01",
+        "note": "All new field stories cite simultaneous schema + code addition (ADR-003 pattern)"
+      },
+      {
+        "id": "PAT-05",
+        "category": "pattern",
+        "label": "Config reading via context.yml",
+        "status": "met",
+        "assessedAt": "2026-05-01",
+        "note": "Cited in p2.7 fleet registry and other stories"
+      },
+      {
+        "id": "AP-01",
+        "category": "anti-pattern",
+        "label": "Gate logic checking feature.stage only",
+        "status": "met",
+        "assessedAt": "2026-05-01",
+        "note": "No stage-proxy gate logic found in any Phase 2 story"
+      },
+      {
+        "id": "AP-02",
+        "category": "anti-pattern",
+        "label": "Hardcoded org/tool names in skill files",
+        "status": "met",
+        "assessedAt": "2026-05-01",
+        "note": "AC6 in p2.9 explicitly prohibits hardcoded names; p2.10 uses context.yml; no violations found in spec"
+      },
+      {
+        "id": "AP-03",
+        "category": "anti-pattern",
+        "label": "External CDN dependencies in viz at runtime",
+        "status": "na",
+        "note": "No Phase 2 story introduces new viz runtime dependencies"
+      },
+      {
+        "id": "AP-04",
+        "category": "anti-pattern",
+        "label": "Fields used by viz/skills but not in schema",
+        "status": "met",
+        "assessedAt": "2026-05-01",
+        "note": "ADR-003 schema-first compliance confirmed across all field-adding stories"
+      },
+      {
+        "id": "AP-05",
+        "category": "anti-pattern",
+        "label": "Committing viz changes without passing check-viz-syntax.js",
+        "status": "not-assessed",
+        "note": "p2.7 fleet panel — to be enforced at implementation"
+      },
+      {
+        "id": "AP-06",
+        "category": "anti-pattern",
+        "label": "Directly mutating pipeline-state.json outside skills",
+        "status": "na",
+        "note": "No Phase 2 story bypasses the skill/agent pipeline-state.json write pattern"
+      }
+    ],
+    "epics": [
+      {
+        "slug": "epic-1-pipeline-evolution-foundation",
+        "name": "Pipeline Evolution Foundation",
+        "status": "complete",
+        "stories": [
+          {
+            "slug": "p2.1-definition-skill-improvements",
+            "name": "/definition skill improvements — dependency chain validation, testability filter, learnings exit step (D1/D2/D3)",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 14,
+              "passing": 14
+            },
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "oversightLevel": "high",
+            "dorStatus": "signed-off",
+            "dorDate": "2026-05-01",
+            "dorAssessedBy": "Copilot",
+            "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.1-definition-skill-improvements-dor.md",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/19",
+            "dispatchedAt": "2026-04-12T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "prUrl": "https://github.com/heymishy/skills-repo/pull/28",
+            "mergedAt": "2026-04-11",
+            "updatedAt": "2026-04-12",
+            "dodStatus": "complete",
+            "prStatus": "merged",
+            "releaseReady": false,
+            "blocker": "Scope deviation recorded in DoD: additional executable/test-harness files changed beyond declared touch points.",
+            "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.1-definition-skill-improvements-dod.md",
+            "layoutGapsAtMerge": false,
+            "layoutGapsRiskAccepted": false
+          },
+          {
+            "slug": "p2.2-review-incremental-write",
+            "name": "/review skill improvement — incremental per-story write (D4)",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 9,
+              "passing": 9
+            },
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "oversightLevel": "high",
+            "dorStatus": "signed-off",
+            "dorDate": "2026-05-01",
+            "dorAssessedBy": "Copilot",
+            "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.2-review-incremental-write-dor.md",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/21",
+            "dispatchedAt": "2026-04-12T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "prUrl": "https://github.com/heymishy/skills-repo/pull/29",
+            "mergedAt": "2026-04-11",
+            "updatedAt": "2026-04-12",
+            "dodStatus": "complete",
+            "prStatus": "merged",
+            "releaseReady": true,
+            "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.2-review-incremental-write-dod.md",
+            "layoutGapsAtMerge": false,
+            "layoutGapsRiskAccepted": false
+          },
+          {
+            "slug": "p2.3-dor-dod-template-improvements",
+            "name": "DoR and DoD template improvements — cross-story schema dependency check, AC verification prompt, NFR guardrail enforcement (D8/D9/B1-enforce)",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 13,
+              "passing": 13
+            },
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "oversightLevel": "high",
+            "dorStatus": "signed-off",
+            "dorDate": "2026-05-01",
+            "dorAssessedBy": "Copilot",
+            "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.3-dor-dod-template-improvements-dor.md",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/23",
+            "dispatchedAt": "2026-04-12T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "prUrl": "https://github.com/heymishy/skills-repo/pull/30",
+            "mergedAt": "2026-04-11",
+            "updatedAt": "2026-04-12",
+            "dodStatus": "complete",
+            "prStatus": "merged",
+            "releaseReady": true,
+            "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.3-dor-dod-template-improvements-dod.md",
+            "layoutGapsAtMerge": false,
+            "layoutGapsRiskAccepted": false
+          }
+        ]
+      },
+      {
+        "slug": "epic-2-full-surface-adapter-model",
+        "name": "Full Surface Adapter Model",
+        "status": "complete",
+        "stories": [
+          {
+            "slug": "p2.4-agents-md-adapter",
+            "name": "AGENTS.md adapter in assembly script — agent instruction format driven by vcs.type (ADR-005)",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 13,
+              "passing": 13
+            },
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "oversightLevel": "high",
+            "dorStatus": "signed-off",
+            "dorDate": "2026-05-01",
+            "dorAssessedBy": "Copilot",
+            "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.4-agents-md-adapter-dor.md",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/25",
+            "dispatchedAt": "2026-04-12T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "prUrl": "https://github.com/heymishy/skills-repo/pull/31",
+            "mergedAt": "2026-04-11",
+            "updatedAt": "2026-04-12",
+            "dodStatus": "complete",
+            "prStatus": "merged",
+            "releaseReady": true,
+            "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.4-agents-md-adapter-dod.md",
+            "layoutGapsAtMerge": false,
+            "layoutGapsRiskAccepted": false
+          },
+          {
+            "slug": "p2.5a-iac-saas-api-adapters",
+            "name": "IaC and SaaS-API surface adapters with POLICY.md floor variants (p2.5a)",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 18,
+              "passing": 18
+            },
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "oversightLevel": "high",
+            "dorStatus": "signed-off",
+            "dorDate": "2026-05-01",
+            "dorAssessedBy": "Copilot",
+            "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.5a-iac-saas-api-adapters-dor.md",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/27",
+            "dispatchedAt": "2026-04-12T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "prUrl": "https://github.com/heymishy/skills-repo/pull/38",
+            "mergedAt": "2026-04-11",
+            "updatedAt": "2026-04-12",
+            "dodStatus": "complete",
+            "prStatus": "merged",
+            "releaseReady": true,
+            "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.5a-iac-saas-api-adapters-dod.md",
+            "layoutGapsAtMerge": false,
+            "layoutGapsRiskAccepted": false
+          },
+          {
+            "slug": "p2.5b-saas-gui-m365-manual-adapters",
+            "name": "SaaS-GUI, M365-admin, and manual surface adapters with POLICY.md floor variants (p2.5b)",
+            "stage": "definition-of-done",
+            "health": "amber",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 20,
+              "passing": 20
+            },
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "oversightLevel": "high",
+            "dorStatus": "signed-off",
+            "dorDate": "2026-05-01",
+            "dorAssessedBy": "Copilot",
+            "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.5b-saas-gui-m365-manual-adapters-dor.md",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/32",
+            "dispatchedAt": "2026-04-12T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "prUrl": "https://github.com/heymishy/skills-repo/pull/46",
+            "mergedAt": "2026-04-12",
+            "updatedAt": "2026-04-12",
+            "dodStatus": "complete",
+            "prStatus": "merged",
+            "releaseReady": false,
+            "blocker": "Scope deviation recorded in DoD: PR bundled unrelated p2.11 implementation payload.",
+            "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.5b-saas-gui-m365-manual-adapters-dod.md",
+            "layoutGapsAtMerge": false,
+            "layoutGapsRiskAccepted": false
+          },
+          {
+            "slug": "p2.6-ea-registry-path-a",
+            "name": "EA registry Path A surface type resolution in surface adapter resolver",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 15,
+              "passing": 15
+            },
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "oversightLevel": "high",
+            "dorStatus": "signed-off",
+            "dorDate": "2026-04-11",
+            "dorAssessedBy": "Copilot",
+            "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.6-ea-registry-path-a-dor.md",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/33",
+            "dispatchedAt": "2026-04-12T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "prUrl": "https://github.com/heymishy/skills-repo/pull/41",
+            "mergedAt": "2026-04-12",
+            "updatedAt": "2026-04-12",
+            "dodStatus": "complete",
+            "prStatus": "merged",
+            "releaseReady": true,
+            "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.6-ea-registry-path-a-dod.md",
+            "layoutGapsAtMerge": false,
+            "layoutGapsRiskAccepted": false
+          }
+        ]
+      }
+    ],
+    "metrics": [
+      {
+        "metricId": "M1",
+        "name": "Second squad outer loop — unassisted",
+        "signal": "on-track",
+        "evidence": "p2.4 merged and DoD-complete: assembly now emits AGENTS.md for non-GitHub contexts with passing check-assembly coverage.",
+        "lastMeasured": "2026-04-12",
+        "targetDescription": "Second squad completes full outer loop in one session with zero blocking lookups"
+      },
+      {
+        "metricId": "M2",
+        "name": "Non-git-native surface adapter — passing assurance verdict",
+        "signal": "on-track",
+        "evidence": "Adapters for iac, saas-api, saas-gui, m365-admin, and manual are merged and DoD-assessed; resolver Path A/Path B routing is operational.",
+        "lastMeasured": "2026-04-12",
+        "targetDescription": "At least one non-git-native adapter produces a passing assurance verdict on a real PR"
+      },
+      {
+        "metricId": "M3",
+        "name": "Improvement agent — first SKILL.md diff proposal from real failure",
+        "signal": "on-track",
+        "evidence": "p2.11 and p2.12 are merged and DoD-complete: trace proposals, challenger pre-check, and proposal review workflow are implemented end-to-end.",
+        "lastMeasured": "2026-04-12",
+        "targetDescription": "At least one proposal in workspace/proposals/ with evidence source, rationale, and challenger pre-check result, reviewed and actioned"
+      },
+      {
+        "metricId": "M4",
+        "name": "Fleet observability — ≥2 squad states without manual entry",
+        "signal": "on-track",
+        "evidence": "p2.7 merged and DoD-complete: fleet registry files, CI aggregation workflow, and viz fleet panel implemented with passing checks.",
+        "lastMeasured": "2026-04-12",
+        "targetDescription": "fleet-state.json generated by CI with ≥2 squad entries; pipeline-viz renders both"
+      },
+      {
+        "metricId": "M5",
+        "name": "Non-engineer approval interface — DoR sign-off outside VS Code",
+        "signal": "not-started",
+        "evidence": null,
+        "lastMeasured": null,
+        "targetDescription": "At least one real DoR sign-off completed via Jira, Confluence, or Slack/Teams by a genuine non-engineer approver"
+      },
+      {
+        "id": "MM1",
+        "name": "Solo operator outer loop — Phase 2 calibration",
+        "signal": "on-track",
+        "evidence": "p2.2 and p2.3 DoD confirm flow-finding write-backs landed, reducing expected outer-loop rework and late gate failures.",
+        "lastMeasured": "2026-04-12",
+        "targetDescription": "All outer loop stages complete with ≤1 blocking lookup; calendar span ≤3 days; focus H/story ≤2.9h"
+      },
+      {
+        "id": "MM2",
+        "name": "Cross-session resume — ISO datetime upgrade",
+        "signal": "not-started",
+        "evidence": null,
+        "lastMeasured": null,
+        "targetDescription": "All Phase 2 E3 phase duration rows sourced as tier-1 (state.json ISO datetime); zero tier-2/3 fallback"
+      },
+      {
+        "id": "MM3",
+        "name": "Improvement loop — first proposal reviewed within one feature cycle",
+        "signal": "on-track",
+        "evidence": "p2.11 proposal generation and p2.12 challenger/review workflow are both delivered in the same feature cycle.",
+        "lastMeasured": "2026-04-12",
+        "targetDescription": "At least one proposal with evidence, pre-check, and action taken within Phase 2 delivery cycle"
+      },
+      {
+        "id": "MM4",
+        "name": "Estimation calibration accuracy",
+        "signal": "not-started",
+        "evidence": null,
+        "lastMeasured": null,
+        "targetDescription": "|E2−actual|/actual < 20% by feature 3; measured automatically from results.tsv at each /improve E3"
+      },
+      {
+        "id": "MM5",
+        "name": "Flow findings conversion rate",
+        "signal": "on-track",
+        "evidence": "D4 (p2.2), D8/D9/B1-enforce (p2.3) delivered and verified DoD-complete, continuing conversion of logged flow findings into shipped changes.",
+        "lastMeasured": "2026-04-12",
+        "targetDescription": "≥50% of logged flow findings result in pipeline improvement within 2 features; operator confirms at each /improve"
+      }
+    ],
+    "epics_batch2": [
+      {
+        "slug": "epic-3-fleet-observability-personas",
+        "name": "Fleet Observability and Non-Engineer Approval Interface",
+        "status": "complete",
+        "stories": [
+          {
+            "slug": "p2.7-fleet-registry-ci-aggregation",
+            "name": "Fleet registry files and CI-aggregated fleet-state.json",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 18,
+              "passing": 18
+            },
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "oversightLevel": "high",
+            "dorStatus": "signed-off",
+            "dorDate": "2026-04-11",
+            "dorAssessedBy": "Copilot",
+            "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.7-fleet-registry-ci-aggregation-dor.md",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/34",
+            "dispatchedAt": "2026-04-12T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "prUrl": "https://github.com/heymishy/skills-repo/pull/42",
+            "mergedAt": "2026-04-12",
+            "updatedAt": "2026-04-12",
+            "dodStatus": "complete",
+            "prStatus": "merged",
+            "releaseReady": true,
+            "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.7-fleet-registry-ci-aggregation-dod.md",
+            "layoutGapsAtMerge": false,
+            "layoutGapsRiskAccepted": false
+          },
+          {
+            "slug": "p2.8-persona-routing-non-engineer-approval",
+            "name": "Persona routing and non-engineer approval interface (depends on p2.7)",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 17,
+              "passing": 17
+            },
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "oversightLevel": "high",
+            "dorStatus": "signed-off",
+            "dorDate": "2026-04-11",
+            "dorAssessedBy": "Copilot",
+            "w2ScopeStability": "unstable-p2.7-dependency",
+            "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.8-persona-routing-non-engineer-approval-dor.md",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/35",
+            "dispatchedAt": "2026-04-12T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "prUrl": "https://github.com/heymishy/skills-repo/pull/45",
+            "mergedAt": "2026-04-12",
+            "updatedAt": "2026-04-12",
+            "dodStatus": "complete",
+            "prStatus": "merged",
+            "releaseReady": true,
+            "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.8-persona-routing-non-engineer-approval-dod.md",
+            "layoutGapsAtMerge": false,
+            "layoutGapsRiskAccepted": false
+          }
+        ]
+      },
+      {
+        "slug": "epic-4-standards-ci-validation",
+        "name": "Remaining Discipline Standards and Bitbucket CI Validation",
+        "status": "complete",
+        "stories": [
+          {
+            "slug": "p2.9-discipline-standards-remaining",
+            "name": "Eight remaining discipline standards and three pilot domain standards",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 17,
+              "passing": 17
+            },
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "oversightLevel": "medium",
+            "dorStatus": "signed-off",
+            "dorDate": "2026-04-11",
+            "dorAssessedBy": "Copilot",
+            "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.9-discipline-standards-remaining-dor.md",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/36",
+            "dispatchedAt": "2026-04-12T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "prUrl": "https://github.com/heymishy/skills-repo/pull/43",
+            "mergedAt": "2026-04-12",
+            "updatedAt": "2026-04-12",
+            "dodStatus": "complete",
+            "prStatus": "merged",
+            "releaseReady": true,
+            "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.9-discipline-standards-remaining-dod.md",
+            "layoutGapsAtMerge": false,
+            "layoutGapsRiskAccepted": false
+          },
+          {
+            "slug": "p2.10-bitbucket-ci-validation",
+            "name": "Bitbucket CI validation — Cloud pipeline-shape tests and DC Docker auth topology",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 15,
+              "passing": 12
+            },
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "oversightLevel": "high",
+            "dorStatus": "signed-off",
+            "dorDate": "2026-04-11",
+            "dorAssessedBy": "Copilot",
+            "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.10-bitbucket-ci-validation-dor.md",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/37",
+            "dispatchedAt": "2026-04-12T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "prUrl": "https://github.com/heymishy/skills-repo/pull/44",
+            "mergedAt": "2026-04-12",
+            "updatedAt": "2026-04-12",
+            "dodStatus": "complete",
+            "prStatus": "merged",
+            "releaseReady": true,
+            "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.10-bitbucket-ci-validation-dod.md",
+            "layoutGapsAtMerge": false,
+            "layoutGapsRiskAccepted": false,
+            "dodNote": "AC3/AC4/AC5 Docker-gated tests accepted as skipped with [PREREQ-DOCKER] when Docker daemon unavailable; harness and compose deliverable verified."
+          }
+        ]
+      },
+      {
+        "slug": "epic-5-self-improving-harness",
+        "name": "Self-Improving Harness",
+        "status": "complete",
+        "sequencingNote": "p2.11 and p2.12 must not be dispatched to inner loop until at least one Phase 2 inner loop story batch is merged and its trace written",
+        "stories": [
+          {
+            "slug": "p2.11-improvement-agent-trace-proposals",
+            "name": "Improvement agent — queryable trace interface, failure and staleness detection, and diff proposals",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 21,
+              "passing": 21,
+              "executionGate": "after-first-phase2-inner-loop-trace"
+            },
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "oversightLevel": "high",
+            "dorStatus": "signed-off",
+            "dorProceedStatus": "PROCEED",
+            "dorBlockedReason": "Gate cleared 2026-04-12: workspace/traces/ confirmed ≥1 real Phase 2 inner loop trace (2026-04-11T21-33-02-002Z-ci-84f82370.jsonl)",
+            "dorDate": "2026-04-11",
+            "dorAssessedBy": "Copilot",
+            "sequencingConstraint": "after-first-inner-loop-batch",
+            "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.11-improvement-agent-trace-proposals-dor.md",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/39",
+            "dispatchedAt": "2026-04-12T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "prUrl": "https://github.com/heymishy/skills-repo/pull/47",
+            "mergedAt": "2026-04-12",
+            "updatedAt": "2026-04-12",
+            "dodStatus": "complete",
+            "prStatus": "merged",
+            "releaseReady": true,
+            "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.11-improvement-agent-trace-proposals-dod.md",
+            "layoutGapsAtMerge": false,
+            "layoutGapsRiskAccepted": false,
+            "dodNote": "failurePattern dependency explicitly verified in .github/scripts/run-assurance-gate.js via commit 5869050."
+          },
+          {
+            "slug": "p2.12-improvement-agent-challenger-skill",
+            "name": "Improvement agent — challenger pre-check, proposal review workflow, and improvement-agent SKILL.md (depends on p2.11)",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "testPlan": {
+              "status": "written",
+              "totalTests": 22,
+              "passing": 22,
+              "executionGate": "after-p2.11-dod-complete-and-phase2-inner-loop-trace"
+            },
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "oversightLevel": "high",
+            "dorStatus": "signed-off",
+            "dorProceedStatus": "PROCEED",
+            "dorBlockedReason": "Gate (1) cleared 2026-04-12: workspace/traces/ confirmed ≥1 real Phase 2 inner loop trace. Gate (2) sequencing: must dispatch after p2.11 DoD-complete per sequencingConstraint.",
+            "dorDate": "2026-04-11",
+            "dorAssessedBy": "Copilot",
+            "sequencingConstraint": "after-first-inner-loop-batch-and-p2.11-dod",
+            "dorArtefact": "artefacts/2026-04-11-skills-platform-phase2/dor/p2.12-improvement-agent-challenger-skill-dor.md",
+            "issueUrl": "https://github.com/heymishy/skills-repo/issues/40",
+            "dispatchedAt": "2026-04-12T00:00:00Z",
+            "dispatchTarget": "github-agent",
+            "prUrl": "https://github.com/heymishy/skills-repo/pull/48",
+            "mergedAt": "2026-04-12",
+            "updatedAt": "2026-04-12",
+            "dodStatus": "complete",
+            "prStatus": "merged",
+            "releaseReady": true,
+            "dodArtefact": "artefacts/2026-04-11-skills-platform-phase2/dod/p2.12-improvement-agent-challenger-skill-dod.md",
+            "layoutGapsAtMerge": false,
+            "layoutGapsRiskAccepted": false,
+            "dodNote": "Gate verification completed before sign-off: Phase 2 trace present and p2.11 DoD artefact confirmed."
+          }
+        ]
+      }
+    ]
+  },
+  "slug": "2026-04-11-skills-platform-phase2",
+  "name": "Skills Platform — Phase 2: Scale, Observability, and Self-Improving Harness",
+  "track": "library",
+  "stage": "definition-of-done",
+  "health": "green",
+  "updatedAt": "2026-05-01",
+  "featureStatus": "complete"
+}

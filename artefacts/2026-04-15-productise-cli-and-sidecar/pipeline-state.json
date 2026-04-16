@@ -1,0 +1,368 @@
+{
+  "version": "1",
+  "updated": "2026-04-17T00:00:00Z",
+  "feature": {
+    "slug": "2026-04-15-productise-cli-and-sidecar",
+    "name": "Productise skills-repo — CLI + Sidecar",
+    "title": "Productise skills-repo — CLI + Sidecar",
+    "track": "productisation-thread",
+    "stage": "definition-of-done",
+    "health": "green",
+    "discoveryStatus": "approved",
+    "benefitMetricStatus": "complete",
+    "slicingStrategy": "walking-skeleton",
+    "updatedAt": "2026-04-15T14:45:00Z",
+    "regulated": false,
+    "complianceProfile": "standard",
+    "complianceFrameworks": [],
+    "sensitiveDataCategories": [],
+    "epics": [
+      {
+        "slug": "epic-1-walking-skeleton",
+        "name": "Walking skeleton — end-to-end CLI backbone",
+        "status": "complete",
+        "stories": [
+          {
+            "slug": "ps1.1",
+            "name": "End-to-end CLI skeleton",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "updatedAt": "2026-04-15T14:15:00Z",
+            "testPlan": {
+              "status": "written",
+              "totalTests": 13,
+              "passing": 13
+            },
+            "acTotal": 5,
+            "acVerified": 5,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "dorStatus": "signed-off",
+            "oversightLevel": "medium",
+            "signedOffBy": "Operator (solo; tech-lead = operator)",
+            "signedOffAt": "2026-04-15",
+            "dorArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps1.1-dor.md",
+            "dorContractArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps1.1-dor-contract.md",
+            "dodStatus": "complete",
+            "dodArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dod/ps1.1-end-to-end-cli-skeleton-dod.md",
+            "prUrl": null,
+            "mergedAt": "2026-04-15",
+            "prStatus": "merged-to-master"
+          }
+        ]
+      },
+      {
+        "slug": "epic-2-fetch-lockfile-hash-integrity",
+        "name": "Fetch, lockfile, and hash integrity",
+        "status": "complete",
+        "stories": [
+          {
+            "slug": "ps2.1",
+            "name": "Fetch skills and standards from a configurable source at init",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "updatedAt": "2026-04-15T14:20:00Z",
+            "testPlan": {
+              "status": "written",
+              "totalTests": 20,
+              "passing": 20
+            },
+            "acTotal": 5,
+            "acVerified": 5,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "dorStatus": "signed-off",
+            "oversightLevel": "medium",
+            "signedOffBy": "Operator (solo; tech-lead = operator)",
+            "signedOffAt": "2026-04-15",
+            "dorArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps2.1-dor.md",
+            "dorContractArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps2.1-dor-contract.md",
+            "dodStatus": "complete",
+            "dodArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dod/ps2.1-fetch-from-configurable-source-dod.md",
+            "mergedAt": "2026-04-15",
+            "prStatus": "merged-to-master"
+          },
+          {
+            "slug": "ps2.2",
+            "name": "Lockfile pinning and verification",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "updatedAt": "2026-04-15T14:25:00Z",
+            "testPlan": {
+              "status": "written",
+              "totalTests": 29,
+              "passing": 29
+            },
+            "acTotal": 6,
+            "acVerified": 6,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "dorStatus": "signed-off",
+            "oversightLevel": "medium",
+            "signedOffBy": "Operator (solo; tech-lead = operator)",
+            "signedOffAt": "2026-04-15",
+            "dorArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps2.2-dor.md",
+            "dorContractArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps2.2-dor-contract.md",
+            "dodStatus": "complete",
+            "dodArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dod/ps2.2-lockfile-pinning-and-verification-dod.md",
+            "mergedAt": "2026-04-15",
+            "prStatus": "merged-to-master"
+          },
+          {
+            "slug": "ps2.3",
+            "name": "Cross-machine hash round-trip acceptance test",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "updatedAt": "2026-04-15T14:30:00Z",
+            "testPlan": {
+              "status": "written",
+              "totalTests": 34,
+              "passing": 34
+            },
+            "acTotal": 5,
+            "acVerified": 5,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "dorStatus": "signed-off",
+            "oversightLevel": "medium",
+            "signedOffBy": "Operator (solo; tech-lead = operator)",
+            "signedOffAt": "2026-04-15",
+            "dorArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps2.3-dor.md",
+            "dorContractArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps2.3-dor-contract.md",
+            "dodStatus": "complete",
+            "dodArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dod/ps2.3-cross-machine-hash-round-trip-dod.md",
+            "mergedAt": "2026-04-15",
+            "prStatus": "merged-to-master"
+          }
+        ]
+      },
+      {
+        "slug": "epic-3-workflow-and-commands",
+        "name": "Workflow schema, commands, and dogfood acceptance",
+        "status": "complete",
+        "stories": [
+          {
+            "slug": "ps3.1",
+            "name": "workflow.yaml schema and one real preset",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "updatedAt": "2026-04-15T14:35:00Z",
+            "testPlan": {
+              "status": "written",
+              "totalTests": 42,
+              "passing": 42
+            },
+            "acTotal": 6,
+            "acVerified": 6,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "dorStatus": "signed-off",
+            "oversightLevel": "medium",
+            "signedOffBy": "Operator (solo; tech-lead = operator)",
+            "signedOffAt": "2026-04-15",
+            "dorArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps3.1-dor.md",
+            "dorContractArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps3.1-dor-contract.md",
+            "dodStatus": "complete",
+            "dodArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dod/ps3.1-workflow-schema-and-preset-dod.md",
+            "mergedAt": "2026-04-15",
+            "prStatus": "merged-to-master"
+          },
+          {
+            "slug": "ps3.2",
+            "name": "status and artefact new commands",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "updatedAt": "2026-04-15T14:40:00Z",
+            "testPlan": {
+              "status": "written",
+              "totalTests": 50,
+              "passing": 50
+            },
+            "acTotal": 6,
+            "acVerified": 6,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "dorStatus": "signed-off",
+            "oversightLevel": "medium",
+            "signedOffBy": "Operator (solo; tech-lead = operator)",
+            "signedOffAt": "2026-04-15",
+            "dorArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps3.2-dor.md",
+            "dorContractArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps3.2-dor-contract.md",
+            "dodStatus": "complete",
+            "dodArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dod/ps3.2-status-and-artefact-new-dod.md",
+            "mergedAt": "2026-04-15",
+            "prStatus": "merged-to-master"
+          },
+          {
+            "slug": "ps3.3",
+            "name": "Dogfood acceptance run",
+            "stage": "definition-of-done",
+            "health": "green",
+            "reviewStatus": "passed",
+            "highFindings": 0,
+            "mediumFindings": 0,
+            "updatedAt": "2026-04-15T14:45:00Z",
+            "testPlan": {
+              "status": "written",
+              "totalTests": 9,
+              "passing": 0
+            },
+            "acTotal": 6,
+            "acVerified": 5,
+            "hasLayoutDependentGaps": false,
+            "e2eToolingRequired": false,
+            "dorStatus": "signed-off",
+            "oversightLevel": "medium",
+            "signedOffBy": "Operator (solo; tech-lead = operator)",
+            "signedOffAt": "2026-04-15",
+            "dorArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps3.3-dor.md",
+            "dorContractArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dor/ps3.3-dor-contract.md",
+            "dodStatus": "complete",
+            "dodArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/dod/ps3.3-dogfood-acceptance-run-dod.md",
+            "mergedAt": "2026-04-15",
+            "prStatus": "merged-to-master"
+          }
+        ]
+      }
+    ],
+    "discoveryArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/discovery.md",
+    "decisionsArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/decisions.md",
+    "benefitMetricArtefact": "artefacts/2026-04-15-productise-cli-and-sidecar/benefit-metric.md",
+    "metrics": [
+      {
+        "id": "m1",
+        "name": "Sidecar-only footprint",
+        "target": "2 top-level paths (.skills-repo/, artefacts/) + optional .gitignore append",
+        "baseline": "N/A (new)",
+        "signal": "measured",
+        "lastMeasured": "2026-04-15T14:45:00Z",
+        "evidence": null,
+        "contributingStories": [
+          "ps1.1",
+          "ps3.3"
+        ]
+      },
+      {
+        "id": "m2",
+        "name": "Time-to-first-artefact",
+        "target": "<15 min (min signal: <30 min)",
+        "baseline": "N/A (new)",
+        "signal": "measured",
+        "lastMeasured": "2026-04-15T14:45:00Z",
+        "evidence": null,
+        "contributingStories": [
+          "ps3.1",
+          "ps3.3"
+        ]
+      },
+      {
+        "id": "m3",
+        "name": "Resume-after-pause works",
+        "target": "pass (binary)",
+        "baseline": "N/A (new)",
+        "signal": "measured",
+        "lastMeasured": "2026-04-15T14:45:00Z",
+        "evidence": null,
+        "contributingStories": [
+          "ps3.1",
+          "ps3.2",
+          "ps3.3"
+        ]
+      },
+      {
+        "id": "m4",
+        "name": "Auditor self-service on resolved snapshots",
+        "target": "pass (binary)",
+        "baseline": "in-tree layout passes today; must not regress",
+        "signal": "measured",
+        "lastMeasured": "2026-04-15T14:45:00Z",
+        "evidence": null,
+        "contributingStories": [
+          "ps2.1",
+          "ps2.2"
+        ]
+      },
+      {
+        "id": "m5",
+        "name": "Cross-machine hash round-trip",
+        "target": "100% hash match across >=2 environments",
+        "baseline": "N/A (new)",
+        "signal": "measured",
+        "lastMeasured": "2026-04-15T14:45:00Z",
+        "evidence": null,
+        "contributingStories": [
+          "ps2.2",
+          "ps2.3",
+          "ps3.3"
+        ]
+      },
+      {
+        "id": "mm1",
+        "name": "Dogfood delivery ran on packaged CLI",
+        "target": ">=1 full artefact chain via CLI before ship",
+        "baseline": "0",
+        "signal": "measured",
+        "lastMeasured": "2026-04-15T14:45:00Z",
+        "evidence": null,
+        "contributingStories": [
+          "ps1.1",
+          "ps3.3"
+        ]
+      },
+      {
+        "id": "mm2",
+        "name": "No §12-tension incidents during MVP",
+        "target": "0 incidents",
+        "baseline": "0 expected",
+        "signal": "measured",
+        "lastMeasured": "2026-04-15T14:45:00Z",
+        "evidence": null,
+        "contributingStories": [
+          "ps3.3"
+        ]
+      },
+      {
+        "id": "mm3",
+        "name": "Fetch-and-pin model held",
+        "target": "0 fetch-related failures",
+        "baseline": "0 expected",
+        "signal": "measured",
+        "lastMeasured": "2026-04-15T14:45:00Z",
+        "evidence": null,
+        "contributingStories": [
+          "ps2.1",
+          "ps2.3",
+          "ps3.3"
+        ]
+      }
+    ],
+    "nfrProfile": "artefacts/2026-04-15-productise-cli-and-sidecar/nfr-profile.md",
+    "guardrails": [],
+    "dodStatus": "complete"
+  },
+  "slug": "2026-04-15-productise-cli-and-sidecar",
+  "name": "Productise skills-repo — CLI + Sidecar",
+  "track": "productisation-thread",
+  "stage": "definition-of-done",
+  "health": "green",
+  "updatedAt": "2026-04-15T14:45:00Z",
+  "featureStatus": "complete"
+}
