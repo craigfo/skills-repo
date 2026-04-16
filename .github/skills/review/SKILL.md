@@ -278,7 +278,7 @@ comparing this run's findings to the previous run.
 
 **Write per story, not per run.** After writing each story's review report file, immediately update that story's entry in `pipeline-state.json` and `workspace/state.json` — before loading or reading the next story. Do not batch state writes to the end of the review run. Each story's state must be durable before the next story begins. This is a sequenced invariant, not an optional best practice: if the session ends mid-review, all reviewed stories must already be recorded in state.
 
-After producing a review report, for each story reviewed update the story entry in `.github/pipeline-state.json` in the **project repository**:
+After producing a review report, for each story reviewed update the story entry in `artefacts/<current-feature-slug>/pipeline-state.json` in the **project repository**:
 
 - Set `stage: "review"`, `updatedAt: [now]`
 - Set `reviewStatus: "passed"` if no HIGH findings, `"has-findings"` if any remain
@@ -295,3 +295,13 @@ After producing a review report, for each story reviewed update the story entry 
 The guardrails array is read by the pipeline visualiser Guardrails Compliance Matrix panel.
 
 **Human review note:** If a human resolves findings and re-approves stories outside a skill session, update `reviewStatus` and `highFindings` manually in `pipeline-state.json`, or run `/workflow` to reconcile.
+
+### Current-feature-slug derivation (ec3.1)
+
+Before writing, resolve the current feature-slug. Write targets are per-feature now, not a shared root file.
+
+1. **Preferred:** read `activeFeature.slug` from `workspace/state.json`.
+2. **Fallback:** run `node scripts/current-feature-slug.js` (stdout emits the slug; exits 1 if unresolvable).
+3. **Target:** write to `artefacts/<slug>/pipeline-state.json` — NOT `artefacts/<current-feature-slug>/pipeline-state.json` (that is a pointer doc since ec3.1; writes to it are forbidden).
+
+If the slug cannot be resolved, halt with the helper's error message and do not write.

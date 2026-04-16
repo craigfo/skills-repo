@@ -405,12 +405,12 @@ When multiple features are active, after the status table:
 
 ## State file reconciliation
 
-`/workflow` is the designated reconciler of `.github/pipeline-state.json`.
+`/workflow` is the designated reconciler of `artefacts/<current-feature-slug>/pipeline-state.json` (per-artefact; aggregate view via `.github/pipeline-state.derived.json` — read-only, scanner-derived).
 Run this process on every invocation — it is fast and non-destructive.
 
-> **Repository scope:** All state file reads and writes target `.github/pipeline-state.json`
+> **Repository scope:** All state file reads and writes target `artefacts/<current-feature-slug>/pipeline-state.json` (per-artefact; aggregate view via `.github/pipeline-state.derived.json` — read-only, scanner-derived)
 > in the **current project repository** (the repo the user is working in), never
-> the skills repo. When a skill says "update `.github/pipeline-state.json`", it
+> the skills repo. When a skill says "update `artefacts/<current-feature-slug>/pipeline-state.json` (per-artefact; aggregate view via `.github/pipeline-state.derived.json` — read-only, scanner-derived)", it
 > means the project repo's copy.
 
 ### When to reconcile
@@ -479,7 +479,7 @@ For each feature in `pipeline-state.json`:
 
 > **Mandatory.** Do not close this skill or produce a closing summary without writing these fields. Confirm the write in your closing message: "Pipeline state updated ✅."
 
-`/workflow` does not advance pipeline stages itself — it reads artefacts and reconciles `.github/pipeline-state.json` in the **project repository**. See the State file reconciliation section above for the full reconciliation logic.
+`/workflow` does not advance pipeline stages itself — it reads artefacts and reconciles `artefacts/<current-feature-slug>/pipeline-state.json` (per-artefact; aggregate view via `.github/pipeline-state.derived.json` — read-only, scanner-derived) in the **project repository**. See the State file reconciliation section above for the full reconciliation logic.
 
 After each reconciliation run, update the top-level `updated` timestamp to now.
 

@@ -359,7 +359,7 @@ Write it so it works equally well for all three without modification:
 
 > **Mandatory.** Do not close this skill or produce a closing summary without writing these fields. Confirm the write in your closing message: "Pipeline state updated ✅."
 
-When the test plan is saved, for each story update `.github/pipeline-state.json` in the **project repository**:
+When the test plan is saved, for each story update `artefacts/<current-feature-slug>/pipeline-state.json` in the **project repository**:
 
 - Set `stage: "test-plan"`, `updatedAt: [now]`
 - Set `testPlan: { status: "written", totalTests: [count], passing: 0 }`
@@ -367,3 +367,13 @@ When the test plan is saved, for each story update `.github/pipeline-state.json`
 - Set `health: "green"`
 - Set `hasLayoutDependentGaps: true` if any AC was classified `CSS-layout-dependent`; `false` otherwise
 - Set `e2eToolingRequired: true` if any layout-dependent AC was assigned option 1 (E2E test); `false` otherwise
+
+### Current-feature-slug derivation (ec3.1)
+
+Before writing, resolve the current feature-slug. Write targets are per-feature now, not a shared root file.
+
+1. **Preferred:** read `activeFeature.slug` from `workspace/state.json`.
+2. **Fallback:** run `node scripts/current-feature-slug.js` (stdout emits the slug; exits 1 if unresolvable).
+3. **Target:** write to `artefacts/<slug>/pipeline-state.json` — NOT `artefacts/<current-feature-slug>/pipeline-state.json` (that is a pointer doc since ec3.1; writes to it are forbidden).
+
+If the slug cannot be resolved, halt with the helper's error message and do not write.

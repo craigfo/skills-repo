@@ -106,7 +106,7 @@ When all Critical fixed and Important fixed (or acknowledged):
 
 > **Mandatory.** Do not close this skill or produce a closing summary without writing these fields. Confirm the write in your closing message: "Pipeline state updated ✅."
 
-Update `.github/pipeline-state.json` in the **project repository** after producing the review report:
+Update `artefacts/<current-feature-slug>/pipeline-state.json` in the **project repository** after producing the review report:
 
 - Set story `stage: "implementation-review"`, `updatedAt: [now]`
 - If critical issues found: set `health: "red"`, `blocker: "[summary of critical issue]"`
@@ -118,3 +118,13 @@ Update `.github/pipeline-state.json` in the **project repository** after produci
 - Recompute the parent epic `status` from its stories: if every story in the epic is done (`dodStatus: "complete"`, `prStatus: "merged"`, or all tasks `tddState: "committed"`), set epic `status: "complete"`; if any story has an active inner loop stage, set `status: "in-progress"`; otherwise `"not-started"`
 
 **Human review note:** If a human performs a code review outside a skill session and resolves findings, update `health` and clear `blocker` manually in `pipeline-state.json`, or run `/workflow` to reconcile.
+
+### Current-feature-slug derivation (ec3.1)
+
+Before writing, resolve the current feature-slug. Write targets are per-feature now, not a shared root file.
+
+1. **Preferred:** read `activeFeature.slug` from `workspace/state.json`.
+2. **Fallback:** run `node scripts/current-feature-slug.js` (stdout emits the slug; exits 1 if unresolvable).
+3. **Target:** write to `artefacts/<slug>/pipeline-state.json` — NOT `artefacts/<current-feature-slug>/pipeline-state.json` (that is a pointer doc since ec3.1; writes to it are forbidden).
+
+If the slug cannot be resolved, halt with the helper's error message and do not write.

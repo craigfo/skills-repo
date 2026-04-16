@@ -283,7 +283,7 @@ If `npm test` fails with a stale-traces error, the traces branch has not receive
 
 > **Mandatory.** Do not close this skill or produce a closing summary without writing these fields. Confirm the write in your closing message: "Pipeline state updated ✅."
 
-/trace is read-only and does not update artefacts, but it does update `.github/pipeline-state.json` in the **project repository** to surface findings:
+/trace is read-only and does not update artefacts, but it does update `artefacts/<current-feature-slug>/pipeline-state.json` in the **project repository** to surface findings:
 
 - For any story where a broken chain link is found: set `health: "amber"` (missing artefact) or `"red"` (broken traceability)
 - Set `stage: "trace"` for stories that have completed the full chain
@@ -297,3 +297,13 @@ If `npm test` fails with a stale-traces error, the traces branch has not receive
 - Merge by `id` — do not remove existing entries from other skills
 
 This allows the visualiser governance view to surface traceability gaps directly. The `traceStatus` field is read by the governance gate checker — without it the gate shows "Pending" indefinitely.
+
+### Current-feature-slug derivation (ec3.1)
+
+Before writing, resolve the current feature-slug. Write targets are per-feature now, not a shared root file.
+
+1. **Preferred:** read `activeFeature.slug` from `workspace/state.json`.
+2. **Fallback:** run `node scripts/current-feature-slug.js` (stdout emits the slug; exits 1 if unresolvable).
+3. **Target:** write to `artefacts/<slug>/pipeline-state.json` — NOT `artefacts/<current-feature-slug>/pipeline-state.json` (that is a pointer doc since ec3.1; writes to it are forbidden).
+
+If the slug cannot be resolved, halt with the helper's error message and do not write.

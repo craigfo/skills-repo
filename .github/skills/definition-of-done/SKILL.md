@@ -202,7 +202,7 @@ Save to `artefacts/[feature]/dod/[story-slug]-dod.md`.
 
 > **Mandatory.** Do not close this skill or produce a closing summary without writing these fields. Confirm the write in your closing message: "Pipeline state updated ✅."
 
-Update `.github/pipeline-state.json` in the **project repository** when the DoD artefact is saved:
+Update `artefacts/<current-feature-slug>/pipeline-state.json` in the **project repository** when the DoD artefact is saved:
 
 - Set story `stage: "definition-of-done"`, `dodStatus: "complete"`, `prStatus: "merged"`, `health: "green"`, `updatedAt: [now]`
 - If all ACs are covered: set `releaseReady: true`
@@ -218,3 +218,13 @@ Update `.github/pipeline-state.json` in the **project repository** when the DoD 
   - For compliance NFRs with named regulatory clauses: if sign-off is confirmed, set `"status": "met"`; if missing, set `"status": "not-met"` with `"evidence"` noting the gap
   - Merge by `id` — do not remove existing entries from other skills
   - **Schema-valid guardrail values only.** When writing `status`, use only: `met`, `not-met`, `na`, `excepted`, `not-assessed`. Do not use informal synonyms (`pass`, `fail`, `deferred`, `no-breach`, `not-applicable`, `has-finding`). When writing `category`, use only: `mandatory-constraint`, `adr`, `nfr`, `compliance-framework`, `pattern`, `anti-pattern`. Subcategories (`performance`, `security`, `audit`) must be written as `nfr`. These values are validated by `validate-trace.sh --ci` — invalid values cause hard CI failures on agent PRs.
+
+### Current-feature-slug derivation (ec3.1)
+
+Before writing, resolve the current feature-slug. Write targets are per-feature now, not a shared root file.
+
+1. **Preferred:** read `activeFeature.slug` from `workspace/state.json`.
+2. **Fallback:** run `node scripts/current-feature-slug.js` (stdout emits the slug; exits 1 if unresolvable).
+3. **Target:** write to `artefacts/<slug>/pipeline-state.json` — NOT `artefacts/<current-feature-slug>/pipeline-state.json` (that is a pointer doc since ec3.1; writes to it are forbidden).
+
+If the slug cannot be resolved, halt with the helper's error message and do not write.

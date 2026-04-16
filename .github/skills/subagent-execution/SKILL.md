@@ -222,7 +222,7 @@ least capable model that can handle each role to conserve cost:
 
 > **Mandatory.** Do not close this skill or produce a closing summary without writing these fields. Confirm the write in your closing message: "Pipeline state updated ✅."
 
-Update `.github/pipeline-state.json` in the **project repository** progressively during execution:
+Update `artefacts/<current-feature-slug>/pipeline-state.json` in the **project repository** progressively during execution:
 
 - **At Step 1 (before the loop):** set story `stage: "subagent-execution"`, `health: "green"`, `updatedAt: [now]`, and initialise the `tasks` array — one entry per task with `tddState: "not-started"` and `file` set to the plan path (see Step 1 above)
 - **At Step 2d (after each task commits):** set that task's `tddState: "committed"`, update `testPlan.passing`, update story `updatedAt`
@@ -236,3 +236,13 @@ Update `.github/pipeline-state.json` in the **project repository** progressively
 **Parent propagation (apply to every inner loop state write):**
 - Always update the feature-level `updatedAt: [now]` — the visualiser staleness timer reads this field; if only the story `updatedAt` is written the feature card shows "STALE PROC"
 - Recompute the parent epic `status` from its stories: if every story in the epic is done (`dodStatus: "complete"`, `prStatus: "merged"`, or all tasks `tddState: "committed"`), set epic `status: "complete"`; if any story has an active inner loop stage, set `status: "in-progress"`; otherwise `"not-started"`
+
+### Current-feature-slug derivation (ec3.1)
+
+Before writing, resolve the current feature-slug. Write targets are per-feature now, not a shared root file.
+
+1. **Preferred:** read `activeFeature.slug` from `workspace/state.json`.
+2. **Fallback:** run `node scripts/current-feature-slug.js` (stdout emits the slug; exits 1 if unresolvable).
+3. **Target:** write to `artefacts/<slug>/pipeline-state.json` — NOT `artefacts/<current-feature-slug>/pipeline-state.json` (that is a pointer doc since ec3.1; writes to it are forbidden).
+
+If the slug cannot be resolved, halt with the helper's error message and do not write.

@@ -21,7 +21,7 @@ triggers:
 
 ## Entry condition
 
-At least one story must have `dorStatus: "signed-off"` in `.github/pipeline-state.json`
+At least one story must have `dorStatus: "signed-off"` in `artefacts/<current-feature-slug>/pipeline-state.json`
 with no `issueUrl` recorded. If all signed-off stories already have `issueUrl` values,
 report this and stop — there is nothing to dispatch.
 
@@ -51,7 +51,7 @@ Do not create issues until the operator confirms all relevant commits are pushed
 
 ## Step 1 — Read pipeline state
 
-Read `.github/pipeline-state.json`. Identify all stories where:
+Read `artefacts/<current-feature-slug>/pipeline-state.json`. Identify all stories where:
 - `dorStatus: "signed-off"`
 - `issueUrl` is absent or null
 
@@ -175,7 +175,7 @@ the body before creation:
 
 ## Step 6 — Record dispatch
 
-After each issue is created, update `.github/pipeline-state.json` for that story:
+After each issue is created, update `artefacts/<current-feature-slug>/pipeline-state.json` for that story:
 
 ```json
 "issueUrl": "https://github.com/[owner]/[repo]/issues/[number]",
@@ -204,7 +204,7 @@ runs.
 
 > **Mandatory.** Do not close this skill without completing this write. Confirm the write in your closing message: "Pipeline state updated ✅."
 
-For each dispatched story, update `.github/pipeline-state.json`:
+For each dispatched story, update `artefacts/<current-feature-slug>/pipeline-state.json`:
 
 - Set `issueUrl: [url]`
 - Set `dispatchedAt: [timestamp]`
@@ -212,3 +212,13 @@ For each dispatched story, update `.github/pipeline-state.json`:
 - Set `updatedAt: [now]` on the feature record
 
 Do not change `stage` or `dorStatus`.
+
+### Current-feature-slug derivation (ec3.1)
+
+Before writing, resolve the current feature-slug. Write targets are per-feature now, not a shared root file.
+
+1. **Preferred:** read `activeFeature.slug` from `workspace/state.json`.
+2. **Fallback:** run `node scripts/current-feature-slug.js` (stdout emits the slug; exits 1 if unresolvable).
+3. **Target:** write to `artefacts/<slug>/pipeline-state.json` — NOT `artefacts/<current-feature-slug>/pipeline-state.json` (that is a pointer doc since ec3.1; writes to it are forbidden).
+
+If the slug cannot be resolved, halt with the helper's error message and do not write.

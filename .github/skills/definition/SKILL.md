@@ -398,7 +398,7 @@ If the operator replies `skip`, continue to /review without updating the estimat
 
 > **Mandatory.** Do not close this skill or produce a closing summary without writing these fields. Confirm the write in your closing message: "Pipeline state updated ✅."
 
-Update `.github/pipeline-state.json` in the **project repository** when all epics and stories for a feature are written and saved:
+Update `artefacts/<current-feature-slug>/pipeline-state.json` in the **project repository** when all epics and stories for a feature are written and saved:
 
 - Set feature `stage: "definition"`, `health: "green"`, `updatedAt: [now]`
 - Set feature `slicingStrategy` to the chosen strategy key (one of: `vertical-slice`, `walking-skeleton`, `user-journey`, `risk-first`)
@@ -418,3 +418,13 @@ Update `.github/pipeline-state.json` in the **project repository** when all epic
 **Guardrails seeding:** After writing epics and stories, seed the feature-level `guardrails[]` array. Read `.github/architecture-guardrails.md` — if a `Guardrails Registry` block exists (fenced `yaml guardrails-registry` code block), parse the guardrail items. For each item, add `{ "id": "[id]", "category": "[category]", "label": "[label]", "status": "not-assessed" }` to `feature.guardrails[]`. This seeds the compliance matrix — evaluation skills (`/review`, `/definition-of-ready`, `/trace`) will update statuses later. If `architecture-guardrails.md` is not found, set `guardrails: []`.
 
 **Human review note:** If a human adds or modifies stories outside a skill session, run `/workflow` to reconcile — it will diff artefacts against the state file.
+
+### Current-feature-slug derivation (ec3.1)
+
+Before writing, resolve the current feature-slug. Write targets are per-feature now, not a shared root file.
+
+1. **Preferred:** read `activeFeature.slug` from `workspace/state.json`.
+2. **Fallback:** run `node scripts/current-feature-slug.js` (stdout emits the slug; exits 1 if unresolvable).
+3. **Target:** write to `artefacts/<slug>/pipeline-state.json` — NOT `artefacts/<current-feature-slug>/pipeline-state.json` (that is a pointer doc since ec3.1; writes to it are forbidden).
+
+If the slug cannot be resolved, halt with the helper's error message and do not write.

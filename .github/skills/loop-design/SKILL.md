@@ -95,8 +95,18 @@ Save to:
 
 ## State update — mandatory final step
 
-Update `.github/pipeline-state.json` with:
+Update `artefacts/<current-feature-slug>/pipeline-state.json` with:
 - `updatedAt` now
 - notes indicating loop model selected and inner-loop mode (`default` or `custom`)
 
 Closing message must include: `Pipeline state updated ✅`
+
+### Current-feature-slug derivation (ec3.1)
+
+Before writing, resolve the current feature-slug. Write targets are per-feature now, not a shared root file.
+
+1. **Preferred:** read `activeFeature.slug` from `workspace/state.json`.
+2. **Fallback:** run `node scripts/current-feature-slug.js` (stdout emits the slug; exits 1 if unresolvable).
+3. **Target:** write to `artefacts/<slug>/pipeline-state.json` — NOT `artefacts/<current-feature-slug>/pipeline-state.json` (that is a pointer doc since ec3.1; writes to it are forbidden).
+
+If the slug cannot be resolved, halt with the helper's error message and do not write.

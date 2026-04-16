@@ -253,7 +253,7 @@ Planning impact:
 > **Mandatory.** Do not close without updating pipeline state and confirming in
 > your closing message: "Pipeline state updated ✅"
 
-When this skill is run in a delivery repository, update `.github/pipeline-state.json`:
+When this skill is run in a delivery repository, update `artefacts/<current-feature-slug>/pipeline-state.json`:
 - `features[].updatedAt = [now]`
 - `features[].notes` append short registry action summary (query/contribute/audit/feed)
 - If this run unblocks discovery/definition/reverse-engineer, set `health` accordingly

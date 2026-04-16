@@ -80,7 +80,7 @@ Add a script entry to the consuming repo's `package.json`:
 
 Create `.github/scripts/coverage-map.js` with content to reproduce the terminal output.
 The script reads `artefacts/[feature-slug]/test-plans/*.md` and
-`.github/pipeline-state.json`, and prints:
+`artefacts/<current-feature-slug>/pipeline-state.json`, and prints:
 
 **For non-Node.js projects**, skip the `package.json` entry and the `.js` script.
 Produce Output 2 (markdown) and Output 3 (HTML) only — those are runtime-agnostic.
@@ -299,8 +299,18 @@ in the repo**, generate a standalone HTML file and note in its header:
 
 > **Mandatory.** Do not close this skill or produce a closing summary without writing these fields. Confirm the write in your closing message: "Pipeline state updated ✅."
 
-Update `.github/pipeline-state.json` in the **project repository** on the feature object:
+Update `artefacts/<current-feature-slug>/pipeline-state.json` in the **project repository** on the feature object:
 
 - Set `coverageMapPath: "artefacts/[feature-slug]/coverage/coverage-map.md"`
 - Set `coverageRisk: "red"` if any story has any 🔴 AC; `"yellow"` if any 🟡 AC and no 🔴; `"green"` if all ACs are 🟢
 - Set `updatedAt: [now]` on the feature record
+
+### Current-feature-slug derivation (ec3.1)
+
+Before writing, resolve the current feature-slug. Write targets are per-feature now, not a shared root file.
+
+1. **Preferred:** read `activeFeature.slug` from `workspace/state.json`.
+2. **Fallback:** run `node scripts/current-feature-slug.js` (stdout emits the slug; exits 1 if unresolvable).
+3. **Target:** write to `artefacts/<slug>/pipeline-state.json` — NOT `artefacts/<current-feature-slug>/pipeline-state.json` (that is a pointer doc since ec3.1; writes to it are forbidden).
+
+If the slug cannot be resolved, halt with the helper's error message and do not write.

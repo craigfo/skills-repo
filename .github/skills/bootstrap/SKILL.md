@@ -526,7 +526,7 @@ would exceed context limits.
 
 > **Mandatory.** Do not close this skill or produce a closing summary without writing these fields. Confirm the write in your closing message: "Pipeline state updated ✅."
 
-Bootstrap creates the initial `.github/pipeline-state.json` in the **project repository** (not the skills repo) as part of scaffolding.
+Bootstrap creates the initial `artefacts/<current-feature-slug>/pipeline-state.json` in the **project repository** (not the skills repo) as part of scaffolding.
 
 The seed file is an empty but valid structure:
 ```json
@@ -540,3 +540,13 @@ The seed file is an empty but valid structure:
 
 Do not pre-populate features — those are added by `/discovery` as features are defined.
 If the file already exists, do not overwrite it.
+
+### Current-feature-slug derivation (ec3.1)
+
+Before writing, resolve the current feature-slug. Write targets are per-feature now, not a shared root file.
+
+1. **Preferred:** read `activeFeature.slug` from `workspace/state.json`.
+2. **Fallback:** run `node scripts/current-feature-slug.js` (stdout emits the slug; exits 1 if unresolvable).
+3. **Target:** write to `artefacts/<slug>/pipeline-state.json` — NOT `artefacts/<current-feature-slug>/pipeline-state.json` (that is a pointer doc since ec3.1; writes to it are forbidden).
+
+If the slug cannot be resolved, halt with the helper's error message and do not write.

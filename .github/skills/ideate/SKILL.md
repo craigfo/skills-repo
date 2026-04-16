@@ -56,7 +56,7 @@ project. Look for:
 - `artefacts/[feature-slug]/discovery.md`
 - `artefacts/[feature-slug]/benefit-metric.md`
 -- `artefacts/[feature-slug]/stories/` - any stories already written
--- `.github/pipeline-state.json` - current feature list and stages
+-- `artefacts/<current-feature-slug>/pipeline-state.json` - current feature list and stages
 
 State what you found:
 
@@ -603,7 +603,7 @@ artefact can be used to revise scope before proceeding to `/definition`.
 
 > **Mandatory.** Do not close this skill or produce a closing summary without writing these fields. Confirm the write in your closing message: "Pipeline state updated ✅."
 
-Update `.github/pipeline-state.json` in the **project repository** when the ideation artefact is saved:
+Update `artefacts/<current-feature-slug>/pipeline-state.json` in the **project repository** when the ideation artefact is saved:
 
 - Set `ideationPath: "artefacts/[feature-slug]/research/ideation.md"` on the feature object
 - If Lens D was run and recommendation is PROCEED: set `ideationSignal: "proceed"`
@@ -611,3 +611,13 @@ Update `.github/pipeline-state.json` in the **project repository** when the idea
 - If DEFER: set `ideationSignal: "defer"`
 - If only Lens A/B/C were run: set `ideationSignal: "in-progress"`
 - Set `updatedAt: [now]` on the feature record
+
+### Current-feature-slug derivation (ec3.1)
+
+Before writing, resolve the current feature-slug. Write targets are per-feature now, not a shared root file.
+
+1. **Preferred:** read `activeFeature.slug` from `workspace/state.json`.
+2. **Fallback:** run `node scripts/current-feature-slug.js` (stdout emits the slug; exits 1 if unresolvable).
+3. **Target:** write to `artefacts/<slug>/pipeline-state.json` — NOT `artefacts/<current-feature-slug>/pipeline-state.json` (that is a pointer doc since ec3.1; writes to it are forbidden).
+
+If the slug cannot be resolved, halt with the helper's error message and do not write.

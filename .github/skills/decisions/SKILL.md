@@ -265,8 +265,18 @@ Add to the log entry format:
 
 > **Mandatory.** Do not close this skill without completing this write. Confirm the write in your closing message: "Pipeline state updated ✅."
 
-Update `.github/pipeline-state.json` for the relevant feature after each decision is recorded:
+Update `artefacts/<current-feature-slug>/pipeline-state.json` for the relevant feature after each decision is recorded:
 
 - Set `updatedAt: [now]`
 - If a `RISK-ACCEPT` was recorded: add a `riskAcceptances` entry with `id`, `decision`, and `date`
 - Do not change `stage` — /decisions does not advance the pipeline stage
+
+### Current-feature-slug derivation (ec3.1)
+
+Before writing, resolve the current feature-slug. Write targets are per-feature now, not a shared root file.
+
+1. **Preferred:** read `activeFeature.slug` from `workspace/state.json`.
+2. **Fallback:** run `node scripts/current-feature-slug.js` (stdout emits the slug; exits 1 if unresolvable).
+3. **Target:** write to `artefacts/<slug>/pipeline-state.json` — NOT `artefacts/<current-feature-slug>/pipeline-state.json` (that is a pointer doc since ec3.1; writes to it are forbidden).
+
+If the slug cannot be resolved, halt with the helper's error message and do not write.
