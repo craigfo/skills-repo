@@ -28,16 +28,17 @@
     "status": "complete"
   },
   "lastUpdated": "2026-04-17T00:00:00Z",
-  "currentPhase": "engine-consolidation-test-plan-complete",
+  "currentPhase": "engine-consolidation-dor-signed-off",
   "activeFeature": {
     "slug": "2026-04-16-engine-consolidation",
     "branch": "feature/engine-consolidation-outer-loop",
     "artefactsDir": "artefacts/2026-04-16-engine-consolidation/",
-    "stage": "post-test-plan / pre-definition-of-ready",
+    "stage": "post-DoR / pre-inner-loop",
     "storyCount": 10,
-    "reviewSummary": "0 HIGH across all 11 review passes; ec3.1 MEDIUM (M1, slug-detection deferral) resolved 2026-04-17 via /decisions \u2014 AC0 inlined into story, Out-of-Scope rewritten. ec2.1 MEDIUM resolved in-story during review-2.",
-    "testPlanSummary": "All 10 stories have test plans + AC verification scripts under artefacts/2026-04-16-engine-consolidation/test-plans/ and verification-scripts/. ec1.1\u2013ec1.7 derived from a shared migration-template pattern (4 unit + 1 integration + 1 NFR audit + 2 manual per story). ec2.1: 4 AC ACs / 4 unit / 3 manual. ec2.2: 3 ACs / 4 unit (AC1 split into 3 block-presence checks per review 1-L1) / 2 manual. ec3.1: 8 ACs / 7 unit + 4 integration + 2 NFR / 3 manual.",
-    "notes": "storyCount corrected 2026-04-17 (was 9 in estimate.e2; ec3.1 added post-initial-estimate). pipeline-state.json epic-3 back-filled 2026-04-17 (was absent \u2014 Q5 scope-add had not updated state). Outer loop (discovery \u2192 benefit-metric \u2192 definition \u2192 review \u2192 test-plan) now complete for all 10 stories."
+    "reviewSummary": "0 HIGH across all 11 review passes; ec3.1 MEDIUM (M1) resolved 2026-04-17 via /decisions; ec2.1 MEDIUM resolved in-story during review-2.",
+    "testPlanSummary": "All 10 stories have test plans + AC verification scripts. ec1.1\u2013ec1.7 derived from a shared migration template (6 tests each). ec2.1: 4 unit. ec2.2: 4 unit. ec3.1: 13 tests (7 unit + 4 integration + 2 NFR).",
+    "dorSummary": "All 10 stories DoR-signed-off 2026-04-17. 15/15 hard blocks pass each. W4 (domain-expert verification-script review) acknowledged as RISK-ACCEPT in /decisions (solo-operator self-review at PR time). Oversight: 8 Medium (ec1.1\u2013ec1.7 + ec3.1), 2 Low (ec2.1, ec2.2). 20 artefacts in artefacts/2026-04-16-engine-consolidation/dor/ (10 DoR checklists + 10 DoR contracts).",
+    "notes": "Outer loop (discovery \u2192 benefit-metric \u2192 definition \u2192 review \u2192 test-plan \u2192 DoR) now complete for all 10 stories. Ready for inner loop (/branch-setup \u2192 /implementation-plan \u2192 /subagent-execution or /tdd \u2192 /verify-completion \u2192 /branch-complete)."
   },
   "cycle": {
     "discovery": {
@@ -147,11 +148,12 @@
   "openPRsNote": "Reconciled 2026-04-17: no open PRs on origin (craigfo/skills-repo). Prior entries (#66, #67) merged as commits 6d622de and 02d637d. /improvement write-back branch merged as PR #99 (commit 5840910). GitHub agent dispatch PRs (#89\u2013#92) confirmed closed by operator.",
   "checkpoint": {
     "writtenAt": "2026-04-17",
-    "contextAtWrite": "/test-plan complete for all 10 engine-consolidation stories. Commits on feature/engine-consolidation-outer-loop: 42441c0 (WIP reconciliation), 202c222 (ec3.1 AC0 + storyCount), e29ebbf (ec1.1\u2013ec1.7 test plans, 15 files), 5f505a5 (ec2.1/ec2.2/ec3.1 test plans + epic-3 state back-fill, 7 files). All pushed to origin. Outer loop complete per copilot-instructions sequence; next pipeline step is /definition-of-ready per story.",
-    "resumeInstruction": "Next pipeline step for engine-consolidation is /definition-of-ready per story. Entry conditions: story + test plan + 0 HIGH findings \u2014 all met. DoR runs produce per-story Coding Agent Instructions + scope contracts, then /decisions collates any RISK-ACCEPT items. After DoR sign-off, inner loop begins with /branch-setup + /implementation-plan. Expected DoR clustering: ec1.1\u2013ec1.7 share a shape (batchable); ec2.1/ec2.2/ec3.1 distinct. ec3.1 DoR will also fold in the AC0 audit-table preparation (the audit itself is the first implementation step).",
+    "contextAtWrite": "/definition-of-ready complete for all 10 engine-consolidation stories. Outer loop sequence (discovery \u2192 benefit-metric \u2192 definition \u2192 review \u2192 test-plan \u2192 DoR) done. 20 DoR artefacts landed (10 checklists + 10 contracts). W4 RISK-ACCEPT logged in /decisions 2026-04-17. All 10 stories at stage=definition-of-ready / dorStatus=signed-off in pipeline-state.json. Branch feature/engine-consolidation-outer-loop.",
+    "resumeInstruction": "Outer loop complete. Next pipeline step: inner coding loop per story. Order: /branch-setup \u2192 /implementation-plan \u2192 /subagent-execution (or /tdd per task) \u2192 /verify-completion \u2192 /branch-complete. Per /decisions Q1, the 7 migration stories (ec1.1\u2013ec1.7) run on parallel branches; ec2.1, ec2.2, ec3.1 independent. Recommended inner-loop order: start ec3.1 (pipeline-state isolation) first since AC0 audit may surface localised patches that other branches should absorb; or start ec1.3 (smallest — single subfile, single test) as a smoke test of the move-only pattern. ec2.1 subsection 7 must coordinate with ec3.1 merge order (AC1a sequencing guard).",
     "pendingActions": [
-      "Run /definition-of-ready per engine-consolidation story (10 stories).",
-      "Before ec3.1 DoR: draft the AC0 slug-detection audit table in the implementation plan folder so DoR has something to sign off against.",
+      "Pick inner-loop starting point: ec3.1 (de-risks AC0 audit) OR ec1.3 (smallest migration, pattern smoke test) OR ec2.2 (smallest docs edit).",
+      "Before ec3.1 inner loop: operator captures legacy pipeline-state.json snapshot as tests/fixtures/pipeline-state-legacy.json so AC2's union-equality test has a baseline.",
+      "Coordinate ec2.1 merge order with ec3.1 (subsection 7 sequencing per AC1a).",
       "Carry-forward from prior session \u2014 confirm item 7: create docs/conflict-resolution-guide.md (two PR merge conflict patterns).",
       "Carry-forward from prior session \u2014 confirm item 8: second-session verification prompt placement (A lightweight / B moderate / C structural)."
     ]

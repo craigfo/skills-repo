@@ -2672,7 +2672,7 @@
             {
               "slug": "ec1.1",
               "name": "Migrate src/surface-adapter/ → cli/src/adapters/surface-adapter/",
-              "stage": "test-plan",
+              "stage": "definition-of-ready",
               "health": "green",
               "reviewStatus": "passed",
               "highFindings": 0,
@@ -2688,12 +2688,25 @@
               "acTotal": 6,
               "acVerified": 0,
               "hasLayoutDependentGaps": false,
-              "e2eToolingRequired": false
+              "e2eToolingRequired": false,
+              "dorStatus": "signed-off",
+              "oversight": "medium",
+              "dor": {
+                "status": "signed-off",
+                "hardBlocksPassed": 15,
+                "hardBlocksTotal": 15,
+                "warningsAcknowledged": 1,
+                "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.1-surface-adapter-migration-dor.md",
+                "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.1-surface-adapter-migration-dor-contract.md",
+                "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                "signedOffAt": "2026-04-17",
+                "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+              }
             },
             {
               "slug": "ec1.2",
               "name": "Migrate src/improvement-agent/ → cli/src/agents/improvement-agent/",
-              "stage": "test-plan",
+              "stage": "definition-of-ready",
               "health": "green",
               "reviewStatus": "passed",
               "highFindings": 0,
@@ -2709,12 +2722,25 @@
               "acTotal": 6,
               "acVerified": 0,
               "hasLayoutDependentGaps": false,
-              "e2eToolingRequired": false
+              "e2eToolingRequired": false,
+              "dorStatus": "signed-off",
+              "oversight": "medium",
+              "dor": {
+                "status": "signed-off",
+                "hardBlocksPassed": 15,
+                "hardBlocksTotal": 15,
+                "warningsAcknowledged": 1,
+                "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.2-improvement-agent-migration-dor.md",
+                "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.2-improvement-agent-migration-dor-contract.md",
+                "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                "signedOffAt": "2026-04-17",
+                "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+              }
             },
             {
               "slug": "ec1.3",
               "name": "Migrate src/approval-channel/ → cli/src/adapters/approval-channel/",
-              "stage": "test-plan",
+              "stage": "definition-of-ready",
               "health": "green",
               "reviewStatus": "passed",
               "highFindings": 0,
@@ -2730,12 +2756,25 @@
               "acTotal": 6,
               "acVerified": 0,
               "hasLayoutDependentGaps": false,
-              "e2eToolingRequired": false
+              "e2eToolingRequired": false,
+              "dorStatus": "signed-off",
+              "oversight": "medium",
+              "dor": {
+                "status": "signed-off",
+                "hardBlocksPassed": 15,
+                "hardBlocksTotal": 15,
+                "warningsAcknowledged": 1,
+                "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.3-approval-channel-migration-dor.md",
+                "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.3-approval-channel-migration-dor-contract.md",
+                "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                "signedOffAt": "2026-04-17",
+                "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+              }
             },
             {
               "slug": "ec1.4",
               "name": "Migrate src/bitbucket-cloud-validator/ → cli/src/adapters/bitbucket/cloud/",
-              "stage": "test-plan",
+              "stage": "definition-of-ready",
               "health": "green",
               "reviewStatus": "passed",
               "highFindings": 0,
@@ -2751,12 +2790,25 @@
               "acTotal": 6,
               "acVerified": 0,
               "hasLayoutDependentGaps": false,
-              "e2eToolingRequired": false
+              "e2eToolingRequired": false,
+              "dorStatus": "signed-off",
+              "oversight": "medium",
+              "dor": {
+                "status": "signed-off",
+                "hardBlocksPassed": 15,
+                "hardBlocksTotal": 15,
+                "warningsAcknowledged": 1,
+                "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.4-bitbucket-cloud-migration-dor.md",
+                "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.4-bitbucket-cloud-migration-dor-contract.md",
+                "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                "signedOffAt": "2026-04-17",
+                "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+              }
             },
             {
               "slug": "ec1.5",
               "name": "Migrate src/bitbucket-dc-validator/ → cli/src/adapters/bitbucket/dc/",
-              "stage": "test-plan",
+              "stage": "definition-of-ready",
               "health": "green",
               "reviewStatus": "passed",
               "highFindings": 0,
@@ -2772,12 +2824,25 @@
               "acTotal": 6,
               "acVerified": 0,
               "hasLayoutDependentGaps": false,
-              "e2eToolingRequired": false
+              "e2eToolingRequired": false,
+              "dorStatus": "signed-off",
+              "oversight": "medium",
+              "dor": {
+                "status": "signed-off",
+                "hardBlocksPassed": 15,
+                "hardBlocksTotal": 15,
+                "warningsAcknowledged": 1,
+                "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.5-bitbucket-dc-migration-dor.md",
+                "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.5-bitbucket-dc-migration-dor-contract.md",
+                "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                "signedOffAt": "2026-04-17",
+                "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+              }
             },
             {
               "slug": "ec1.6",
               "name": "Migrate src/suite-parser/ → cli/src/engine/suite/",
-              "stage": "test-plan",
+              "stage": "definition-of-ready",
               "health": "green",
               "reviewStatus": "passed",
               "highFindings": 0,
@@ -2793,12 +2858,25 @@
               "acTotal": 6,
               "acVerified": 0,
               "hasLayoutDependentGaps": false,
-              "e2eToolingRequired": false
+              "e2eToolingRequired": false,
+              "dorStatus": "signed-off",
+              "oversight": "medium",
+              "dor": {
+                "status": "signed-off",
+                "hardBlocksPassed": 15,
+                "hardBlocksTotal": 15,
+                "warningsAcknowledged": 1,
+                "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.6-suite-parser-migration-dor.md",
+                "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.6-suite-parser-migration-dor-contract.md",
+                "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                "signedOffAt": "2026-04-17",
+                "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+              }
             },
             {
               "slug": "ec1.7",
               "name": "Migrate src/definition-skill/ → cli/src/engine/story/",
-              "stage": "test-plan",
+              "stage": "definition-of-ready",
               "health": "green",
               "reviewStatus": "passed",
               "highFindings": 0,
@@ -2814,7 +2892,20 @@
               "acTotal": 6,
               "acVerified": 0,
               "hasLayoutDependentGaps": false,
-              "e2eToolingRequired": false
+              "e2eToolingRequired": false,
+              "dorStatus": "signed-off",
+              "oversight": "medium",
+              "dor": {
+                "status": "signed-off",
+                "hardBlocksPassed": 15,
+                "hardBlocksTotal": 15,
+                "warningsAcknowledged": 1,
+                "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec1.7-definition-migration-dor.md",
+                "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec1.7-definition-migration-dor-contract.md",
+                "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                "signedOffAt": "2026-04-17",
+                "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+              }
             }
           ]
         },
@@ -2826,7 +2917,7 @@
             {
               "slug": "ec2.1",
               "name": "Add CONTRIBUTING.md at repo root",
-              "stage": "test-plan",
+              "stage": "definition-of-ready",
               "health": "green",
               "reviewStatus": "passed",
               "highFindings": 0,
@@ -2843,12 +2934,25 @@
               "acTotal": 4,
               "acVerified": 0,
               "hasLayoutDependentGaps": false,
-              "e2eToolingRequired": false
+              "e2eToolingRequired": false,
+              "dorStatus": "signed-off",
+              "oversight": "low",
+              "dor": {
+                "status": "signed-off",
+                "hardBlocksPassed": 15,
+                "hardBlocksTotal": 15,
+                "warningsAcknowledged": 1,
+                "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec2.1-contributing-md-dor.md",
+                "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec2.1-contributing-md-dor-contract.md",
+                "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                "signedOffAt": "2026-04-17",
+                "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+              }
             },
             {
               "slug": "ec2.2",
               "name": "Apply product/* edits (roadmap + tech-stack + decisions ADR)",
-              "stage": "test-plan",
+              "stage": "definition-of-ready",
               "health": "green",
               "reviewStatus": "passed",
               "highFindings": 0,
@@ -2865,7 +2969,20 @@
               "acVerified": 0,
               "hasLayoutDependentGaps": false,
               "e2eToolingRequired": false,
-              "notes": "AC1 tightened at /test-plan (review 1-L1) by splitting into three unit checks — one per 006 text block — rather than reopening AC1 to split into AC1a/AC1b/AC1c."
+              "notes": "AC1 tightened at /test-plan (review 1-L1) by splitting into three unit checks — one per 006 text block — rather than reopening AC1 to split into AC1a/AC1b/AC1c.",
+              "dorStatus": "signed-off",
+              "oversight": "low",
+              "dor": {
+                "status": "signed-off",
+                "hardBlocksPassed": 15,
+                "hardBlocksTotal": 15,
+                "warningsAcknowledged": 1,
+                "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec2.2-product-edits-dor.md",
+                "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec2.2-product-edits-dor-contract.md",
+                "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                "signedOffAt": "2026-04-17",
+                "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+              }
             }
           ]
         },
@@ -2878,7 +2995,7 @@
             {
               "slug": "ec3.1",
               "name": "Relocate pipeline-state from .github/ root to per-artefact; root becomes derived",
-              "stage": "test-plan",
+              "stage": "definition-of-ready",
               "health": "green",
               "reviewStatus": "passed",
               "highFindings": 0,
@@ -2898,7 +3015,20 @@
               "acVerified": 0,
               "hasLayoutDependentGaps": false,
               "e2eToolingRequired": false,
-              "notes": "8 ACs (AC0–AC7). AC0 added post-review as the M1 resolution. Complexity 3 — feature-level complexity rerated to 3 when epic-3 was scoped in (per /decisions Q5)."
+              "notes": "8 ACs (AC0–AC7). AC0 added post-review as the M1 resolution. Complexity 3 — feature-level complexity rerated to 3 when epic-3 was scoped in (per /decisions Q5).",
+              "dorStatus": "signed-off",
+              "oversight": "medium",
+              "dor": {
+                "status": "signed-off",
+                "hardBlocksPassed": 15,
+                "hardBlocksTotal": 15,
+                "warningsAcknowledged": 1,
+                "artefact": "artefacts/2026-04-16-engine-consolidation/dor/ec3.1-pipeline-state-isolation-dor.md",
+                "contract": "artefacts/2026-04-16-engine-consolidation/dor/ec3.1-pipeline-state-isolation-dor-contract.md",
+                "signedOffBy": "Operator (tech lead + contributor, solo scale)",
+                "signedOffAt": "2026-04-17",
+                "notes": "W4 (domain-expert review of verification script) acknowledged as RISK-ACCEPT via /decisions — solo operator self-reviews at PR time."
+              }
             }
           ]
         }
