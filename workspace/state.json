@@ -35,8 +35,8 @@
     "artefactsDir": "artefacts/2026-04-16-engine-consolidation/",
     "stage": "post-review / pre-test-plan",
     "storyCount": 10,
-    "reviewSummary": "0 HIGH across all 11 review passes; 1 unresolved MEDIUM on ec3.1 (pipeline-state-isolation), 1 MEDIUM resolved in-story on ec2.1",
-    "notes": "Story count in estimate.e2 (9) predates ec3.1-pipeline-state-isolation being added; actual story count is 10."
+    "reviewSummary": "0 HIGH across all 11 review passes; ec3.1 MEDIUM (M1, slug-detection deferral) resolved 2026-04-17 via /decisions \u2014 AC0 inlined into story, Out-of-Scope rewritten. ec2.1 MEDIUM resolved in-story during review-2.",
+    "notes": "storyCount corrected 2026-04-17 (was 9 in estimate.e2; ec3.1 added post-initial-estimate)."
   },
   "cycle": {
     "discovery": {
@@ -78,7 +78,8 @@
       "date": "2026-04-16",
       "mode": "E2",
       "feature": "2026-04-16-engine-consolidation",
-      "storyCount": 9,
+      "storyCount": 10,
+      "storyCountAmendment": "Amended 2026-04-17: ec3.1 (pipeline-state-isolation) added post-initial-estimate via /decisions Q5 ARCH scope-add. Initial count 9 preserved below in byStory for calibration traceability.",
       "byStory": {
         "count": 9,
         "complexity": {
@@ -86,7 +87,8 @@
           "2": 7,
           "3": 0
         },
-        "p75FocusHPerStory": 0.069
+        "p75FocusHPerStory": 0.069,
+        "note": "Reflects initial E2 (pre-ec3.1). ec3.1 is complexity 3, Stable scope; operator judged the re-derivation not worth redoing for a single late addition."
       },
       "expectedCalendarDays": 1,
       "engagementFraction": 0.25,
@@ -144,13 +146,10 @@
   "openPRsNote": "Reconciled 2026-04-17: no open PRs on origin (craigfo/skills-repo). Prior entries (#66, #67) merged as commits 6d622de and 02d637d. /improvement write-back branch merged as PR #99 (commit 5840910). GitHub agent dispatch PRs (#89\u2013#92) confirmed closed by operator.",
   "checkpoint": {
     "writtenAt": "2026-04-17",
-    "contextAtWrite": "State reconciliation after stale resume. Active feature pivoted to 2026-04-16-engine-consolidation. Prior Phase 3 improvement write-back PR #99 merged. All 11 engine-consolidation review passes show 0 HIGH findings \u2014 /review exit condition met. Working branch feature/engine-consolidation-outer-loop has uncommitted changes on discovery.md, pipeline-state.json, state.json (mostly PowerShell-style \u2192 compact JSON reformat; substantive addition is engine-consolidation E2 estimate block) plus untracked artefacts/2026-04-16-engine-consolidation/benefit-metric.md.",
-    "resumeInstruction": "Next pipeline step for engine-consolidation is /test-plan per story (10 stories: ec1.1\u2013ec1.7, ec2.1, ec2.2, ec3.1). Before running /test-plan, (a) resolve or accept the unresolved MEDIUM finding on ec3.1-pipeline-state-isolation review, (b) decide disposition of the uncommitted reformat changes on pipeline-state.json and state.json, (c) correct storyCount in estimate.e2 from 9 to 10 (ec3.1 added after estimate).",
+    "contextAtWrite": "Outer loop resumed 2026-04-17. Pre-/test-plan blockers cleared: ec3.1 review-1 MEDIUM M1 resolved via option (a) \u2014 AC0 inlined into story; Out-of-Scope rewritten to permit localised patches and exclude only net-new slug-detection infrastructure; /decisions entry added 2026-04-17. storyCount corrected from 9 to 10 in activeFeature and estimate.e2 (byStory retains 9 for calibration traceability). Prior WIP committed as 42441c0 (engine-consolidation outer loop artefacts + state reconciliation) and pushed to origin. Ready for /test-plan.",
+    "resumeInstruction": "Next pipeline step for engine-consolidation is /test-plan per story. Story order: ec1.1\u2013ec1.7 share a template (batch-compatible), then ec2.1 (CONTRIBUTING.md), ec2.2 (product edits), ec3.1 (pipeline-state isolation \u2014 now 8 ACs including new AC0). Entry conditions for /test-plan are met: story artefacts exist, review reports show PASS (0 HIGH), ACs are in G/W/T format.",
     "pendingActions": [
-      "Decide disposition of uncommitted pipeline-state.json + state.json reformat changes (commit as chore, revert, or keep local).",
-      "Update estimate.e2.storyCount (9 \u2192 10) and byStory.count to reflect ec3.1.",
-      "Resolve or accept unresolved MEDIUM finding on ec3.1-pipeline-state-isolation-review-1.md before /test-plan.",
-      "Run /test-plan per engine-consolidation story (ec1.1\u2013ec3.1).",
+      "Run /test-plan per engine-consolidation story (10 stories; ec1.1\u2013ec1.7 batchable, ec2.1/ec2.2/ec3.1 distinct).",
       "Carry-forward from prior session \u2014 confirm item 7: create docs/conflict-resolution-guide.md (two PR merge conflict patterns).",
       "Carry-forward from prior session \u2014 confirm item 8: second-session verification prompt placement (A lightweight / B moderate / C structural)."
     ]

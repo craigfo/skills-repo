@@ -31,6 +31,9 @@ So that **concurrent phase-boundary writes from different features never race on
 
 ## Acceptance Criteria
 
+**AC0:** Given the set of skills and helpers that write to pipeline-state, When each is inspected for feature-slug derivation, Then every writer either (a) already derives the active feature-slug from its invocation context (branch name, working directory, or an explicit parameter passed by the operator/harness) or (b) is patched within ec3.1's scope to do so, and the audit result is recorded as a one-table section in this story's implementation plan.
+  Verification: a single audit table in the implementation plan listing each pipeline-state-writing skill/helper and its slug-derivation mechanism — `already-present` / `added-in-ec3.1` / `n/a-read-only`. No writer remains in "slug unknown" state at close. Added to resolve review-1 M1 (load-bearing out-of-scope deferral on slug-detection).
+
 **AC1:** Given the feature branch, When every `.github/skills/*/SKILL.md` (and any helper invoked by a skill) is inspected for state-write instructions, Then every write targets `artefacts/<current-feature-slug>/pipeline-state.json`, not `.github/pipeline-state.json`.
   Verification: `grep -rn '\.github/pipeline-state\.json' .github/skills/ scripts/ cli/` returns **zero** matches against write paths; any remaining matches are in read-only scanner / archival-reference paths and explicitly commented.
 
@@ -58,7 +61,7 @@ So that **concurrent phase-boundary writes from different features never race on
 - **Migration of historical completed features into per-artefact files.** The existing root file is retained as a read-only archival reference (by AC5 pointer variant) for features that predate the split; completed-feature state is not backfilled.
 - **Changes to `pipeline-viz.html` rendering logic.** Input path only (AC3).
 - **New metrics beyond MM4 reconciliation.** MM4 itself is noted as a follow-up on the benefit-metric sheet; this story does not amend benefit-metric.md.
-- **Slug-detection logic for "current feature slug."** Assume each skill already knows or can derive the active feature slug from the branch / working directory context; if it doesn't, that's a pre-existing gap, separate.
+- **Net-new slug-detection infrastructure.** AC0 covers the in-scope audit and any small patches needed to ensure writers derive the active feature slug from their invocation context. If the audit surfaces a gap that requires new detection infrastructure (versus a localised patch), that gap splits to a follow-up story rather than expanding ec3.1.
 
 ## NFRs
 

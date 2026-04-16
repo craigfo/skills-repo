@@ -2,7 +2,7 @@
 
 **Feature:** Engine consolidation (CLI as control plane)
 **Discovery reference:** `artefacts/2026-04-16-engine-consolidation/discovery.md`
-**Last updated:** 2026-04-16
+**Last updated:** 2026-04-17
 
 ---
 
@@ -69,3 +69,11 @@
 **Scope impact:** Adds a new epic (**epic-3 — pipeline-state isolation**) to this feature. One story (`ec3.1`). Feature-level complexity rerated from 2 → 3 to reflect the fan-out across every skill that writes state. Benefit-metric document may need a reconciliation pass (new metric: root file write-contention eliminated) — flagged as follow-up, not done here.
 **Made by:** operator.
 **Revisit trigger:** If the scanner approach proves expensive on a grown artefacts/ tree (e.g., visualisation rebuild > few seconds), or if a per-artefact state file needs a schema change within the first two uses, revisit the split and/or add caching.
+
+---
+**2026-04-17 | SCOPE | review-response (ec3.1 review-1 M1 — slug-detection deferral folded back into scope)**
+**Decision:** Resolve ec3.1 review-1 M1 via option (a) — inline a new AC0 into the story making the slug-detection audit an in-scope, testable precondition rather than an out-of-scope deferral. AC0 requires every pipeline-state writer to either already derive the active feature-slug from context or be patched within ec3.1 to do so, with the audit recorded as a one-table section of the implementation plan. The Out-of-Scope entry is rewritten: net-new slug-detection infrastructure stays out of scope; localised patches are in.
+**Alternatives considered:** (a) inline AC0 (chosen — reviewer's pick); (b) spin a pre-gate spike story ec3.0; (c) RISK-ACCEPT via /decisions with a named operator check at first post-ship pipeline run.
+**Rationale:** (a) is the cheapest option that keeps ec3.1 self-contained, keeps AC1 and AC6 enforceable without a silent "writes-to-undefined-slug" failure mode, and avoids fanning out another story or deferring the question into operational risk. (b) doubles the story count for what is likely a short audit; (c) accepts operational risk on a metric (MM4(b)) that already needs a 30-day observation window, compounding the uncertainty.
+**Made by:** operator (pickup /review → /test-plan transition, 2026-04-17).
+**Revisit trigger:** If the AC0 audit surfaces ≥3 skills needing net-new slug-detection infrastructure (not a localised patch), split ec3.0 after all and gate ec3.1 on it.
