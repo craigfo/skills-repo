@@ -186,16 +186,17 @@ describe("AC3 — Viz reads derived aggregate", () => {
     expect(content).toMatch(/pipeline-state\.derived\.json/);
   });
 
-  test("AC3-U2 pipeline-viz.html does not fetch the old root file as a write target", () => {
+  test("AC3-U2 pipeline-viz.html STATE_FILE constant is the derived path (no behavioural fetch of the old root)", () => {
     if (!existsSync(VIZ_HTML)) return;
     const content = readFileSync(VIZ_HTML, "utf8");
-    // The viz must not have a fetch() pointing at pipeline-state.json (without .derived.)
-    const badFetch = /fetch\(['"][^'"]*pipeline-state\.json['"][^)]*\)/;
-    const alsoBad = /pipeline-state\.json(?!\.derived)/;
-    // Permit a comment mentioning the historical path
-    const lines = content.split("\n").filter((line) => !/^\s*(\/\/|<!--)/.test(line));
-    const offending = lines.filter((line) => badFetch.test(line) || (alsoBad.test(line) && !/derived/.test(line)));
-    expect(offending).toEqual([]);
+    // AC3 requires only the input-path constant to change; UI copy referencing
+    // the legacy filename (drag-drop instructions, button labels) is permitted.
+    // What must not exist: a `const STATE_FILE = 'pipeline-state.json'` behavioural
+    // target or a fetch() of the legacy path.
+    expect(content).toMatch(/const\s+STATE_FILE\s*=\s*['"]pipeline-state\.derived\.json['"]/);
+    // No fetch of the legacy root
+    const badFetch = /fetch\(\s*['"][^'"]*pipeline-state\.json['"]\s*[,)]/;
+    expect(badFetch.test(content)).toBe(false);
   });
 });
 
