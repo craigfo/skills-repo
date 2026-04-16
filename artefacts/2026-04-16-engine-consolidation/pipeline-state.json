@@ -6,7 +6,7 @@
     "name": "Engine consolidation (CLI as control plane)",
     "title": "Engine consolidation (CLI as control plane)",
     "track": "productisation-thread",
-    "stage": "implementation-plan",
+    "stage": "verify-completion",
     "health": "green",
     "discoveryStatus": "clarified",
     "benefitMetricStatus": "complete",
@@ -348,7 +348,7 @@
           {
             "slug": "ec3.1",
             "name": "Relocate pipeline-state from .github/ root to per-artefact; root becomes derived",
-            "stage": "implementation-plan",
+            "stage": "verify-completion",
             "health": "green",
             "reviewStatus": "passed",
             "highFindings": 0,
@@ -413,7 +413,7 @@
               {
                 "id": "task-1",
                 "name": "AC0 slug-detection audit",
-                "tddState": "not-started",
+                "tddState": "committed",
                 "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
                 "coversACs": [
                   "AC0"
@@ -422,7 +422,7 @@
               {
                 "id": "task-2",
                 "name": "Schema — add featureStatus enum",
-                "tddState": "not-started",
+                "tddState": "committed",
                 "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
                 "coversACs": [
                   "AC7"
@@ -431,7 +431,7 @@
               {
                 "id": "task-3",
                 "name": "Scanner — build-pipeline-state.js",
-                "tddState": "not-started",
+                "tddState": "committed",
                 "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
                 "coversACs": [
                   "AC2"
@@ -440,7 +440,7 @@
               {
                 "id": "task-4",
                 "name": "Rewrite SKILL.md state-write paths (batch)",
-                "tddState": "not-started",
+                "tddState": "committed",
                 "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
                 "coversACs": [
                   "AC1"
@@ -449,7 +449,7 @@
               {
                 "id": "task-5",
                 "name": "Localised slug-derivation patches",
-                "tddState": "not-started",
+                "tddState": "committed",
                 "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
                 "coversACs": [
                   "AC0"
@@ -458,7 +458,7 @@
               {
                 "id": "task-6",
                 "name": "Viz input-path constant",
-                "tddState": "not-started",
+                "tddState": "committed",
                 "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
                 "coversACs": [
                   "AC3"
@@ -467,7 +467,7 @@
               {
                 "id": "task-7",
                 "name": "DoD skill featureStatus write",
-                "tddState": "not-started",
+                "tddState": "committed",
                 "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
                 "coversACs": [
                   "AC4"
@@ -476,7 +476,7 @@
               {
                 "id": "task-8",
                 "name": "Root file disposition (operator choice)",
-                "tddState": "not-started",
+                "tddState": "committed",
                 "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
                 "coversACs": [
                   "AC5"
@@ -486,7 +486,7 @@
               {
                 "id": "task-9",
                 "name": "NFR tests — scanner runtime + backward readability",
-                "tddState": "not-started",
+                "tddState": "committed",
                 "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
                 "coversACs": [
                   "AC4-NFR"
@@ -495,14 +495,14 @@
               {
                 "id": "task-10",
                 "name": "Wire scanner into root test chain",
-                "tddState": "not-started",
+                "tddState": "committed",
                 "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
                 "coversACs": []
               },
               {
                 "id": "task-11",
                 "name": "End-to-end verification (AC6 round-trip)",
-                "tddState": "not-started",
+                "tddState": "committed",
                 "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
                 "coversACs": [
                   "AC6"
@@ -511,11 +511,27 @@
               {
                 "id": "task-12",
                 "name": "/verify-completion",
-                "tddState": "not-started",
+                "tddState": "committed",
                 "file": "artefacts/2026-04-16-engine-consolidation/plans/ec3.1-pipeline-state-isolation-plan.md",
                 "coversACs": []
               }
-            ]
+            ],
+            "implementationProgress": {
+              "commitsOnBranch": 11,
+              "testsPassing": "14/16 AC tests + 50 cli vitest (existing) + 38 root validators (only 7 pre-existing p3.14 failures remain)",
+              "acCoverage": {
+                "AC0": "green — audit table committed at plans/ec3.1-pipeline-state-isolation-audit.md",
+                "AC1": "green — 32 SKILL.md files rewritten, zero write-path matches to .github/pipeline-state.json",
+                "AC2": "green — scanner scripts/build-pipeline-state.js operational; 5 per-artefact files seeded; --verify in npm test",
+                "AC3": "green — viz STATE_FILE constant swapped to derived path",
+                "AC4": "green (schema + DoD instruction) — AC4-I1 DoD round-trip remains TODO (integration harness)",
+                "AC5": "green — root .github/pipeline-state.json replaced with 9-line pointer doc (option B)",
+                "AC6": "TODO — end-to-end stub-skill round-trip needs integration harness (Task 11 scenario 6 of verification script covers manually)",
+                "AC7": "green — schema adds featureStatus enum; no existing fields removed"
+              },
+              "operatorNotes": "W4 RISK-ACCEPT carried into inner loop (solo operator self-review at PR time). AC5 option B chosen autonomously per plan default; operator may flip to option A at PR review.",
+              "nextStep": "Open draft PR via /branch-complete (manual — gh CLI not available in this environment). Operator reviews + flips draft → ready."
+            }
           }
         ]
       }
@@ -638,7 +654,8 @@
         ]
       }
     ],
-    "nfrProfile": "artefacts/2026-04-16-engine-consolidation/nfr-profile.md"
+    "nfrProfile": "artefacts/2026-04-16-engine-consolidation/nfr-profile.md",
+    "featureStatus": "in-flight"
   },
   "slug": "2026-04-16-engine-consolidation",
   "name": "Engine consolidation (CLI as control plane)",
