@@ -600,6 +600,37 @@ After a DoR batch commit, write an explicit `pendingActions` entry to `workspace
 
 ---
 
+## Pipeline gap D7 — `--target vscode` minimal issue body produces empty agent PRs; `--target github-agent` must be the default
+
+### Observed — 2026-04-18 (spc.1–spc.5 inner loop dispatch)
+
+**Circumstance:** Five stories (spc.1–spc.5) for the `2026-04-18-skill-performance-capture` feature were dispatched via `/issue-dispatch` using the default `--target vscode` mode. All 5 GitHub Copilot coding agent runs produced only a single empty "Initial plan" commit with zero file changes. Each story's PR was merged with no deliverable implemented.
+
+**Root cause:** The `--target vscode` issue body is a minimal 5-line stub listing only artefact paths. It contains no task list, no concrete file touchpoints, no implementation context, and no AC details. When the GitHub Copilot SWE agent receives this body, it has insufficient context to determine what to build. The agent writes a plan comment and opens a PR, but the plan contains no actionable steps because the issue body provided no actionable steps. The agent's PR is then reviewed and merged as-not-implemented.
+
+**The structural failure:** `--target vscode` was designed for the VS Code inline chat agent, which has access to the full workspace filesystem and can read artefact files directly. The GitHub Copilot SWE agent (GitHub Actions) clones the repo at assignment time but has no session continuity — it infers its task only from the issue body. A minimal stub that says "read artefact/x.md" requires the agent to discover, read, parse, and execute from artefact files without any scaffolding. In practice, the agent stalls and produces empty output rather than discovering the full task chain.
+
+**Recovery applied:** `git merge origin/feature/p3-remaining-stories` — recovered all 39 artefact files that were only on the feature branch; all 5 deliverables implemented manually in operator session.
+
+**D-batch classification:** D7 — default dispatch target produces unusable agent output. Structural fix is changing the SKILL.md default.
+
+| ID | Gap | Fix location |
+|----|-----|-------------|
+| D3 | learnings-write step missing from skill exits | Multiple SKILL.md exit sequences |
+| D5 | /checkpoint missing from numbered exit sequence | /definition-of-ready SKILL.md |
+| D6 | /issue-dispatch not prompted after all-PROCEED batch | /definition-of-ready SKILL.md exit + push gate |
+| **D7** | **`--target vscode` minimal body produces empty agent PRs** | **`/issue-dispatch` SKILL.md Step 2 default** |
+
+**Structural fix applied:** `/issue-dispatch` SKILL.md Step 2 default changed from `--target vscode` to `--target github-agent`. The `--target vscode` option is retained but requires explicit opt-in. A warning note added explaining when `--target vscode` is appropriate (only when operator confirms the agent runtime reads artefact files independently, e.g. VS Code inline chat with full workspace access).
+
+**Rule for future dispatch decisions:**
+- **`--target github-agent`** (default): use for all standard inner loop dispatches. Inlines Coding Agent Instructions, AC list, file touchpoints, and implementation context from DoR artefacts into the issue body. The agent can complete the task from the issue body alone without reading additional files.
+- **`--target vscode`** (opt-in): use only when the agent runtime is VS Code inline chat with confirmed access to the full workspace. Requires the operator to verify the agent can read artefact files during the session. Not appropriate for GitHub Actions / SWE agent runs.
+
+**Action:** `/issue-dispatch` SKILL.md Step 2 default updated to `--target github-agent` in this session. Log as a Phase 3 /improve candidate for validation that the change holds across future dispatch runs.
+
+---
+
 ## Tool-use gap — duplicate GitHub issues created by combined heredoc+gh-issue-create PowerShell calls
 
 ### Observed — 2026-04-12
@@ -674,7 +705,71 @@ After a DoR batch commit, write an explicit `pendingActions` entry to `workspace
     fetch-depth: 0
 ```
 
+---
+
+## Pipeline gap D8 — `--target github-agent` rich issue body still produces empty PRs from GitHub Copilot coding agent (2nd occurrence)
+
+### Observed — 2026-04-18 (p3.3 #163/PR #166, p3.13 #164/PR #165)
+
+**Circumstance:** Two stories (p3.3 and p3.13) were dispatched via `/issue-dispatch` using `--target github-agent` — the structural fix introduced by D7. Both issue bodies were comprehensive: full AC lists, implementation task breakdowns, file touchpoints (CREATE/MODIFY/EXTERNAL), non-negotiable rules, and artefact reference tables. Both issues were assigned to the GitHub Copilot coding agent. Both PRs (#165, #166) were merged. Both had **0 additions, 0 deletions, 0 changed files**.
+
+**This is the second occurrence.** D7 (spc.1–spc.5) was attributed to `--target vscode` minimal issue bodies giving the agent insufficient context. The fix was to switch the default to `--target github-agent` with rich inlined bodies. That fix does not address this occurrence — the bodies were rich and complete. The agent still produced empty PRs.
+
+**Why this happened — analysis of likely causes:**
+
+1. **Agent plan-without-execute pattern.** The GitHub Copilot coding agent follows a two-phase pattern: (a) read the issue, write a plan comment, create a branch; (b) execute the plan by making code changes. In both D7 and D8, the agent completed phase (a) but not phase (b). PR #166's description explicitly ticked all 5 ACs and listed implementation details — the agent understood the spec. It just didn't write any code. This suggests the agent's execution phase is either timing out, hitting a context limit, or encountering a blocker it doesn't surface.
+
+2. **Repo complexity / orientation failure.** The skills-repo has ~700+ files across deeply nested artefact directories, dashboard files, standards, and governance scripts. The agent's `.github/instructions/agent-orientation.instructions.md` directs it to read `workspace/state.json`, DoR artefacts, and run `npm test` + `validate-trace.sh` before changing anything. If the agent spends its budget on orientation reads (state.json is large, pipeline-state.json is 2400+ lines), it may exhaust its execution budget before making changes.
+
+3. **External repo dependency (p3.3 specifically).** p3.3 required creating files in `heymishy/skills-framework-infra` (an external repo) AND modifying the delivery repo. The agent may not have permissions or capability to push to a second repository, causing it to stall silently.
+
+4. **No test failure to drive TDD.** The issue bodies described what tests to write, but the tests didn't exist yet on master. The agent couldn't run a red-green cycle because there was nothing red to start from. For stories that require creating new test files and new source files from scratch, the agent may need pre-committed failing test stubs.
+
+5. **Operator merged without reviewing file changes.** The empty PRs were merged because the PR descriptions looked complete (all ACs ticked, well-formatted body). The merge gate (human review) didn't catch that 0 files were changed. This is a process gap independent of the agent.
+
+**Resolution options for future dispatch — by agent runtime:**
+
+| Runtime | Strengths | Weaknesses for this pattern | When to use |
+|---------|-----------|---------------------------|-------------|
+| **GitHub Copilot coding agent** (current) | Autonomous, no operator time, creates own PR | Empty PR pattern (D7, D8), no way to inspect mid-execution, black box when it stalls, cannot push to external repos | Simple single-repo stories with clear file paths; stories where failing tests already exist on master |
+| **VS Code Copilot agent** (this session pattern) | Full workspace context, operator can monitor and intervene, can read all artefact files, can run tests interactively | Requires operator focus time, not fully autonomous, single-threaded (one story at a time) | Complex stories, external repo dependencies, stories requiring orientation across many files, stories where the agent needs mid-execution guidance |
+| **Claude Code** (CLI agent) | Deep context window, strong multi-file editing, can be given explicit tool access, good at TDD cycles, can be pointed at specific repos | Requires local setup / API key, no native GitHub PR integration (manual PR step), operator must monitor terminal | Stories requiring deep codebase understanding, large refactors, stories touching 5+ files |
+| **Cursor** (AI IDE) | Visual file context, inline diff review, multi-model support, composer mode for multi-file changes | Requires operator presence in Cursor IDE, not automatable for batch dispatch, no headless mode | Interactive implementation sessions, stories where the operator wants to pair with the agent, UI-heavy or layout work |
+
+**Recommended dispatch strategy going forward:**
+
+1. **Pre-dispatch validation gate:** Before dispatching to the GitHub agent, check: (a) Do failing tests already exist on master? (b) Is the story single-repo only? (c) Are ALL target file paths within the delivery repo? If any answer is no, dispatch to VS Code agent or Claude Code instead.
+
+2. **Post-merge empty-PR check:** Add a governance check (or manual checklist item) that verifies `changedFiles > 0` before merging any agent PR. Could be a GitHub Actions check: `gh pr view $PR --json changedFiles --jq '.changedFiles'` must be > 0.
+
+3. **Pre-committed failing test stubs:** For stories dispatched to the GitHub agent, commit the test file stubs (with `test.todo()` or `test.skip()`) to master BEFORE assigning the issue. This gives the agent a red starting point.
+
+4. **Tiered dispatch model:**
+   - **Tier 1 (GitHub agent):** Single-repo, tests pre-committed, clear file CRUD, no external dependencies
+   - **Tier 2 (VS Code / Claude Code):** Multi-repo, complex orientation, no pre-existing tests, external dependencies
+   - **Tier 3 (Operator direct):** Governance infrastructure changes, SKILL.md modifications, cross-cutting refactors
+
+**Actions:**
+- [ ] Add empty-PR merge guard to assurance gate workflow or PR template checklist
+- [ ] Add pre-dispatch validation checklist to `/issue-dispatch` SKILL.md
+- [ ] Re-dispatch p3.3 and p3.13 via VS Code agent (operator session) or Claude Code
+- [ ] Consider pre-committing failing test stubs for remaining stories dispatched to GitHub agent (p3.4, p3.12)
+
 **Pattern:** Any workflow that must push commits back to the PR branch must include `ref: ${{ github.head_ref }}` + `fetch-depth: 0` on checkout. Without these, the runner is in detached HEAD at the merge commit — commits succeed locally but pushes will be rejected whenever the branch has advanced since the workflow started.
+
+---
+
+## Definition skill — story count may be disproportionate for tooling/instrumentation features
+
+### Observed — 2026-04-18
+
+**Circumstance:** `/definition` for the `2026-04-18-skill-performance-capture` feature produced 5 stories for what is architecturally a config schema addition + a Markdown template + an instruction text addition + a directory convention + a check script. The operator flagged that 5 stories feels heavyweight relative to other features of similar complexity.
+
+**Hypothesis:** The /definition skill's default decomposition is calibrated for user-facing feature work (stories = independently shippable slices of user value). For tooling/instrumentation features with no UI and no external consumers, user stories impose overhead that doesn't match the verification model — there is no "operator tries to do X and can/can't" demarcation between most of these stories.
+
+**Not confirmed yet** — this may be correct decomposition for a governed pipeline (each story = one change to a governed file type, independently reviewable). But worth checking at /review whether story boundaries feel artificial or add overhead rather than reduce it.
+
+**Action:** At /review, note whether story boundaries for spc.1–spc.5 feel natural or manufactured. If 3 stories would have covered the same scope without losing reviewability, flag as a calibration signal for the definition skill. Consider a future heuristic: for features where all stories touch the same 1–2 file types with no external persona consuming intermediate output, a single "thin feature" story may be more appropriate than vertical slices.
 
 **Action:** Add to `.github/architecture-guardrails.md` as a workflow authoring guardrail. Log as Phase 2 /improve candidate.
 

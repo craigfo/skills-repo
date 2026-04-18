@@ -26,14 +26,14 @@
 
 This repository is a **skills-based SDLC pipeline library** — not an application.
 It contains:
-- `pipeline-viz.html` — single-file HTML/CSS/JS pipeline visualisation tool
+- `dashboards/pipeline-viz.html` — single-file HTML/CSS/JS pipeline visualisation tool
 - `.github/skills/*/SKILL.md` — agent skill instruction files (Markdown)
 - `.github/templates/*.md` — artefact templates (Markdown)
 - `.github/pipeline-state.json` + `pipeline-state.schema.json` — live + schema state files
 - `.github/scripts/` — Node.js pre-commit hooks and validators
 - `artefacts/` — per-feature pipeline artefacts produced during delivery
 
-Architecture guardrails apply to changes to the viz (`pipeline-viz.html`), the schema (`pipeline-state.schema.json`), and any new scripts added under `.github/scripts/`.
+Architecture guardrails apply to changes to the viz (`dashboards/pipeline-viz.html`), the schema (`pipeline-state.schema.json`), and any new scripts added under `.github/scripts/`.
 
 Skill files and templates are content, not code — they are governed by pipeline process, not these guardrails.
 
@@ -47,7 +47,7 @@ Skill files and templates are content, not code — they are governed by pipelin
 
 ## Style Guide
 
-**Viz (`pipeline-viz.html`):**
+**Viz (`dashboards/pipeline-viz.html`):**
 - All styles live in the inline `<style>` block — no external CSS files
 - CSS custom properties (`--var-name`) for all colours and spacing values
 - No CSS frameworks (Bootstrap, Tailwind, etc.) — keep the file self-contained
@@ -69,8 +69,8 @@ Skill files and templates are content, not code — they are governed by pipelin
 
 | Capability | Reference path | Notes |
 |---|---|---|
-| Feature card rendering | `.github/pipeline-viz.html` — `featureCardHTML()` | Pattern for how state fields map to UI elements |
-| Governance gate evaluation | `.github/pipeline-viz.html` — `evaluateGate()` | Pattern for reading state fields and producing pass/warn/fail |
+| Feature card rendering | `dashboards/pipeline-viz.html` — `featureCardHTML()` | Pattern for how state fields map to UI elements |
+| Governance gate evaluation | `dashboards/pipeline-viz.html` — `evaluateGate()` | Pattern for reading state fields and producing pass/warn/fail |
 | JSON schema definition | `.github/pipeline-state.schema.json` | All new state fields must be added here before being used |
 | Pre-commit validation | `.github/scripts/check-viz-syntax.js` | Pattern for adding new validators |
 | Skill structural contracts | `.github/scripts/check-skill-contracts.js` | Defines required markers per skill; extend when adding structural invariants |
@@ -80,7 +80,7 @@ Skill files and templates are content, not code — they are governed by pipelin
 
 ## Approved Patterns
 
-- **Viz architecture:** Single-file HTML — all JS, CSS, and markup inline in `pipeline-viz.html`. No build step. No external runtime dependencies.
+- **Viz architecture:** Single-file HTML — all JS, CSS, and markup inline in `dashboards/pipeline-viz.html`. No build step. No external runtime dependencies.
 - **State access in viz:** Read from the parsed `pipelineState` global — never fetch or import. State is loaded via `<script>` tag injection or `fetch('./pipeline-state.json')`.
 - **Gate logic:** Gate pass/fail is determined by reading specific evidence fields from `pipeline-state.json` stories — not by checking `feature.stage` alone (see ADR-002).
 - **Schema evolution:** Add new fields to `pipeline-state.schema.json` at the same time as adding them to any skill or viz code that reads or writes them. Schema and implementation stay in sync.
@@ -100,7 +100,7 @@ Skill files and templates are content, not code — they are governed by pipelin
 | Hardcoding org/tool names in skill files | Breaks when context changes; violates configurability | Use `context.yml` fields via the skill's config-reading step |
 | External CDN dependencies in viz at runtime | Breaks offline use; supply chain risk | Bundle or inline, or omit |
 | Adding fields used by viz/skills but not in schema | Schema becomes stale; validators miss them | Add to `pipeline-state.schema.json` simultaneously |
-| Committing changes to `pipeline-viz.html` without passing `check-viz-syntax.js` | Breaks the pre-commit gate silently | Run `node .github/scripts/check-viz-syntax.js` locally before committing |
+| Committing changes to `dashboards/pipeline-viz.html` without passing `check-viz-syntax.js` | Breaks the pre-commit gate silently | Run `node .github/scripts/check-viz-syntax.js` locally before committing |
 | Deleting or mutating pipeline artefacts in `pipeline-state.json` directly | Can corrupt feature history | Use skills to write state; manual edits only for scaffolding |
 | Bundling changes from story B into story A's PR | Makes root-cause traceability noisy; DoD evidence becomes ambiguous; violates ADR-008 | One PR per story; amend the DoR contract if scope genuinely expands |
 | Committing runtime artefact churn (trace files, validation reports) in story branches | Non-functional CI side effects inflate diff noise and make PR review harder | Add generated runtime paths to `.gitignore`; do not commit `workspace/traces/` or `trace-validation-report.json` in story branches |
@@ -118,8 +118,8 @@ Skill files and templates are content, not code — they are governed by pipelin
 - Any field read by the viz from `pipeline-state.json` must exist in `pipeline-state.schema.json`
 
 ### Self-containment
-- `pipeline-viz.html` must open and render correctly without any build step, server, or network access
-- No npm `devDependencies` may be added to `pipeline-viz.html` at runtime; pre-commit scripts may use Node.js built-ins only
+- `dashboards/pipeline-viz.html` must open and render correctly without any build step, server, or network access
+- No npm `devDependencies` may be added to `dashboards/pipeline-viz.html` at runtime; pre-commit scripts may use Node.js built-ins only
 
 ### Security
 - No user-supplied content is ever injected into innerHTML without sanitisation
@@ -140,7 +140,7 @@ Skill files and templates are content, not code — they are governed by pipelin
 
 | # | Status | Title | Constrains |
 |---|---|---|---|
-| ADR-001 | Active | Single-file viz, no build step | `pipeline-viz.html` architecture |
+| ADR-001 | Active | Single-file viz, no build step | `dashboards/pipeline-viz.html` architecture |
 | ADR-002 | Active | Gates must use evidence fields, not stage-proxy | All `evaluateGate()` implementations |
 | ADR-003 | Active | Schema-first: fields defined before use | `pipeline-state.schema.json` evolution |
 | ADR-004 | Active | `context.yml` is the single config source of truth | Skill files, viz config reading |
@@ -150,7 +150,7 @@ Skill files and templates are content, not code — they are governed by pipelin
 | ADR-008 | Active | DoR touch-point contract is binding at pre-merge — no silent scope bundling | All PRs, /verify-completion step, DoR contract amendment workflow |
 | ADR-009 | Active | Evaluation and write-back workflows must be separate triggers with separate permission scopes | All CI/CD workflows that produce audit artefacts |
 | ADR-010 | Active | CI audit records must be persisted to main post-merge, not to feature branches | assurance-gate.yml, trace-commit.yml, all future governance gates |
-| ADR-011 | Active | Artefact-first: new SKILL.md files, src/ modules, and governance check scripts require a story artefact before or alongside the commit | All contributors; /definition-of-ready H9 check; coding agent |
+| ADR-011 | Active | Artefact-first: new SKILL.md files, src/ modules, governance check scripts, dashboard behavioural changes, copilot-instructions behavioural changes, and structural pipeline-state.json changes require a story artefact before or alongside the commit | All contributors; /definition-of-ready H9 check; coding agent |
 
 ---
 
@@ -164,7 +164,7 @@ Skill files and templates are content, not code — they are governed by pipelin
 The viz tool needs to be usable by anyone with a browser and a local clone — no Node, no npm install, no build step. It is a supporting tool for the pipeline, not a product.
 
 #### Decision
-`pipeline-viz.html` is a single self-contained file. All JS, CSS, and markup are inline. No external runtime npm dependencies. No bundler (webpack, vite, esbuild).
+`dashboards/pipeline-viz.html` is a single self-contained file. All JS, CSS, and markup are inline. No external runtime npm dependencies. No bundler (webpack, vite, esbuild).
 
 #### Consequences
 **Easier:** Zero setup to open and use. No dependency drift. No build pipeline to maintain.
@@ -386,18 +386,27 @@ If the two-workflow artifact handoff proves unreliable at scale (e.g. artifact e
 
 ---
 
-### ADR-011: Artefact-first — new skills, modules, and governance scripts require a story artefact
+### ADR-011: Artefact-first — new skills, modules, governance scripts, dashboard logic, instructions, and structural state changes require a story artefact
 
 **Status:** Active
-**Date:** 2026-04-16
-**Source finding:** `workspace/retrospective-audit-2026-04-16.md` — Finding 2 (11 BETWEEN-STORIES items, 2 HIGH-risk)
+**Date:** 2026-04-18 (scope extended from 2026-04-16 original)
+**Source finding:** `workspace/retrospective-audit-2026-04-16.md` — Finding 2 (11 BETWEEN-STORIES items, 2 HIGH-risk); `workspace/learnings.md` D8 — empty-PR pattern caused by agent context budget exhaustion from oversized pipeline-state.json
 **Decided by:** Hamish
 
 #### Context
 The retrospective artefact coverage audit (2026-04-16) found that 45% of post-pipeline CHANGELOG items had no covering story — including two HIGH-risk functional primitives (the `/estimate` and `/issue-dispatch` skills) added directly between story cycles. The platform's core traceability claim — that every behavioural change has a discoverable chain from problem statement to tested implementation — was violated for these items. The root cause was the absence of a structural constraint that made the violation visible before commit.
 
+**2026-04-18 scope extension:** The D8 learning (empty-PR pattern) revealed that the original ADR-011 scope was too narrow. Dashboard behavioural changes (`dashboards/*.js`, `dashboards/*.html` logic), copilot-instructions.md behavioural changes, and structural changes to `pipeline-state.json` (schema evolution, file splitting, archive mechanisms) all change the rules by which agents and operators work, and all carry the same risk of silent divergence between codebase-as-delivered and codebase-as-specified. Data-only updates to dashboard static arrays (story phase/state changes reflecting pipeline-state.json) and pipeline bookkeeping updates (stage transitions, metric signals) remain exempt.
+
 #### Decision
-Any new SKILL.md file under `.github/skills/`, any new module under `src/`, and any new governance check script under `tests/` or `scripts/` committed to master must have a corresponding story artefact (discovery → benefit-metric → story → test-plan → DoR) committed to `artefacts/` before or alongside the implementation.
+Any new or behaviourally modified file in the following categories committed to master must have a corresponding story artefact (discovery → benefit-metric → story → test-plan → DoR) committed to `artefacts/` before or alongside the implementation:
+
+1. **SKILL.md files** under `.github/skills/`
+2. **Modules** under `src/`
+3. **Governance check scripts** under `tests/` or `scripts/`
+4. **Dashboard behavioural changes** — new JS logic, new rendering functions, structural changes to `dashboards/pipeline-viz.html` or `dashboards/*.js` (NOT data-only updates to static arrays reflecting pipeline state)
+5. **copilot-instructions.md behavioural changes** — new rules, guardrail additions, or workflow modifications that change agent behaviour (NOT typo fixes or clarifications of existing intent)
+6. **Structural pipeline-state.json changes** — schema evolution, file splitting, archive mechanisms, new top-level fields (NOT pipeline bookkeeping: stage transitions, metric signals, dispatch records)
 
 **Exemptions** (do not require a full artefact chain):
 - Documentation-only changes (README, CHANGELOG, `workspace/` notes)
@@ -439,7 +448,7 @@ This repository is operated by a single engineer. The following posture applies 
   GUARDRAILS_REGISTRY — Machine-parseable guardrail index.
   
   This block is read by:
-  - pipeline-viz.html (Guardrails Compliance sub-panel in governance view)
+  - dashboards/pipeline-viz.html (Guardrails Compliance sub-panel in governance view)
   - /review skill (Category E checklist)
   - /definition-of-ready (H9 guardrail compliance check)
   - /trace (architecture compliance check)
@@ -505,12 +514,12 @@ This repository is operated by a single engineer. The following posture applies 
 
 - id: MC-SELF-01
   category: mandatory-constraint
-  label: "pipeline-viz.html renders without build step, server, or network"
+  label: "dashboards/pipeline-viz.html renders without build step, server, or network"
   section: Self-containment
 
 - id: MC-SELF-02
   category: mandatory-constraint
-  label: "No npm devDependencies in pipeline-viz.html runtime"
+  label: "No npm devDependencies in dashboards/pipeline-viz.html runtime"
   section: Self-containment
 
 - id: MC-CONSIST-01
@@ -680,11 +689,11 @@ This repository is operated by a single engineer. The following posture applies 
 
 - id: AP-11
   category: anti-pattern
-  label: "Committing a new SKILL.md, src/ module, or governance check script without a story artefact (artefact-first violation)"
+  label: "Committing a new SKILL.md, src/ module, governance check script, dashboard behavioural change, copilot-instructions behavioural change, or structural pipeline-state change without a story artefact (artefact-first violation)"
   section: Anti-Patterns
 
 - id: ADR-011
   category: adr
-  label: "Artefact-first: new SKILL.md files, src/ modules, and governance check scripts require a story artefact before or alongside the commit"
+  label: "Artefact-first: new SKILL.md files, src/ modules, governance check scripts, dashboard behavioural changes, copilot-instructions behavioural changes, and structural pipeline-state.json changes require a story artefact before or alongside the commit"
   section: Active ADRs
 ```

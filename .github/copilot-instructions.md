@@ -219,7 +219,7 @@ Rules:
 
 [FILL IN BEFORE COMMITTING]
 
-**Artefact-first rule:** Any new SKILL.md file under `.github/skills/`, any new module under `src/`, and any new governance check script under `tests/` or `scripts/` committed to master must have a corresponding story artefact (discovery → benefit-metric → story → test-plan → DoR) committed to `artefacts/` before or alongside the implementation. A PR that adds or modifies a SKILL.md, `src/` module, or check script without a DoR story artefact is out-of-process. Exception: documentation-only changes (README, CHANGELOG, workspace notes), typo/configuration fixes that make no behavioural difference, and changes explicitly listed in the governed exemption register do not require a full chain. For work that has already landed without a chain, use `.github/templates/retrospective-story.md` to create a retroactive story.
+**Artefact-first rule:** Any new SKILL.md file under `.github/skills/`, any new module under `src/`, any new governance check script under `tests/` or `scripts/`, any behavioural change to dashboard logic (`dashboards/*.js`, `dashboards/*.html` rendering/logic), any behavioural change to `copilot-instructions.md` (new rules, guardrails, workflow changes), and any structural change to `pipeline-state.json` (schema evolution, file splitting, archive mechanisms, new top-level fields) committed to master must have a corresponding story artefact (discovery → benefit-metric → story → test-plan → DoR) committed to `artefacts/` before or alongside the implementation. A PR that adds or modifies any of these without a DoR story artefact is out-of-process. Exception: documentation-only changes (README, CHANGELOG, workspace notes), typo/configuration fixes that make no behavioural difference, data-only updates to dashboard static arrays reflecting pipeline-state.json (story phase/state changes), pipeline bookkeeping updates (stage transitions, metric signals, dispatch records), and changes explicitly listed in the governed exemption register do not require a full chain. For work that has already landed without a chain, use `.github/templates/retrospective-story.md` to create a retroactive story.
 
 **State and artefact updates — no standalone PR required:** Changes to `workspace/state.json`, `.github/pipeline-state.json`, and files under `artefacts/` are pipeline bookkeeping, not code. They do not need a standalone draft PR with a review cycle. Rules:
 - **Bundle first:** whenever practical, include state/artefact updates in the same commit and branch as the implementation they record. Merge once — not twice.
@@ -342,3 +342,19 @@ Full orientation reference (VS Code context): `.github/instructions/agent-orient
 | On-call alerting | Incident response | Set in `context.yml: tools.alerting` |
 | Issue tracking | Project management | Set in `context.yml: tools.project_management` |
 | Artefact repository | Build artefacts | Set in `context.yml: tools.artifact_registry` |
+
+---
+
+## Skill Performance Capture (instrumentation)
+
+At session start, read `.github/context.yml`. Check `instrumentation.enabled`. If `instrumentation.enabled: true`, append a capture block to each phase output artefact you write in this session. If `instrumentation.enabled` is absent or `false`, do not append any capture block.
+
+**When to append:** After writing a phase output artefact of one of these types — `discovery.md`, `benefit-metric.md`, story artefacts (files under `stories/`), test plan artefacts (files under `test-plans/`) — append the capture block template from `.github/templates/capture-block.md` as the final section of that file.
+
+**Appendix-only constraint:** The capture block is an appendix. Do not modify the primary artefact body content. Append after the last line of existing content only.
+
+**Excluded artefact types:** Do not append capture blocks to gate artefacts — DoR (definition-of-ready) artefacts and DoD (definition-of-done) artefacts are explicitly excluded.
+
+**Field names:** When populating the capture block, use the exact field names defined in the template: `experiment_id`, `model_label`, `cost_tier`, `skill_name`, `artefact_path`, `run_timestamp`.
+
+**Security constraint (MC-SEC-02):** The `fidelity_self_report` field must not contain session tokens, user identifiers, or API credentials. Record only model behaviour observations.
