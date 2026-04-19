@@ -17,7 +17,7 @@
   To evolve: update this file, open a PR, tag tech lead for review.
 -->
 
-**Last updated:** 2026-04-16
+**Last updated:** 2026-04-20
 **Maintained by:** Repo owner (solo)
 
 ---
@@ -151,6 +151,8 @@ Skill files and templates are content, not code — they are governed by pipelin
 | ADR-009 | Active | Evaluation and write-back workflows must be separate triggers with separate permission scopes | All CI/CD workflows that produce audit artefacts |
 | ADR-010 | Active | CI audit records must be persisted to main post-merge, not to feature branches | assurance-gate.yml, trace-commit.yml, all future governance gates |
 | ADR-011 | Active | Artefact-first: new SKILL.md files, src/ modules, governance check scripts, dashboard behavioural changes, copilot-instructions behavioural changes, and structural pipeline-state.json changes require a story artefact before or alongside the commit | All contributors; /definition-of-ready H9 check; coding agent |
+| ADR-012 | Active | Platform-agnostic architecture: prefer portable, multi-VCS-compatible implementations over vendor-specific optimisations; adapters enable platform adaptation without core fragmentation | All infrastructure, registry, and audit features; Phase 3 T3M1 Q8 implementation; enterprise adapter architecture |
+| ADR-013 | Active | Phase 4 enforcement architecture: shared 3-operation governance package (`resolveAndVerifySkill`, `evaluateGateAndAdvance`, `writeVerifiedTrace`) is the contract all surface adapters call — no surface adapter reimplements governance logic independently | All Phase 4 enforcement adapters (p4-enf-mcp, p4-enf-cli, and any future surface adapter); E3 implementation stories |
 
 ---
 
@@ -428,6 +430,92 @@ If a `check-artefact-coverage.js` CI governance gate is implemented (Phase 3 exi
 
 ---
 
+### ADR-012: Platform-agnostic architecture via adapters
+
+**Status:** Active
+**Date:** 2026-04-19
+**Decided by:** Operator
+**Triggered by:** ASSUMPTION-02 (T3M1 Q8 tamper-evidence registry implementation choice); Phase 3 MVP scope
+
+#### Context
+Phase 3 must implement a tamper-evidence registry for T3M1 Q8 (audit-readiness). Two options existed:
+
+**Option A:** GitHub Artifact Attestation with OIDC-signed workflow identity. Fast, GitHub-native, cryptographically strong. Limitation: only works on GitHub Actions. Requires OIDC token support.
+
+**Option B:** Read-only registry repository. Portable across GitHub, Bitbucket, GitLab, and any Git host. Append-only, immutable by design. Requires second repository; slower to query. Limitation: no cryptographic attestation layer.
+
+The platform's founding principle (ADR-003, ADR-004, ADR-006) is platform neutrality: the pipeline operates across GitHub, Bitbucket, GitLab, and on-premise Git without code fragmentation. Adapters — modular interfaces keyed on `context.yml` settings — allow the core platform to remain Git-host-agnostic while supporting host-specific optimizations.
+
+#### Decision
+**Choose Option B (portable read-only registry).** The T3M1 Q8 implementation must not introduce GitHub-specific dependencies. The registry is a portable Git-based append-only store, not a GitHub Actions primitive. When an enterprise adopter targets Bitbucket or on-premise Git, the same registry implementation works without core changes.
+
+The platform architecture commits to this posture: core infrastructure (gates, traces, registries, audit artefacts) uses portable primitives; host-specific optimizations (OIDC-signed attestation, GitHub Checks API integration, Bitbucket Deployment environments) land in adapter implementations, not the core platform code.
+
+#### Consequences
+**Easier:** Portable implementation from day one. No future migration cost if tooling changes. Enterprise adoption blocked only by adapter availability, not core incompatibility. Consistent mental model: all enterprise adapters follow the same pattern (`context.yml` → adapter selection → adapter-specific logic).
+
+**Harder / constrained:** No GitHub-native optimizations (OIDC attestation, direct GitHub API trust anchors). The registry is slower to query than a database. Tamper-evidence relies on immutability-by-design (append-only storage, no write access granted to agents) rather than cryptographic proof.
+
+**Off the table:** Assuming a default GitHub-Actions-only implementation and adding adapters "later" (deferral creates de facto GitHub-first expectations in the core code). Fragmented core implementations that differ between VCS hosts.
+
+#### Alternatives considered
+**Option A (GitHub OIDC attestation):** Rejected because it blocks Bitbucket and on-premise Git environments, contradicting ADR-003.
+
+**Hybrid approach:** Use Option B now, add OIDC verification via an adapter layer on GitHub. Rejected because it adds complexity without solving the core problem — the registry still needs to be portable.
+
+#### Implications on Phase 3 and Phase 4
+- **T3M1 Q8 implementation (Phase 3):** Read-only registry repository. Delivery agents have no write access. Audit records committed post-merge by a dedicated workflow. Immutability enforced by access control and branch protection rules, not cryptography.
+- **Enterprise adapters (Phase 3, Priority 8):** Teams and Jira adapters confirmed as minimum viable set. Both use portable auth mechanisms (OAuth, PAT) — no GitHub Checks API dependencies.
+- **OIDC verification (Phase 4 or later):** If GitHub enterprises require attestation, a GitHub-specific adapter can optionally verify OIDC tokens against the registry. This is host-specific logic in an adapter, not platform core.
+- **Cross-VCS trace aggregation (Phase 3, Priority 7):** Git-based, works identically on GitHub, Bitbucket, GitLab. Scheduled CI job aggregates `workspace/traces/` JSONL across squads into a shared `platform/traces/` partition.
+
+#### Revisit trigger
+If a future enterprise adopter requires cryptographic attestation and OIDC is not available in their environment (e.g. self-hosted Git without OIDC support), re-evaluate whether a time-stamping service or blockchain-based immutability service becomes necessary. The decision to remain portable supersedes any individual adopter's attestation preference unless the preference is universal.
+
+---
+
+### ADR-013: Phase 4 enforcement architecture — shared governance package as surface-adapter contract
+
+**Status:** Active
+**Date:** 2026-04-20
+**Decided by:** Operator (heymishy)
+**Triggered by:** Spike A (PROCEED), Spike B1 (PROCEED — MCP/VS Code surface), Spike B2 (PROCEED — CLI/regulated surface); all three verdicts confirmed this pattern before E3 stories begin implementation.
+
+#### Context
+Phase 4 must add per-invocation skill fidelity enforcement (P1–P4 properties) to at least two surface classes: interactive operator surfaces (VS Code / Claude Code via MCP) and regulated / CI surfaces (CLI). A naive approach would implement governance logic (hash verification, gate evaluation, trace writing) independently in each surface adapter. This would produce duplicated logic, divergent audit trails, and independent maintenance burdens.
+
+Spike A investigated whether governance logic could be extracted into a shared package. Verdict: PROCEED. Spike B1 validated that the MCP surface adapter can call the 3-operation package contract without modification. Spike B2 validated that the CLI surface adapter can call the same 3-operation contract at three enforcement seams.
+
+The 3-operation contract established by Spike A is:
+- `resolveAndVerifySkill(skillName, skillsDir, expectedHash)` → hash verification at envelope-build time; returns `{ exists, path, content, hash, hashValid }`; a `hashValid: false` result is a hard abort (C5)
+- `evaluateGateAndAdvance(feature, stories, gateId, proposedStateUpdate, pipelineState)` → gate evaluation before state transition; `newState: null` on gate failure prevents partial advancement
+- `writeVerifiedTrace(executionData, artefactChain)` → chain-validated trace emission before the independent assurance gate re-verifies; `written: false` if chain is incomplete
+
+#### Decision
+The shared governance enforcement package — implementing the 3-operation contract — is the boundary between surface-specific adapter code and platform governance logic. No surface adapter implements hash verification, gate evaluation, or trace chain validation independently. Every surface adapter (MCP, CLI, and any future surface) calls into the shared package at the three enforcement seams. The package is the owner of the governance contract; adapters are the owners of the seam (envelope format, command vocabulary, surface-specific integration points).
+
+#### Consequences
+**Easier:** Single implementation of governance logic. Audit trail consistency across surfaces. Changes to governance policy (e.g. hash algorithm upgrade, gate schema evolution) land in one place. New surface adapters have a tested, documented contract to call.
+**Harder / constrained:** The shared package must be stable before E3 implementation stories begin. A breaking change to the 3-operation interface requires coordinated updates to all surface adapters.
+**Off the table:** Surface-specific reimplementations of hash verification, gate evaluation, or trace chain validation. A surface adapter that evaluates its own gate outcome without calling `evaluateGateAndAdvance`. A surface adapter that emits a trace without calling `writeVerifiedTrace`.
+
+#### Scope note — P2/P4 PARTIAL for Mode 1 surfaces
+Spike B1 (MCP/VS Code) found P2 (context injection exclusivity) PARTIAL for interactive mode: the enforcement tool delivers skill content correctly, but ambient workspace access is not structurally blocked. Spike B2 (CLI) found P2 and P4 both PARTIAL for Mode 1 (human-driven interactive): the envelope is assembled correctly but the agent's ambient session is not constrained after envelope handoff.
+
+These PARTIAL findings are consistent and expected for interactive surface modes. They are not REDESIGN triggers for this ADR. The resolution path is Mode 2 (headless subprocess for CLI) and skill-file isolation (for MCP). Each E3 implementation story carries an explicit AC for its P2 closure approach. The ADR stands: the shared package contract is correct and complete; the P2/P4 closure is a per-surface implementation concern.
+
+#### Alternatives considered
+**A — Independent per-surface implementations:** Each surface adapter reimplements hash verification, gate evaluation, and trace writing. Rejected: duplicated governance logic with divergent behaviour risk; audit trail inconsistency; maintenance overhead scales with surface count.
+
+**B — Single monolithic enforcement layer, no adapters:** One enforcement runtime that all surfaces invoke remotely. Rejected: violates C11 (no persistent hosted runtime); conflicts with the platform's non-fork distribution model.
+
+**C — Defer until E3:** Begin E3 implementation without a defined shared contract; extract the package post-implementation. Rejected: Spikes A/B1/B2 exist precisely to define the contract before implementation begins; deferred extraction produces guaranteed rework.
+
+#### Revisit trigger
+If the 3-operation interface proves too coarse-grained for a future surface type (e.g. a surface that requires streaming trace emission or partial hash verification), re-evaluate whether the contract needs extension or whether a sub-contract pattern is more appropriate. Any extension to the 3-operation interface requires a spike before E4 (or the equivalent future phase) implementation stories can use it.
+
+---
+
 ## Operating Posture
 
 ### Solo operator / W4 RISK-ACCEPT posture
@@ -695,5 +783,15 @@ This repository is operated by a single engineer. The following posture applies 
 - id: ADR-011
   category: adr
   label: "Artefact-first: new SKILL.md files, src/ modules, governance check scripts, dashboard behavioural changes, copilot-instructions behavioural changes, and structural pipeline-state.json changes require a story artefact before or alongside the commit"
+  section: Active ADRs
+
+- id: ADR-012
+  category: adr
+  label: "Platform-agnostic architecture: prefer portable multi-VCS implementations over vendor-specific optimisations; adapters enable platform adaptation without fragmentation"
+  section: Active ADRs
+
+- id: ADR-013
+  category: adr
+  label: "Phase 4 enforcement architecture: shared 3-operation governance package is the contract all surface adapters call — no surface adapter reimplements governance logic independently"
   section: Active ADRs
 ```

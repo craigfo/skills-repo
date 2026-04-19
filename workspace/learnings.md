@@ -733,10 +733,51 @@ After a DoR batch commit, write an explicit `pendingActions` entry to `workspace
 |---------|-----------|---------------------------|-------------|
 | **GitHub Copilot coding agent** (current) | Autonomous, no operator time, creates own PR | Empty PR pattern (D7, D8), no way to inspect mid-execution, black box when it stalls, cannot push to external repos | Simple single-repo stories with clear file paths; stories where failing tests already exist on master |
 | **VS Code Copilot agent** (this session pattern) | Full workspace context, operator can monitor and intervene, can read all artefact files, can run tests interactively | Requires operator focus time, not fully autonomous, single-threaded (one story at a time) | Complex stories, external repo dependencies, stories requiring orientation across many files, stories where the agent needs mid-execution guidance |
+
+---
+
+## D9 — Short-track features must still have discovery.md for trace validation
+
+**Date:** 2026-04-18
+**Detected at:** CI on PR #169 (trace validation hard-fail)
+**Severity:** Medium (blocks PR merge until fixed)
+
+**What happened:** The `2026-04-18-pipeline-state-archive` feature was created as a short-track (story originated from D8 learning, not a formal `/discovery` run). Story, test plan, review, and DoR artefacts were all created correctly — but no `discovery.md` was written. The `check_discovery_exists` hard-fail check in `scripts/validate-trace.sh` requires every directory under `artefacts/` (not listed in `.github/trace-validation.yml` `reference_dirs`) to have a `discovery.md`. CI failed.
+
+**Root cause:** The operator/agent workflow for short-track features assumed that "short-track = skip discovery" meant no discovery *artefact* was needed. In reality, `copilot-instructions.md` says short-track is `/test-plan → /definition-of-ready → coding agent` — it skips the formal `/discovery` *skill run*, but the trace validation CI check doesn't distinguish between formal and short-track features. Every feature directory needs a discovery.md on disk regardless of how it was initiated.
+
+**Fix applied:** Created a minimal `discovery.md` (Status: Approved) for the archive feature, modelled on the dashboard-v2 short-track discovery format.
+
+**Preventive rule:** When creating any new feature directory under `artefacts/`, always create a `discovery.md` — even for short-track features. The discovery can be minimal (problem statement, MVP scope, Status: Approved) but must exist to pass trace validation. Alternatively, add the directory to `reference_dirs` in `.github/trace-validation.yml` if it genuinely isn't a feature (e.g. reference packages, docs-only directories).
 | **Claude Code** (CLI agent) | Deep context window, strong multi-file editing, can be given explicit tool access, good at TDD cycles, can be pointed at specific repos | Requires local setup / API key, no native GitHub PR integration (manual PR step), operator must monitor terminal | Stories requiring deep codebase understanding, large refactors, stories touching 5+ files |
 | **Cursor** (AI IDE) | Visual file context, inline diff review, multi-model support, composer mode for multi-file changes | Requires operator presence in Cursor IDE, not automatable for batch dispatch, no headless mode | Interactive implementation sessions, stories where the operator wants to pair with the agent, UI-heavy or layout work |
 
 **Recommended dispatch strategy going forward:**
+
+---
+
+## Pipeline gap — agent framed experiment model switching as its own action
+
+### Observed — 2026-04-19 14:00
+
+**Circumstance:** Setting up a Sonnet 4.6 vs Opus 4.6 outer-loop comparison experiment. The agent copied `contexts/experiment-sonnet-phase4.yml` to `.github/context.yml` and described this as "switching to Sonnet" — implying the context file copy changed the active model.
+
+**What was wrong:** The `model_label` and `cost_tier` fields in the instrumentation block of `context.yml` are **telemetry labels only**. They record which model the operator has already selected. Copying a context file does not and cannot change which model the agent runs on. Model selection is always an operator action: VS Code model picker, API configuration, or equivalent IDE setting.
+
+**Root cause:** The experiment framing conflated two distinct things: (1) setting the telemetry label so capture blocks record the correct model name, and (2) actually switching the model. Only the operator can do (2). The agent can do (1) by writing the label, but must explicitly instruct the operator to perform (2) first.
+
+**Correct experiment flow:**
+1. Operator switches model in IDE (e.g. VS Code Copilot model picker → Claude Sonnet 4.6)
+2. Operator copies matching context file (`cp contexts/experiment-sonnet-phase4.yml .github/context.yml`) to set the telemetry label
+3. Agent confirms the label is set correctly (read `model_label` from active context.yml)
+4. Agent runs the skill — capture blocks auto-append with the correct `model_label`
+5. Operator switches model in IDE to Claude Opus 4.6
+6. Operator copies Opus context file to set label
+7. Agent confirms and runs again
+
+**Rule:** Never present copying a context file as "switching to a model." Always instruct the operator to switch the model in their IDE before confirming the experiment phase can begin. The agent's role is confirming the telemetry label is correctly set — not performing or claiming to perform model switching.
+
+**Action:** Flag for `/improve`. Consider adding an explicit note to the experiment frame template (or `/benefit-metric` instrumentation guidance) clarifying that `model_label` is operator-set telemetry, not agent-controlled routing.
 
 1. **Pre-dispatch validation gate:** Before dispatching to the GitHub agent, check: (a) Do failing tests already exist on master? (b) Is the story single-repo only? (c) Are ALL target file paths within the delivery repo? If any answer is no, dispatch to VS Code agent or Claude Code instead.
 
@@ -1230,3 +1271,23 @@ This is the enterprise-standard maker/checker pattern: the gate that signs off a
 **Items deferred to operator confirmation:** Item 7 (docs/conflict-resolution-guide.md) and Item 8 (second-session verification prompt) remain pending.
 
 **Key learning this run:** The artefact-first rule (copilot-instructions.md Coding Standards) applies to SKILL.md modifications as much as to src/ or governance check scripts. The rule must be checked before applying any improvement write-back. Failure to do so would itself have been a governance violation.
+
+---
+
+## D10 — pipeline-state.json stage values must match schema enum (2nd CI-only trace failure this session)
+
+**Date:** 2026-04-18
+**Detected at:** CI on PR #171 (trace validation hard-fail: `schema_valid` check)
+**Severity:** Medium (blocks PR merge)
+
+**What happened:** After implementing psa.1 archive script, the pipeline-state.json was updated with `"stage": "implementation"` for the PSA feature and psa.1 story. This value is not in the `pipeline-state.schema.json` stage enum. The `npm test` suite passed locally (no test validates the state against the schema), but CI runs `bash scripts/validate-trace.sh --ci` which includes `jsonschema` validation via Python. CI failed with: `'implementation' is not one of [...]`.
+
+**Root cause:** The agent used an intuitive but invalid stage name. The valid inner-loop stages are: `branch-setup`, `implementation-plan`, `subagent-execution`, `implementation-review`, `verify-completion`, `branch-complete`. There is no generic `implementation` stage — the pipeline uses granular inner-loop phase names.
+
+**Pattern:** This is the same class of failure as D9 — a CI check (`validate-trace.sh`) catches issues that the local `npm test` suite doesn't test for. D9 was missing `discovery.md`; D10 is an invalid enum value in the schema.
+
+**Fix applied:** Changed `"stage": "implementation"` to `"stage": "subagent-execution"` for both the PSA feature and the psa.1 epic story.
+
+**Preventive rule:** When setting `stage` values in pipeline-state.json, always reference the enum in `pipeline-state.schema.json` (search for `"stage":` with `"enum":`). Never use a stage name from memory — copy from the schema. Valid inner-loop stages: `branch-setup` → `implementation-plan` → `subagent-execution` → `implementation-review` → `verify-completion` → `branch-complete`.
+
+**Systemic fix candidate:** Add a schema validation step to the local `npm test` chain so this class of error is caught before push. This would eliminate the D9/D10 pattern entirely.

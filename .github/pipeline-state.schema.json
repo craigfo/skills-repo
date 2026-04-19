@@ -6,7 +6,9 @@
   "required": ["version", "updated", "features"],
   "properties": {
     "version": { "type": "string", "description": "Schema version, currently 1" },
-    "updated": { "type": "string", "format": "date-time", "description": "ISO 8601 timestamp of last write" },  "config": {
+    "updated": { "type": "string", "format": "date-time", "description": "ISO 8601 timestamp of last write" },
+    "archive": { "type": "string", "description": "Relative path to the archive file containing completed features, e.g. .github/pipeline-state-archive.json" },
+    "config": {
     "type": "object",
     "description": "Repo-level config bridged from context.yml by skills. Consumed by the viz to set default governance mode.",
     "properties": {
@@ -103,6 +105,46 @@
                 "exception": { "type": "string", "description": "If excepted: RISK-ACCEPT reference from decisions.md" },
                 "assessedBy":{ "type": "string", "description": "Skill that last assessed this guardrail, e.g. /review, /definition-of-ready" },
                 "assessedAt":{ "type": "string", "format": "date-time" }
+              }
+            }
+          },
+          "spikes": {
+            "type": "array",
+            "description": "Architecture spike records for this feature. Each spike tracks a design investigation with a verifiable verdict. Written by /test-plan checkpoint; updated at spike closeout by the operator.",
+            "items": {
+              "type": "object",
+              "required": ["id", "storySlug"],
+              "properties": {
+                "id":             { "type": "string", "description": "Spike identifier, e.g. spike-a, spike-b1" },
+                "storySlug":      { "type": "string", "description": "Corresponding story slug, e.g. p4-spike-a" },
+                "verdict":        { "type": ["string", "null"], "enum": ["PROCEED", "REDESIGN", "DEFER", "REJECT", null], "description": "Spike investigation verdict. Null until closeout." },
+                "outputArtefact": { "type": "string", "description": "Relative path to the spike output artefact" },
+                "verdictAt":      { "type": "string", "format": "date-time", "description": "ISO 8601 timestamp when the verdict was recorded" }
+              }
+            }
+          },
+          "stories": {
+            "type": "array",
+            "description": "Flat story list for Phase 3+ features. Full story state lives here; epics[].stories[] holds slug references only. Written by /test-plan, /definition-of-ready, and inner loop skills.",
+            "items": {
+              "type": "object",
+              "required": ["id"],
+              "properties": {
+                "id":                  { "type": "string", "description": "Story slug, e.g. p4-spike-a" },
+                "epic":                { "type": "string", "description": "Parent epic ID, e.g. e1" },
+                "testPlan": {
+                  "type": "object",
+                  "properties": {
+                    "status":     { "type": "string", "enum": ["not-started", "written", "all-passing"] },
+                    "testFile":   { "type": "string", "description": "Relative path to the test JS file" },
+                    "totalTests": { "type": "integer" },
+                    "passing":    { "type": "integer" }
+                  }
+                },
+                "dorStatus":           { "type": "string", "enum": ["not-started", "blocked", "signed-off"] },
+                "dorArtefact":         { "type": "string", "description": "Relative path to the DoR artefact" },
+                "dorContractArtefact": { "type": "string", "description": "Relative path to the DoR contract artefact" },
+                "dorSignedOffAt":      { "type": "string", "format": "date-time" }
               }
             }
           },
@@ -224,6 +266,24 @@
           "type": "array",
           "description": "One entry per squad with registry_mode: publishing",
           "items": { "$ref": "#/$defs/fleetStateEntry" }
+        }
+      }
+    },
+    "phase4": {
+      "type": "object",
+      "description": "Phase 4 spike verdicts shortcut — convenience lookup for tests and tooling. Updated at spike closeout alongside features[0].spikes[].verdict.",
+      "properties": {
+        "spikes": {
+          "type": "object",
+          "description": "Spike verdict map. Keys are spike-id strings (spike-a, spike-b1, spike-b2, spike-c, spike-d).",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "verdict":        { "type": ["string", "null"], "enum": ["PROCEED", "REDESIGN", "DEFER", "REJECT", null] },
+              "verdictAt":      { "type": ["string", "null"], "format": "date-time" },
+              "outputArtefact": { "type": "string", "description": "Relative path to the spike output artefact" }
+            }
+          }
         }
       }
     }
