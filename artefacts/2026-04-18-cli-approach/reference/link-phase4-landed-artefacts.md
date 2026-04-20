@@ -38,6 +38,24 @@ These supersede (or substantially clarify) several sections of the original stra
 
 - `link-ref-skills-platform-phase4-5.md` (this folder) → the strategic horizon document that originally informed this feature. Still useful for framing and the five-mechanism matrix; several forward-looking sections now answered by the spike DoDs and decisions above.
 
+## 7. Implementation scaffold — `src/enforcement/` (LANDED AFTER FIRST CLARIFY RUN)
+
+heymishy has built the implementation skeleton of the enforcement adapter pattern. These landed between the first `/clarify` run and the re-run.
+
+- **`../../../src/enforcement/cli-adapter.js`** — CLI enforcement adapter. **Exposes exactly the 9 commands from this feature's discovery**: `init`, `fetch`, `pin`, `verify`, `workflow`, `advance`, `back`, `navigate`, `emitTrace`. **Status: scaffold.** Seven of nine commands return `{ status: 'ok', command: '...' }` with no real logic. The two with substantive logic are `advance` (transition validation per ADR-002 + hash verification per C5 + state advancement via `govPackage.verifyHash` + `govPackage.advanceState`; returns typed errors `TRANSITION_NOT_PERMITTED` / `HASH_MISMATCH`) and `emitTrace` (validated trace entry — skillHash, inputHash, outputRef, transitionTaken, surfaceType, timestamp; MC-SEC-02 compliant).
+- **`../../../src/enforcement/governance-package.js`** — the shared governance core. Spike A's verdict: extractability is feasible. The adapters call into this.
+- **`../../../src/enforcement/mcp-adapter.js`** — peer MCP enforcement adapter (for the other surface type per phase4-5's matrix).
+- **`../../../src/enforcement/schema-validator.js`** — structured-output validation shared across adapters.
+
+## 8. Additional supporting artefacts landed with the scaffold
+
+- **Spike C DoD:** [`../../2026-04-19-skills-platform-phase4/dod/p4-spike-c-dod.md`](../../2026-04-19-skills-platform-phase4/dod/p4-spike-c-dod.md)
+- **p4-enf-package DoD** (governance-package implementation): [`../../2026-04-19-skills-platform-phase4/dod/p4-enf-package-dod.md`](../../2026-04-19-skills-platform-phase4/dod/p4-enf-package-dod.md)
+- **p4-enf-schema DoD** (schema validator): [`../../2026-04-19-skills-platform-phase4/dod/p4-enf-schema-dod.md`](../../2026-04-19-skills-platform-phase4/dod/p4-enf-schema-dod.md)
+- **p4-enf-second-line DoD** (second-line independence deliverables — directly relevant to the Theme F scope question in this feature's discovery): [`../../2026-04-19-skills-platform-phase4/dod/p4-enf-second-line-dod.md`](../../2026-04-19-skills-platform-phase4/dod/p4-enf-second-line-dod.md)
+- **Theme F inputs:** [`../../2026-04-19-skills-platform-phase4/theme-f-inputs.md`](../../2026-04-19-skills-platform-phase4/theme-f-inputs.md) — authoritative list of what Theme F actually covers. Use this to decide which Theme F items the discovery wrongly absorbed.
+- **Trace schema:** [`../../../scripts/trace-schema.json`](../../../scripts/trace-schema.json) — canonical JSON schema for trace entries (resolves reference §16.12).
+
 ---
 
 ## What the clarify agent should take from these
@@ -46,3 +64,6 @@ These supersede (or substantially clarify) several sections of the original stra
 - **Spike C resolved the distribution questions** §16 had deferred (§16.1, 16.2, 16.3, 16.8, 16.9, 16.10). Read Spike C output; fold conclusions into discovery rather than listing them as spike-deferred.
 - **Spike A resolved governance extractability** — the major unknown in the phase4-5 strategic doc. Verdict is in its DoD: determines whether the feature is positioned as an adapter around a shared core, or a separate implementation aligning on skill format + trace schema only.
 - **ADR-013 is the canonical Phase 4 enforcement architecture decision.** Reconcile any discovery claims that imply a different architecture.
+- **`src/enforcement/cli-adapter.js` implements exactly this feature's 9-command design.** Not a competing design — heymishy scaffolded craigfo's spec. The discovery's command set is confirmed in code; the seven unimplemented stubs are where implementation work lives.
+- **`theme-f-inputs.md` is authoritative for Theme F scope.** Use it to decide which of the four "Theme F contributions" the first `/clarify` run absorbed genuinely belong to this feature versus belong to Theme F itself. Expect most to belong to Theme F and be rolled back from the discovery.
+- **`scripts/trace-schema.json` is the canonical trace schema.** Resolves reference §16.12 directly — no need to treat it as Spike A-gated.
