@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "updated": "2026-04-19T23:50:00.000Z",
+  "updated": "2026-04-20T23:00:00.000Z",
   "programmes": [],
   "phase4": {
     "spikes": {
@@ -32,6 +32,92 @@
     }
   },
   "features": [
+    {
+      "slug": "2026-04-20-cli-approach-v2",
+      "name": "CLI approach for AI-assisted workflow (v2)",
+      "track": "standard",
+      "stage": "definition",
+      "health": "green",
+      "updatedAt": "2026-04-20T23:00:00.000Z",
+      "discoveryStatus": "approved",
+      "discoveryArtefact": "artefacts/2026-04-20-cli-approach-v2/discovery.md",
+      "benefitMetricArtefact": "artefacts/2026-04-20-cli-approach-v2/benefit-metric.md",
+      "nfrProfileArtefact": "artefacts/2026-04-20-cli-approach-v2/nfr-profile.md",
+      "slicingStrategy": "risk-first",
+      "storyCount": 10,
+      "epicCount": 5,
+      "complexityDistribution": {
+        "complexity-1": 1,
+        "complexity-2": 3,
+        "complexity-3": 6
+      },
+      "regulated": false,
+      "complianceProfile": "standard",
+      "complianceFrameworks": [],
+      "sensitiveDataCategories": [],
+      "epics": [
+        {
+          "slug": "e1-install-exclusion",
+          "name": "Non-fork install with permanent-exclusion-list enforcement on existing repos",
+          "status": "not-started",
+          "artefact": "artefacts/2026-04-20-cli-approach-v2/epics/e1-install-exclusion.md",
+          "stories": [
+            { "slug": "v2-install-init", "name": "Install scaffolded CLI into existing project 1 via init honouring permanent-exclusion list", "stage": "definition", "health": "green" },
+            { "slug": "v2-install-sidecar-lockfile", "name": "Sidecar materialisation + lockfile commit with hash pins observable", "stage": "definition", "health": "green" },
+            { "slug": "v2-install-collision-detection", "name": "Pre-install collision detection protects operator-authored content", "stage": "definition", "health": "green" }
+          ]
+        },
+        {
+          "slug": "e2-workflow-declaration",
+          "name": "Full workflow graph declaration authored for usable end-to-end CLI",
+          "status": "not-started",
+          "artefact": "artefacts/2026-04-20-cli-approach-v2/epics/e2-workflow-declaration.md",
+          "stories": [
+            { "slug": "v2-decl-outer-loop", "name": "Outer-loop subgraph declaration for /discovery through /definition-of-ready", "stage": "definition", "health": "green" },
+            { "slug": "v2-decl-inner-loop-support", "name": "Inner-loop coding sub-step and support-skill nodes declared — full graph complete", "stage": "definition", "health": "green" }
+          ]
+        },
+        {
+          "slug": "e3-e2e-validation",
+          "name": "End-to-end validation across two existing projects",
+          "status": "not-started",
+          "artefact": "artefacts/2026-04-20-cli-approach-v2/epics/e3-e2e-validation.md",
+          "stories": [
+            { "slug": "v2-e2e-project1", "name": "First full feature cycle on project 1 end-to-end via CLI", "stage": "definition", "health": "green" },
+            { "slug": "v2-e2e-project2", "name": "Second full feature cycle on project 2 — cross-project quirks surface", "stage": "definition", "health": "green" },
+            { "slug": "v2-e2e-upgrade", "name": "upgrade cycle on at least one project — update-channel validated", "stage": "definition", "health": "green" }
+          ]
+        },
+        {
+          "slug": "e4-operator-docs",
+          "name": "Operator-facing documentation and integration guide",
+          "status": "not-started",
+          "artefact": "artefacts/2026-04-20-cli-approach-v2/epics/e4-operator-docs.md",
+          "stories": [
+            { "slug": "v2-docs-integration-guide", "name": "Operator integration guide — first-run experience and workflow-declaration authoring runbook", "stage": "definition", "health": "green" }
+          ]
+        },
+        {
+          "slug": "e5-customisation-mvp",
+          "name": "Consumer-side customisation MVP — probe the §16.2 / §16.9 open question",
+          "status": "not-started",
+          "artefact": "artefacts/2026-04-20-cli-approach-v2/epics/e5-customisation-mvp.md",
+          "stories": [
+            { "slug": "v2-custom-add-step", "name": "Add one local node to the workflow declaration — probe customisation", "stage": "definition", "health": "green" }
+          ]
+        }
+      ],
+      "metrics": [
+        { "id": "m1", "name": "Skill-as-contract (P1)", "target": "100% hash-classification + 100% output-shape", "baseline": "0%", "signal": "not-yet-measured", "lastMeasured": null, "evidence": null, "contributingStories": ["v2-decl-outer-loop", "v2-decl-inner-loop-support", "v2-e2e-project1", "v2-e2e-project2", "v2-custom-add-step"] },
+        { "id": "m2", "name": "Active context injection (P2)", "target": "100% envelope-before-handoff", "baseline": "0%", "signal": "not-yet-measured", "lastMeasured": null, "evidence": null, "contributingStories": ["v2-e2e-project1", "v2-e2e-project2"] },
+        { "id": "m3", "name": "Per-invocation trace anchoring (P3)", "target": "100% trace-emission + 100% gate-reverification + 100% hash-matching", "baseline": "0%", "signal": "not-yet-measured", "lastMeasured": null, "evidence": null, "contributingStories": ["v2-install-sidecar-lockfile", "v2-e2e-project1", "v2-e2e-project2"] },
+        { "id": "m4", "name": "Interaction mediation (P4)", "target": "100% single-exchange-per-invocation for per-exchange-prescribed nodes; 0% agent-visible graph", "baseline": "0%", "signal": "not-yet-measured", "lastMeasured": null, "evidence": null, "contributingStories": ["v2-decl-outer-loop", "v2-decl-inner-loop-support", "v2-e2e-project1", "v2-e2e-project2"] },
+        { "id": "m5", "name": "Non-fork adoption across two existing projects", "target": "2/2 projects complete MVP flow without forking", "baseline": "0/2", "signal": "not-yet-measured", "lastMeasured": null, "evidence": null, "contributingStories": ["v2-install-init", "v2-install-sidecar-lockfile", "v2-install-collision-detection", "v2-e2e-project2", "v2-e2e-upgrade", "v2-custom-add-step"] },
+        { "id": "mm1", "name": "Real end-to-end adoption fidelity", "target": ">=2 full feature cycles (1 per project) without mid-cycle abandonment", "baseline": "0 cycles", "signal": "not-yet-measured", "lastMeasured": null, "evidence": null, "contributingStories": ["v2-e2e-project1", "v2-e2e-project2"] },
+        { "id": "mm2", "name": "Workflow portability across runtimes", "target": "100% non-linear scenarios + >=1 hash-equivalent cross-runtime trace pair", "baseline": "0%", "signal": "not-yet-measured", "lastMeasured": null, "evidence": null, "contributingStories": ["v2-e2e-project1"] },
+        { "id": "mm3", "name": "Coreutils sharpness discipline", "target": "100% commands still sharp at 6-month review", "baseline": "100% at launch (deferred measurement)", "signal": "not-yet-measured", "lastMeasured": null, "evidence": null, "contributingStories": [] }
+      ]
+    },
     {
       "slug": "2026-04-19-skills-platform-phase4",
       "name": "Skills Platform — Phase 4: Distribution, Structural Enforcement, and Non-Technical Access",
