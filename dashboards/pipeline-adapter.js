@@ -1,6 +1,3 @@
-// no-artefact: bug-fix — Phase 3+ schema id/slug normalisation and epic back-ref story grouping;
-// corrects broken rendering of Phase 4 stories; no new governance behaviour added.
-
 /**
  * pipeline-adapter.js
  * Reads .github/pipeline-state.json and exposes window.CYCLES + window.EPICS
@@ -69,29 +66,12 @@
 
   function buildStoryMap(f) {
     var map = {};
-    (f.stories || []).forEach(function (s) {
-      // Support both old schema (s.slug) and Phase 3+ schema (s.id)
-      if (s.slug) map[s.slug] = s;
-      if (s.id)   map[s.id]   = s;
-    });
+    (f.stories || []).forEach(function (s) { map[s.slug] = s; });
     return map;
   }
 
   function resolveStory(s, storyMap) {
-    return typeof s === 'string' ? (storyMap[s] || { id: s }) : s;
-  }
-
-  // Return the canonical identifier for a story object (slug or id fallback)
-  function storyId(s) {
-    return s.slug || s.id || '';
-  }
-
-  // Return feature-level stories belonging to a given epic
-  // Used for Phase 3+ schema where epics carry no stories[] and stories
-  // reference the epic via s.epic back-reference.
-  function storiesForEpic(f, epicId) {
-    if (!Array.isArray(f.stories) || !epicId) return [];
-    return f.stories.filter(function (s) { return s.epic === epicId; });
+    return typeof s === 'string' ? (storyMap[s] || { slug: s }) : s;
   }
 
   // ── Transform pipeline-state.json → CYCLES / EPICS ──────────────
@@ -103,17 +83,8 @@
     window.CYCLES = state.features.map(function (f) {
       var storyMap = buildStoryMap(f);
       var allRaw = collectEpicBatches(f).reduce(function (acc, e) {
-        var epicId = e.slug || e.id;
-        // Phase 1/2: stories embedded in epic; Phase 3+: stories in f.stories[] with back-ref
-        var epicStories = (e.stories && e.stories.length > 0)
-          ? e.stories
-          : storiesForEpic(f, epicId);
-        return acc.concat(epicStories);
+        return acc.concat(e.stories || []);
       }, []);
-      // Fallback: if no epics have stories, use f.stories[] directly
-      if (allRaw.length === 0 && Array.isArray(f.stories)) {
-        allRaw = f.stories.slice();
-      }
       var resolved = allRaw.map(function (s) { return resolveStory(s, storyMap); });
       var doneN = resolved.filter(function (s) {
         return s.dodStatus === 'complete' || s.stage === 'definition-of-done';
@@ -141,17 +112,11 @@
     state.features.forEach(function (f) {
       var storyMap = buildStoryMap(f);
       collectEpicBatches(f).forEach(function (epic) {
-        var epicId = epic.slug || epic.id;
-        // Phase 1/2: stories embedded in epic; Phase 3+: stories in f.stories[] with back-ref
-        var rawStories = (epic.stories && epic.stories.length > 0)
-          ? epic.stories
-          : storiesForEpic(f, epicId);
-        var fullStories = rawStories.map(function (s) { return resolveStory(s, storyMap); });
+        var fullStories = (epic.stories || []).map(function (s) { return resolveStory(s, storyMap); });
         var mappedStories = fullStories.map(function (s) {
-          var sid = storyId(s);
           var obj = {
-            id: sid,
-            name: s.name || sid || '',
+            id: s.slug,
+            name: s.name || s.slug || '',
             phase: toPhaseKey(s.stage),
             state: deriveStoryState(s),
             stageRaw: s.stage || '',
@@ -166,11 +131,11 @@
             acVerified: s.acVerified || 0,
           };
           if (s.testPlan) obj.testPlan = s.testPlan;
-          if (s.health === 'red') obj.blockerId = sid + '-blocked';
+          if (s.health === 'red') obj.blockerId = s.slug + '-blocked';
           return obj;
         });
         epics.push({
-          id:      epicId,
+          id:      epic.slug,
           cycleId: f.slug,
           name:    epic.name,
           risk:    deriveRisk(fullStories),
