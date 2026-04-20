@@ -13,10 +13,10 @@
 **Feature folder:** `artefacts/2026-04-20-cli-approach-v2/`
 **Supersedes:** `artefacts/2026-04-18-cli-approach/discovery.md` (Approved 2026-04-18; on `heymishy/skills-repo` master; preserved unchanged for historical reference along with its sibling `benefit-metric.md`, `decisions.md`, and `reference/`).
 
-**Status:** Clarified (pending approval)
+**Status:** Approved
 **Created:** 2026-04-20 (v2 folder)
-**Clarified:** 2026-04-20 via /clarify (this session — three questions resolved; see Clarification log below).
-**Approved by:** (pending)
+**Clarified:** 2026-04-20 via /clarify (three questions resolved; see Clarification log below).
+**Approved by:** craigfo — 2026-04-20
 **Author:** Claude (operator-driven conversational run through /discovery + /clarify)
 
 **Re-run rationale:** The prior discovery was Approved 2026-04-18 and landed on `heymishy/skills-repo` master. Between then and 2026-04-20, Phase 4 (`artefacts/2026-04-19-skills-platform-phase4/`) also landed on master. Phase 4 delivered Spike A / B1 / B2 / C verdicts, ADR-013 (shared 3-operation governance package as the surface-adapter contract), ADR-phase4-enforcement (mechanism per surface class), a working implementation scaffold at `src/enforcement/cli-adapter.js` matching the prior feature's 9-command design, `theme-f-inputs.md` authoritative for Theme F scope, and `scripts/trace-schema.json` canonical for trace entries. Those changes supersede or resolve material sections of the prior discovery. This v2 folder contains the re-run; the prior discovery and its siblings are left on master unmodified.
